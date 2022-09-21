@@ -1,14 +1,24 @@
 import {
+  IAuthResponse,
   ICategoriesResponse,
   ICategoryCreate,
   IDistrictCreate,
   IDistrictsResponse,
   IPostsResponse,
+  IUserResponse,
   IWardCreate,
   IWardResponse,
   IWardsResponse
 } from '../interfaces'
 import axiosClient from './axiosClient'
+
+const login = (username: string, password: string) => {
+  return axiosClient.post<IAuthResponse>('/auth/login', { username, password })
+}
+
+const getCurrentUser = () => {
+  return axiosClient.get<IUserResponse>('/auth/me')
+}
 
 const getCategories = () => {
   return axiosClient.get<ICategoriesResponse>('/categories')
@@ -39,6 +49,8 @@ const createWard = (ward: IWardCreate) => {
 }
 
 const CommonService = {
+  login,
+  getCurrentUser,
   getCategories,
   createCategory,
   getDistricts,

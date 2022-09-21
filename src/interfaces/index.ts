@@ -91,6 +91,10 @@ export interface IUser {
   createdAt: string
 }
 
+export interface IUserResponse {
+  user: IUser
+}
+
 export interface IWard {
   id: string
   name: string
@@ -123,3 +127,9 @@ export interface IMenuItem {
   link?: string
   children?: IMenuItem[]
 }
+
+export interface IAuthResponse {
+  token: string
+}
+
+export type Nullable<T> = T | null
