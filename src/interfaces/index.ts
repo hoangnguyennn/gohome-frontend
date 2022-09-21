@@ -1,4 +1,4 @@
-import { DistrictTypes } from './enums'
+import { DistrictTypes, WardTypes } from './enums'
 
 export interface IDistrict {
   id: string
@@ -17,4 +17,25 @@ export interface IDistrictsResponse {
 
 export interface IDistrictResponse {
   district: IDistrict
+}
+
+export interface IWard {
+  id: string
+  name: string
+  type: WardTypes
+  district?: IDistrict
+}
+
+export interface IWardCreate {
+  name: string
+  type: WardTypes
+  districtId: string
+}
+
+export interface IWardsResponse {
+  wards: IWard[]
+}
+
+export interface IWardResponse {
+  ward: IWard
 }

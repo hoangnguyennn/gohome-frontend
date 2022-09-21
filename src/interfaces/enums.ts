@@ -4,3 +4,9 @@ export enum DistrictTypes {
   THANH_PHO = 'Thành phố',
   THI_XA = 'Thị xã'
 }
+
+export enum WardTypes {
+  XA = 'Xã',
+  PHUONG = 'Phường',
+  THI_TRAN = 'Thị trấn'
+}

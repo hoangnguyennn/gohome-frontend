@@ -16,3 +16,18 @@ export const DISTRICT_TYPES = [
     title: 'Thị xã'
   }
 ]
+
+export const WARD_TYPES = [
+  {
+    value: 'Xã',
+    title: 'Xã'
+  },
+  {
+    value: 'Phường',
+    title: 'Phường'
+  },
+  {
+    value: 'Thị trấn',
+    title: 'Thị trấn'
+  }
+]
