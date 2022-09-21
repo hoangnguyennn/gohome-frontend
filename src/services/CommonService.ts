@@ -1,4 +1,6 @@
 import {
+  ICategoriesResponse,
+  ICategoryCreate,
   IDistrictCreate,
   IDistrictsResponse,
   IWardCreate,
@@ -6,6 +8,14 @@ import {
   IWardsResponse
 } from '../interfaces'
 import axiosClient from './axiosClient'
+
+const getCategories = () => {
+  return axiosClient.get<ICategoriesResponse>('/categories')
+}
+
+const createCategory = (category: ICategoryCreate) => {
+  return axiosClient.post('/categories', category)
+}
 
 const getDistricts = () => {
   return axiosClient.get<IDistrictsResponse>('/districts')
@@ -24,6 +34,8 @@ const createWard = (ward: IWardCreate) => {
 }
 
 const CommonService = {
+  getCategories,
+  createCategory,
   getDistricts,
   createDistrict,
   getWards,

@@ -1,5 +1,24 @@
 import { DistrictTypes, WardTypes } from './enums'
 
+export interface ICategory {
+  id: string
+  name: string
+  code: string
+}
+
+export interface ICategoryCreate {
+  name: string
+  code: string
+}
+
+export interface ICategoryResponse {
+  category: ICategory
+}
+
+export interface ICategoriesResponse {
+  categories: ICategory[]
+}
+
 export interface IDistrict {
   id: string
   name: string

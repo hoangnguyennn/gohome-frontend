@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import { IDistrict, IDistrictCreate } from '../../interfaces'
 import CommonService from '../../services/CommonService'
 

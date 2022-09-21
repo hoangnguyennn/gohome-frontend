@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import { IWard, IWardCreate } from '../../interfaces'
 import CommonService from '../../services/CommonService'
 
