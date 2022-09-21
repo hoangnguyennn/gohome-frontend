@@ -11,4 +11,11 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const title = to.meta.title as string
+
+  document.title = title || 'GHNT'
+  next()
+})
+
 export default router

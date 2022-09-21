@@ -86,3 +86,9 @@ const resetForm = () => {
     </Row>
   </Form>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: default
+  title: Thêm quận, huyện mới
+</route>

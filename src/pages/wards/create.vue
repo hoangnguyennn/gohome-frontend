@@ -113,3 +113,9 @@ onMounted(() => {
     </Row>
   </Form>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: default
+  title: Thêm xã phường mới
+</route>

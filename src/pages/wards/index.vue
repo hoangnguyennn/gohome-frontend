@@ -94,3 +94,9 @@ onMounted(() => {
     {{ itemWillDelete?.id }}
   </Modal>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: default
+  title: Danh sách xã phường
+</route>
