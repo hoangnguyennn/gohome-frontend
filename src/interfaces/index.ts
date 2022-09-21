@@ -63,3 +63,10 @@ export interface IErrorResponse {
   code: number
   message: string
 }
+
+export interface IMenuItem {
+  id: string | number
+  title: string
+  link?: string
+  children?: IMenuItem[]
+}

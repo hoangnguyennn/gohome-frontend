@@ -1,42 +1,21 @@
 <script setup lang="ts">
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined
-} from '@ant-design/icons-vue'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import {
   Layout,
   LayoutSider,
   LayoutHeader,
-  LayoutContent,
-  Menu,
-  MenuItem
+  LayoutContent
 } from 'ant-design-vue'
+import TheMenu from '../components/TheMenu.vue'
 
 const collapsed = ref(false)
-const selectedKeys = ref(['1'])
 </script>
 
 <template>
   <Layout id="layout-default">
     <LayoutSider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <div class="logo" />
-      <Menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-        <MenuItem key="1">
-          <user-outlined />
-          <span>nav 1</span>
-        </MenuItem>
-        <MenuItem key="2">
-          <video-camera-outlined />
-          <span>nav 2</span>
-        </MenuItem>
-        <MenuItem key="3">
-          <upload-outlined />
-          <span>nav 3</span>
-        </MenuItem>
-      </Menu>
+      <div class="logo"></div>
+      <TheMenu />
     </LayoutSider>
     <Layout>
       <LayoutHeader style="background: #fff; padding: 0">
