@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { Form, FormItem, Input, Row, Col, Button } from 'ant-design-vue'
+import {
+  Form,
+  FormItem,
+  Input,
+  Row,
+  Col,
+  Button,
+  PageHeader
+} from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
 import { ICategoryCreate } from '../../interfaces'
@@ -31,9 +39,7 @@ const resetForm = () => {
 </script>
 
 <template>
-  <Row justify="space-between" align="middle" style="margin-bottom: 50px">
-    <h2 style="margin: 0">Thêm loại nhà đất mới</h2>
-  </Row>
+  <PageHeader title="Thêm loại nhà đất mới" @back="router.back"></PageHeader>
 
   <Form
     name="basic"

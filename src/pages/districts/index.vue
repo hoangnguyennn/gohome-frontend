@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, Col } from 'ant-design-vue'
+import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { IDistrict } from '../../interfaces'
 import { useDistrictStore } from '../../store/stores/districtStore'
@@ -52,12 +52,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <Row justify="space-between" align="middle" style="margin-bottom: 50px">
-    <h2 style="margin: 0">Quận huyện</h2>
-    <router-link to="/districts/create">
-      <Button type="primary">Thêm quận, huyện mới</Button>
-    </router-link>
-  </Row>
+  <PageHeader
+    title="Quận huyện"
+    back-icon=""
+    style="padding-left: 0; padding-right: 0"
+  >
+    <template #extra>
+      <router-link to="/districts/create">
+        <Button type="primary">Thêm quận, huyện mới</Button>
+      </router-link>
+    </template>
+  </PageHeader>
 
   <Table :columns="columns" :data-source="districts">
     <template #bodyCell="{ column, record }">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, Col } from 'ant-design-vue'
+import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { IWard } from '../../interfaces'
 import { useWardStore } from '../../store/stores/wardStore'
@@ -57,12 +57,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <Row justify="space-between" align="middle" style="margin-bottom: 50px">
-    <h2 style="margin: 0">Xã phường</h2>
-    <router-link to="/wards/create">
-      <Button type="primary">Thêm xã phường mới</Button>
-    </router-link>
-  </Row>
+  <PageHeader
+    title="Xã phường"
+    back-icon=""
+    style="padding-left: 0; padding-right: 0"
+  >
+    <template #extra>
+      <router-link to="/wards/create">
+        <Button type="primary">Thêm xã phường mới</Button>
+      </router-link>
+    </template>
+  </PageHeader>
 
   <Table :columns="columns" :data-source="wards">
     <template #bodyCell="{ column, record }">

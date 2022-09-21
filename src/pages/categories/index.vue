@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row } from 'ant-design-vue'
+import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { ICategory } from '../../interfaces'
 import { useCategoryStore } from '../../store/stores/categoryStore'
@@ -52,12 +52,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <Row justify="space-between" align="middle" style="margin-bottom: 50px">
-    <h2 style="margin: 0">Loại nhà đất</h2>
-    <router-link to="/categories/create">
-      <Button type="primary">Thêm loại nhà đất mới</Button>
-    </router-link>
-  </Row>
+  <PageHeader
+    title="Loại nhà đất"
+    back-icon=""
+    style="padding-left: 0; padding-right: 0"
+  >
+    <template #extra>
+      <router-link to="/categories/create">
+        <Button type="primary">Thêm loại nhà đất mới</Button>
+      </router-link>
+    </template>
+  </PageHeader>
 
   <Table :columns="columns" :data-source="categories">
     <template #bodyCell="{ column, record }">

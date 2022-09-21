@@ -7,7 +7,8 @@ import {
   SelectOption,
   Row,
   Col,
-  Button
+  Button,
+  PageHeader
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
@@ -41,9 +42,7 @@ const resetForm = () => {
 </script>
 
 <template>
-  <Row justify="space-between" align="middle" style="margin-bottom: 50px">
-    <h2 style="margin: 0">Thêm quận, huyện mới</h2>
-  </Row>
+  <PageHeader title="Thêm quận, huyện mới" @back="router.back"></PageHeader>
 
   <Form
     name="basic"
