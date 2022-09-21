@@ -39,3 +39,8 @@ export interface IWardsResponse {
 export interface IWardResponse {
   ward: IWard
 }
+
+export interface IErrorResponse {
+  code: number
+  message: string
+}
