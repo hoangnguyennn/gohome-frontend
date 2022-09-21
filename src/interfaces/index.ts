@@ -1,4 +1,9 @@
-import { DistrictTypes, WardTypes } from './enums'
+import {
+  DistrictTypes,
+  PostVerifyStatuses,
+  UserTypes,
+  WardTypes
+} from './enums'
 
 export interface ICategory {
   id: string
@@ -36,6 +41,54 @@ export interface IDistrictsResponse {
 
 export interface IDistrictResponse {
   district: IDistrict
+}
+
+export interface IImage {
+  id: string
+  url: string
+}
+
+export interface IPost {
+  id: string
+  code: string
+  title: string
+  slug: string
+  price: number
+  commission: number
+  acreage: number
+  bedroom: number
+  bathroom: number
+  floor: number
+  description: string
+  ownerName: string
+  ownerPhone: string
+  ownerAddress: string
+  verifyStatus: PostVerifyStatuses
+  denyReason: string
+  isCheap: boolean
+  isFeatured: boolean
+  isRented: boolean
+  hiddenAt?: string
+  shownAt: string
+
+  category?: ICategoryResponse
+  ward?: IWardResponse
+  createdBy?: IUser
+  updatedBy?: IUser
+  images?: IImage[]
+}
+
+export interface IPostsResponse {
+  posts: IPost[]
+}
+
+export interface IUser {
+  id: string
+  username: string
+  fullName?: string
+  avatar?: string
+  type: UserTypes
+  createdAt: string
 }
 
 export interface IWard {

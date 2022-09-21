@@ -5,6 +5,18 @@ export enum DistrictTypes {
   THI_XA = 'Thị xã'
 }
 
+export enum PostVerifyStatuses {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  DENIED = 'DENIED'
+}
+
+export enum UserTypes {
+  ROOT = 0,
+  ADMIN = 1,
+  EMPLOYEE = 2
+}
+
 export enum WardTypes {
   XA = 'Xã',
   PHUONG = 'Phường',
