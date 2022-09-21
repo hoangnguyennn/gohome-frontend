@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { Menu, SubMenu, MenuItem } from 'ant-design-vue'
-import { LogoutOutlined } from '@ant-design/icons-vue'
 import { menuItems } from '../constants'
+import router from '../router'
+import { useAuthStore } from '../store/stores/authStore'
+
+const authStore = useAuthStore()
 
 const selectedKeys = ref([menuItems[0].id])
+
+const onLogout = () => {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -24,7 +32,7 @@ const selectedKeys = ref([menuItems[0].id])
         </MenuItem>
       </SubMenu>
 
-      <MenuItem v-else>
+      <MenuItem v-else :key="menuItem.id">
         <router-link v-if="menuItem.link" :to="menuItem.link">
           {{ menuItem.title }}
         </router-link>
@@ -33,6 +41,6 @@ const selectedKeys = ref([menuItems[0].id])
         </template>
       </MenuItem>
     </template>
-    <MenuItem>Đăng xuất</MenuItem>
+    <MenuItem :key="-1" @click="onLogout">Đăng xuất</MenuItem>
   </Menu>
 </template>

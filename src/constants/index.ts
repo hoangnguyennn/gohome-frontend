@@ -82,5 +82,16 @@ export const menuItems: IMenuItem[] = [
         link: '/wards/create'
       }
     ]
+  },
+  {
+    id: '4',
+    title: 'Người dùng',
+    children: [
+      {
+        id: '4_1',
+        title: 'Danh sách',
+        link: '/users'
+      }
+    ]
   }
 ]

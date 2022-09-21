@@ -6,6 +6,7 @@ import {
   IDistrictsResponse,
   IPostsResponse,
   IUserResponse,
+  IUsersResponse,
   IWardCreate,
   IWardResponse,
   IWardsResponse
@@ -40,6 +41,10 @@ const getPosts = () => {
   return axiosClient.get<IPostsResponse>('/posts')
 }
 
+const getUsers = () => {
+  return axiosClient.get<IUsersResponse>('/users')
+}
+
 const getWards = () => {
   return axiosClient.get<IWardsResponse>('/wards')
 }
@@ -56,6 +61,7 @@ const CommonService = {
   getDistricts,
   createDistrict,
   getPosts,
+  getUsers,
   getWards,
   createWard
 }

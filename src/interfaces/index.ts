@@ -95,6 +95,10 @@ export interface IUserResponse {
   user: IUser
 }
 
+export interface IUsersResponse {
+  users: IUser[]
+}
+
 export interface IWard {
   id: string
   name: string
