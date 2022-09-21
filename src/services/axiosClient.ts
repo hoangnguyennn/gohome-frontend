@@ -9,8 +9,9 @@ const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL
 })
 
-axios.interceptors.request.use((config) => {
+axiosClient.interceptors.request.use((config) => {
   const authStore = useAuthStore()
+  console.log('token', authStore.token)
 
   config.headers = {
     Authorization: `Bearer ${authStore.token}`

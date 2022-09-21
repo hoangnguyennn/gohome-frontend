@@ -7,6 +7,11 @@ export const useAuthStore = defineStore(
     const currentUser = ref<Nullable<IUser>>(null)
     const token = ref('')
 
+    const login = async (username: string, password: string) => {
+      const response = await CommonService.login(username, password)
+      token.value = response.data.token
+    }
+
     const getCurrentUser = async () => {
       const response = await CommonService.getCurrentUser()
       currentUser.value = response.data.user
@@ -20,6 +25,7 @@ export const useAuthStore = defineStore(
     return {
       token,
       currentUser,
+      login,
       getCurrentUser,
       logout
     }
