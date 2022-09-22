@@ -36,6 +36,22 @@ export const WARD_TYPES = [
 
 export const menuItems: IMenuItem[] = [
   {
+    id: '5',
+    title: 'Bài đăng',
+    children: [
+      {
+        id: '5_1',
+        title: 'Danh sách',
+        link: '/posts'
+      },
+      {
+        id: '5_2',
+        title: 'Thêm mới',
+        link: '/posts/create'
+      }
+    ]
+  },
+  {
     id: '1',
     title: 'Loại nhà đất',
     children: [

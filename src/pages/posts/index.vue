@@ -1,83 +1,136 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import {
+  Table,
+  Divider,
+  Modal,
+  Button,
+  Row,
+  PageHeader,
+  Tag
+} from 'ant-design-vue'
+import type { ColumnsType } from 'ant-design-vue/es/table/interface'
 import { storeToRefs } from 'pinia'
-import { IWard } from '../../interfaces'
+import { IPost, Nullable } from '../../interfaces'
+import { PostVerifyStatuses } from '../../interfaces/enums'
 import { usePostStore } from '../../store/stores/postStore'
-import { useWardStore } from '../../store/stores/wardStore'
+import { toDateTime, toVND } from '../../utils/formatter'
 
 const postStore = usePostStore()
 const { posts } = storeToRefs(postStore)
 
-const columns = ref([
+const columns: ColumnsType = [
   {
-    title: 'Code',
+    title: '#',
     dataIndex: 'code',
-    key: 'code'
+    key: 'code',
+    width: 124,
+    maxWidth: 124
   },
   {
-    title: 'Title',
+    title: 'Hình ảnh',
+    dataIndex: 'images',
+    key: 'images',
+    width: 124,
+    maxWidth: 124
+  },
+  {
+    title: 'Tiêu đề',
     dataIndex: 'title',
-    key: 'title'
+    key: 'title',
+    width: 224,
+    maxWidth: 224
   },
   {
-    title: 'Created by',
+    title: 'Tạo bởi',
     dataIndex: 'createdBy',
-    key: 'createdBy'
+    key: 'createdBy',
+    width: 120,
+    maxWidth: 120
   },
   {
-    title: 'Commission',
+    title: 'Hoa hồng',
     dataIndex: 'commission',
-    key: 'commission'
+    key: 'commission',
+    width: 124,
+    maxWidth: 124
   },
   {
-    title: 'Verification Status',
+    title: 'Tình trạng duyệt',
     dataIndex: 'verifyStatus',
-    key: 'verifyStatus'
+    key: 'verifyStatus',
+    width: 150,
+    maxWidth: 150
   },
   {
-    title: 'Deny Reason',
+    title: 'Lý do từ chối',
     dataIndex: 'denyReason',
-    key: 'denyReason'
+    key: 'denyReason',
+    width: 130,
+    maxWidth: 130
   },
   {
-    title: 'Show/Hide',
+    title: 'Ẩn/Hiện',
     dataIndex: 'isHide',
-    key: 'isHide'
+    key: 'isHide',
+    width: 124,
+    maxWidth: 124
   },
   {
-    title: 'Hidden At (Latest)',
-    dataIndex: 'hiddenAt',
-    key: 'hiddenAt'
-  },
-  {
-    title: 'Shown At (Latest)',
-    dataIndex: 'shownAt',
-    key: 'shownAt'
-  },
-  {
-    title: 'Created At',
+    title: 'Ngày tạo',
     dataIndex: 'createdAt',
-    key: 'createdAt'
+    key: 'createdAt',
+    width: 124,
+    maxWidth: 124
   },
   {
-    title: 'Updated At',
+    title: 'Ngày cập nhật',
     dataIndex: 'updatedAt',
-    key: 'updatedAt'
+    key: 'updatedAt',
+    width: 124,
+    maxWidth: 124
   },
   {
-    title: 'Actions',
+    title: 'Hành động',
     key: 'actions'
   }
-])
+]
 
-const itemWillDelete = ref<IWard | null>(null)
+const dateTimeFields = ref(['createdAt', 'updatedAt'])
+
+const itemWillDelete = ref<Nullable<IPost>>(null)
 const isOpenConfirmDeletePost = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/posts/${id}/${action}`
 }
 
-const onClickDelete = (item: IWard) => {
+const getVerifyStatusColor = (record: IPost) => {
+  switch (record.verifyStatus) {
+    case PostVerifyStatuses.PENDING:
+      return 'warning'
+    case PostVerifyStatuses.APPROVED:
+      return 'success'
+    case PostVerifyStatuses.DENIED:
+      return 'error'
+    default:
+      return 'warning'
+  }
+}
+
+const getVerifyStatusText = (record: IPost) => {
+  switch (record.verifyStatus) {
+    case PostVerifyStatuses.PENDING:
+      return 'Chờ duyệt'
+    case PostVerifyStatuses.APPROVED:
+      return 'Đã duyệt'
+    case PostVerifyStatuses.DENIED:
+      return 'Đã từ chối'
+    default:
+      return ''
+  }
+}
+
+const onClickDelete = (item: IPost) => {
   itemWillDelete.value = item
   isOpenConfirmDeletePost.value = true
 }
@@ -105,21 +158,71 @@ onMounted(() => {
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="posts">
-    <template #bodyCell="{ column, record }">
-      <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">View</router-link>
-        <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
-        <Divider type="vertical" />
-        <a @click.prevent="onClickDelete(record)">Delete</a>
-      </Row>
-    </template>
-  </Table>
+  <div class="responsive-wrapper">
+    <Table :columns="columns" :data-source="posts">
+      <template #headerCell="{ column }">
+        <template v-if="column.key === 'verifyStatus'">
+          <span class="line">Tình trạng</span>{{ ' ' }}
+          <span class="line">duyệt</span>
+        </template>
+        <template v-if="column.key === 'updatedAt'">
+          <span class="line">Ngày</span>{{ ' ' }}
+          <span class="line">cập nhật</span>
+        </template>
+      </template>
+
+      <template #bodyCell="{ column, record }">
+        <Row v-if="column.key === 'actions'">
+          <router-link :to="getLink(record.id, 'view')">View</router-link>
+          <Divider type="vertical" />
+          <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
+          <Divider type="vertical" />
+          <a @click.prevent="onClickDelete(record)">Delete</a>
+          <Divider type="vertical" />
+          <a @click.prevent="onClickDelete(record)">Mark as rented</a>
+        </Row>
+
+        <template v-else-if="column.key === 'images'">
+          <img v-if="record.images.length" :src="record.images[0].url" alt="" />
+        </template>
+
+        <template v-else-if="column.key === 'createdBy'">
+          <router-link :to="`/users/${record.createdBy.id}/view`">
+            {{ record.createdBy.fullName || record.createdBy.username }}
+          </router-link>
+        </template>
+
+        <template v-else-if="column.key === 'commission'">
+          <div style="text-align: right">{{ toVND(record.commission) }}</div>
+        </template>
+
+        <template v-else-if="column.key === 'verifyStatus'">
+          <div style="text-align: center">
+            <Tag :color="getVerifyStatusColor(record)">
+              {{ getVerifyStatusText(record) }}
+            </Tag>
+          </div>
+        </template>
+
+        <template v-else-if="column.key === 'isHide'">
+          <div style="text-align: center">
+            <Tag v-if="record.isHide" color="default">Ẩn</Tag>
+            <Tag v-else color="green">Hiện</Tag>
+          </div>
+        </template>
+
+        <template v-else-if="dateTimeFields.includes(column.key)">
+          <template v-if="record[column.key]">
+            {{ toDateTime(new Date(record[column.key])) }}
+          </template>
+        </template>
+      </template>
+    </Table>
+  </div>
 
   <Modal
     v-model:visible="isOpenConfirmDeletePost"
-    title="Delete a ward?"
+    title="Delete the post?"
     @ok="onDelete"
   >
     {{ itemWillDelete?.id }}
@@ -131,3 +234,18 @@ meta:
   layout: default
   title: Danh sách bài đăng
 </route>
+
+<style lang="scss">
+.responsive-wrapper {
+  overflow: auto;
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 12px;
+  }
+}
+
+.line {
+  display: inline-block;
+}
+</style>

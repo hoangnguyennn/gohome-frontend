@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { ICategory } from '../../interfaces'
+import { ICategory, Nullable } from '../../interfaces'
 import { useCategoryStore } from '../../store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()
@@ -29,7 +29,7 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<ICategory | null>(null)
+const itemWillDelete = ref<Nullable<ICategory>>(null)
 const isOpenConfirmDeleteCategory = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -78,7 +78,7 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeleteCategory"
-    title="Delete a category?"
+    title="Delete the category?"
     @ok="onDelete"
   >
     {{ itemWillDelete?.id }}

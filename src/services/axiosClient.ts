@@ -3,8 +3,6 @@ import { message } from 'ant-design-vue'
 import { IErrorResponse } from '../interfaces'
 import { useAuthStore } from '../store/stores/authStore'
 
-console.log(import.meta.env.VITE_API_BASE_URL)
-
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL
 })

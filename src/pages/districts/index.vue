@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IDistrict } from '../../interfaces'
+import { IDistrict, Nullable } from '../../interfaces'
 import { useDistrictStore } from '../../store/stores/districtStore'
 
 const districtStore = useDistrictStore()
@@ -29,7 +29,7 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<IDistrict | null>(null)
+const itemWillDelete = ref<Nullable<IDistrict>>(null)
 const isOpenConfirmDeleteDistrict = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -78,7 +78,7 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeleteDistrict"
-    title="Delete a district?"
+    title="Delete the district?"
     @ok="onDelete"
   >
     {{ itemWillDelete?.id }}

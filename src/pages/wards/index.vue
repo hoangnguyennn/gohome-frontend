@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IWard } from '../../interfaces'
+import { IWard, Nullable } from '../../interfaces'
 import { useWardStore } from '../../store/stores/wardStore'
 
 const wardStore = useWardStore()
@@ -34,7 +34,7 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<IWard | null>(null)
+const itemWillDelete = ref<Nullable<IWard>>(null)
 const isOpenConfirmDeleteWard = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -88,7 +88,7 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeleteWard"
-    title="Delete a ward?"
+    title="Delete the ward?"
     @ok="onDelete"
   >
     {{ itemWillDelete?.id }}

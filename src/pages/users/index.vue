@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IUser } from '../../interfaces'
+import { IUser, Nullable } from '../../interfaces'
 import { useUserStore } from '../../store/stores/userStore'
 
 const userStore = useUserStore()
@@ -34,7 +34,7 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<IUser | null>(null)
+const itemWillDelete = ref<Nullable<IUser>>(null)
 const isOpenConfirmDeleteUser = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -77,7 +77,7 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeleteUser"
-    title="Delete a category?"
+    title="Delete the user?"
     @ok="onDelete"
   >
     {{ itemWillDelete?.id }}
