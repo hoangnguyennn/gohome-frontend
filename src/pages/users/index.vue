@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { IUser, Nullable } from '../../interfaces'
+import { UserTypes } from '../../interfaces/enums'
 import { useUserStore } from '../../store/stores/userStore'
 
 const userStore = useUserStore()
@@ -51,6 +52,28 @@ const onDelete = () => {
   isOpenConfirmDeleteUser.value = false
 }
 
+const getUserTypeText = (record: IUser) => {
+  switch (record.type) {
+    case UserTypes.ROOT:
+      return 'Root'
+    case UserTypes.ADMIN:
+      return 'Quản trị viên'
+    case UserTypes.EMPLOYEE:
+      return 'Nhân viên'
+  }
+}
+
+const getUserTypeColor = (record: IUser) => {
+  switch (record.type) {
+    case UserTypes.ROOT:
+      return 'error'
+    case UserTypes.ADMIN:
+      return 'success'
+    case UserTypes.EMPLOYEE:
+      return 'default'
+  }
+}
+
 onMounted(() => {
   userStore.getUsers()
 })
@@ -72,6 +95,11 @@ onMounted(() => {
         <Divider type="vertical" />
         <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
+      <template v-else-if="column.key === 'type'">
+        <Tag :color="getUserTypeColor(record)">
+          {{ getUserTypeText(record) }}
+        </Tag>
+      </template>
     </template>
   </Table>
 
