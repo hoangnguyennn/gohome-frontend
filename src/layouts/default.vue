@@ -35,7 +35,8 @@ const collapsed = ref(false)
           margin: '24px 16px',
           padding: '24px',
           background: '#fff',
-          minHeight: '280px'
+          minHeight: '280px',
+          overflow: 'auto'
         }"
       >
         <RouterView />

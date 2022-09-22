@@ -33,6 +33,10 @@ const getDistricts = () => {
   return axiosClient.get<IDistrictsResponse>('/districts')
 }
 
+const getWardsByDistrictId = (districtId: string) => {
+  return axiosClient.get<IWardsResponse>(`/districts/${districtId}/wards`)
+}
+
 const createDistrict = (district: IDistrictCreate) => {
   return axiosClient.post<IDistrictsResponse>('/districts', district)
 }
@@ -59,6 +63,7 @@ const CommonService = {
   getCategories,
   createCategory,
   getDistricts,
+  getWardsByDistrictId,
   createDistrict,
   getPosts,
   getUsers,
