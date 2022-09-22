@@ -1,4 +1,4 @@
-import { IPost } from '../../interfaces'
+import { IPost, IPostCreate } from '../../interfaces'
 import CommonService from '../../services/CommonService'
 
 export const usePostStore = defineStore('postStore', () => {
@@ -9,8 +9,13 @@ export const usePostStore = defineStore('postStore', () => {
     posts.value = response.data.posts
   }
 
+  const createPost = (post: IPostCreate) => {
+    return CommonService.createPost(post)
+  }
+
   return {
     posts,
-    getPosts
+    getPosts,
+    createPost
   }
 })

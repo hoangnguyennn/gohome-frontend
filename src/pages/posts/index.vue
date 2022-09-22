@@ -243,6 +243,12 @@ meta:
   .ant-table-tbody > tr > td {
     padding: 12px;
   }
+
+  img {
+    max-height: 100px;
+    width: 100px;
+    object-fit: contain;
+  }
 }
 
 .line {

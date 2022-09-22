@@ -78,6 +78,29 @@ export interface IPost {
   images?: IImage[]
 }
 
+export interface IPostCreate {
+  title: string
+  categoryId: string
+  wardId: string
+  price: number
+  commission: number
+  acreage: number
+  bedroom: number
+  bathroom: number
+  floor: number
+  description: string
+  ownerName: string
+  ownerPhone: string
+  ownerAddress: string
+  isCheap: boolean
+  isFeatured: boolean
+  imagesId: string[]
+}
+
+export interface IPostResponse {
+  post: IPost
+}
+
 export interface IPostsResponse {
   posts: IPost[]
 }

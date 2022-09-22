@@ -11,7 +11,8 @@ import {
   Col,
   Button,
   PageHeader,
-  Divider
+  Divider,
+  UploadFile
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
@@ -19,6 +20,9 @@ import { storeToRefs } from 'pinia'
 import { useDistrictStore } from '../../store/stores/districtStore'
 import { useCategoryStore } from '../../store/stores/categoryStore'
 import { toVndPrefix, toRawNumber } from '../../utils/formatter'
+import ImageUploader from '../../components/ImageUploader.vue'
+import { IPostCreate } from '../../interfaces'
+import { usePostStore } from '../../store/stores/postStore'
 
 interface IFormState {
   title: string
@@ -37,11 +41,12 @@ interface IFormState {
   ownerAddress: string
   isCheap: boolean
   isFeatured: boolean
-  imagesId: string[]
+  images: UploadFile[]
 }
 
 const categoryStore = useCategoryStore()
 const districtStore = useDistrictStore()
+const postStore = usePostStore()
 const router = useRouter()
 
 const { categories } = storeToRefs(categoryStore)
@@ -64,14 +69,33 @@ const formState = ref<IFormState>({
   ownerAddress: '',
   isCheap: false,
   isFeatured: false,
-  imagesId: []
+  images: []
 })
 
 const formRef = ref<FormInstance>()
 
 const onFinish = async (values: IFormState) => {
-  // await wardStore.createWard(values as IWardCreate)
-  // router.push('/wards')
+  const post: IPostCreate = {
+    title: values.title,
+    categoryId: values.categoryId,
+    wardId: values.wardId,
+    price: values.price,
+    commission: values.commission,
+    acreage: values.acreage,
+    bedroom: values.bedroom,
+    bathroom: values.bathroom,
+    floor: values.floor,
+    description: values.description,
+    ownerName: values.ownerName,
+    ownerPhone: values.ownerPhone,
+    ownerAddress: values.ownerAddress,
+    isCheap: values.isCheap,
+    isFeatured: values.isFeatured,
+    imagesId: values.images.map((image) => image.response?.image.id)
+  }
+
+  await postStore.createPost(post)
+  router.push('/posts')
 }
 
 const resetForm = () => {
@@ -259,6 +283,18 @@ onMounted(() => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Hình ảnh</h3>
+    <Row>
+      <Col span="24">
+        <FormItem
+          label="images"
+          name="images"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 20 }"
+        >
+          <ImageUploader v-model:value="formState.images" />
+        </FormItem>
+      </Col>
+    </Row>
 
     <Divider type="horizontal"></Divider>
 
