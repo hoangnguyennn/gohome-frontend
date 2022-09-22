@@ -14,22 +14,22 @@ const columns = ref([
     key: 'id'
   },
   {
-    title: 'Username',
+    title: 'Tên đăng nhập',
     dataIndex: 'username',
     key: 'username'
   },
   {
-    title: 'Fullname',
+    title: 'Họ tên',
     dataIndex: 'fullname',
     key: 'fullname'
   },
   {
-    title: 'Type',
+    title: 'Loại',
     dataIndex: 'type',
     key: 'type'
   },
   {
-    title: 'Actions',
+    title: 'Hành động',
     key: 'actions'
   }
 ])
@@ -66,21 +66,23 @@ onMounted(() => {
   <Table :columns="columns" :data-source="users">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">View</router-link>
+        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
+        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
         <Divider type="vertical" />
-        <a @click.prevent="onClickDelete(record)">Delete</a>
+        <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
     </template>
   </Table>
 
   <Modal
     v-model:visible="isOpenConfirmDeleteUser"
-    title="Delete the user?"
+    title="Xóa người dùng?"
     @ok="onDelete"
   >
-    {{ itemWillDelete?.id }}
+    Bạn có chắc chắn muốn xóa người dùng "{{
+      itemWillDelete?.fullName || itemWillDelete?.username
+    }}"?
   </Modal>
 </template>
 

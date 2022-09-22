@@ -52,24 +52,26 @@ const resetForm = () => {
     <Row>
       <Col span="12">
         <FormItem
-          label="Name"
+          label="Tên loại"
           name="name"
-          :rules="[{ required: true, message: 'Name is required' }]"
+          :rules="[{ required: true, message: 'Tên loại là trường bắt buộc' }]"
         >
           <Input v-model:value="formState.name" />
         </FormItem>
 
         <FormItem
-          label="Code"
+          label="Mã loại"
           name="code"
-          :rules="[{ required: true, message: 'Code is required' }]"
+          :rules="[{ required: true, message: 'Mã loại là trường bắt buộc' }]"
         >
           <Input v-model:value="formState.code" />
         </FormItem>
 
         <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Submit</Button>
-          <Button style="margin-left: 10px" @click="resetForm">Reset</Button>
+          <Button type="primary" html-type="submit">Tạo loại nhà đất</Button>
+          <Button style="margin-left: 10px" @click="resetForm">
+            Xóa tất cả
+          </Button>
         </FormItem>
       </Col>
       <Col span="12"></Col>

@@ -66,16 +66,16 @@ onMounted(() => {
     <Row>
       <Col span="12">
         <FormItem
-          label="Name"
+          label="Tên"
           name="name"
-          :rules="[{ required: true, message: 'Name is required' }]"
+          :rules="[{ required: true, message: 'Tên là trường bắt buộc' }]"
         >
           <Input v-model:value="formState.name" />
         </FormItem>
         <FormItem
-          label="Type"
+          label="Loại"
           name="type"
-          :rules="[{ required: true, message: 'Type is required' }]"
+          :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
           <Select v-model:value="formState.type">
             <SelectOption
@@ -89,9 +89,11 @@ onMounted(() => {
         </FormItem>
 
         <FormItem
-          label="District"
+          label="Quận huyện"
           name="districtId"
-          :rules="[{ required: true, message: 'District is required' }]"
+          :rules="[
+            { required: true, message: 'Quận huyện là trường bắt buộc' }
+          ]"
         >
           <Select v-model:value="formState.districtId">
             <SelectOption
@@ -105,8 +107,10 @@ onMounted(() => {
         </FormItem>
 
         <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Submit</Button>
-          <Button style="margin-left: 10px" @click="resetForm">Reset</Button>
+          <Button type="primary" html-type="submit">Tạo loại nhà đất</Button>
+          <Button style="margin-left: 10px" @click="resetForm">
+            Xóa tất cả
+          </Button>
         </FormItem>
       </Col>
       <Col span="12"></Col>

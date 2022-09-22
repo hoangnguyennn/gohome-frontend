@@ -14,17 +14,17 @@ const columns = ref([
     key: 'id'
   },
   {
-    title: 'Name',
+    title: 'Tên loại',
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'Code',
+    title: 'Mã loại',
     dataIndex: 'code',
     key: 'code'
   },
   {
-    title: 'Actions',
+    title: 'Hành động',
     key: 'actions'
   }
 ])
@@ -67,21 +67,21 @@ onMounted(() => {
   <Table :columns="columns" :data-source="categories">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">View</router-link>
+        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
+        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
         <Divider type="vertical" />
-        <a @click.prevent="onClickDelete(record)">Delete</a>
+        <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
     </template>
   </Table>
 
   <Modal
     v-model:visible="isOpenConfirmDeleteCategory"
-    title="Delete the category?"
+    title="Xóa loại nhà đất?"
     @ok="onDelete"
   >
-    {{ itemWillDelete?.id }}
+    Bạn có chắc chắn muốn xóa loại nhà đất "{{ itemWillDelete?.name }}"?
   </Modal>
 </template>
 

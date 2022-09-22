@@ -173,13 +173,13 @@ onMounted(() => {
 
       <template #bodyCell="{ column, record }">
         <Row v-if="column.key === 'actions'">
-          <router-link :to="getLink(record.id, 'view')">View</router-link>
+          <router-link :to="getLink(record.id, 'view')">Xem</router-link>
           <Divider type="vertical" />
-          <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
+          <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
           <Divider type="vertical" />
-          <a @click.prevent="onClickDelete(record)">Delete</a>
+          <a @click.prevent="onClickDelete(record)">Xóa</a>
           <Divider type="vertical" />
-          <a @click.prevent="onClickDelete(record)">Mark as rented</a>
+          <a @click.prevent="onClickDelete(record)">Đánh dấu đã thuê</a>
         </Row>
 
         <template v-else-if="column.key === 'images'">
@@ -222,10 +222,10 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeletePost"
-    title="Delete the post?"
+    title="Xóa bài đăng?"
     @ok="onDelete"
   >
-    {{ itemWillDelete?.id }}
+    Bạn có chắc chắn muốn xóa bài đăng "{{ itemWillDelete?.title }}"?
   </Modal>
 </template>
 

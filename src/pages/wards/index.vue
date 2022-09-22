@@ -14,22 +14,22 @@ const columns = ref([
     key: 'id'
   },
   {
-    title: 'Name',
+    title: 'Tên',
     dataIndex: 'name',
     key: 'name'
   },
   {
-    title: 'Type',
+    title: 'Loại',
     dataIndex: 'type',
     key: 'type'
   },
   {
-    title: 'District',
+    title: 'Quận huyện',
     dataIndex: 'district',
     key: 'district'
   },
   {
-    title: 'Actions',
+    title: 'Hành động',
     key: 'actions'
   }
 ])
@@ -72,11 +72,11 @@ onMounted(() => {
   <Table :columns="columns" :data-source="wards">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">View</router-link>
+        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Edit</router-link>
+        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
         <Divider type="vertical" />
-        <a @click.prevent="onClickDelete(record)">Delete</a>
+        <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
       <template v-else-if="column.key === 'district'">
         <router-link :to="`/districts/${record.district.id}/view`">
@@ -88,10 +88,10 @@ onMounted(() => {
 
   <Modal
     v-model:visible="isOpenConfirmDeleteWard"
-    title="Delete the ward?"
+    title="Xóa xã phường?"
     @ok="onDelete"
   >
-    {{ itemWillDelete?.id }}
+    Bạn có chắc chắn muốn xóa xã phường "{{ itemWillDelete?.name }}"?
   </Modal>
 </template>
 

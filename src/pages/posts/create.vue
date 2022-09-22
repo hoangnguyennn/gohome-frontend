@@ -19,7 +19,7 @@ import { storeToRefs } from 'pinia'
 
 import { useDistrictStore } from '../../store/stores/districtStore'
 import { useCategoryStore } from '../../store/stores/categoryStore'
-import { toVndPrefix, toRawNumber } from '../../utils/formatter'
+import { toVndPrefix, toRawNumber, toAcreage } from '../../utils/formatter'
 import ImageUploader from '../../components/ImageUploader.vue'
 import { IPostCreate } from '../../interfaces'
 import { usePostStore } from '../../store/stores/postStore'
@@ -131,17 +131,17 @@ onMounted(() => {
     <Row>
       <Col span="12">
         <FormItem
-          label="Title"
+          label="Tiêu đề"
           name="title"
-          :rules="[{ required: true, message: 'Title is required' }]"
+          :rules="[{ required: true, message: 'Tiêu đề là trường bắt buộc' }]"
         >
           <Input v-model:value="formState.title" />
         </FormItem>
 
         <FormItem
-          label="Category"
+          label="Loại"
           name="categoryId"
-          :rules="[{ required: true, message: 'Category is required' }]"
+          :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
           <Select v-model:value="formState.categoryId">
             <SelectOption
@@ -155,9 +155,11 @@ onMounted(() => {
         </FormItem>
 
         <FormItem
-          label="District"
+          label="Quận huyện"
           name="districtId"
-          :rules="[{ required: true, message: 'District is required' }]"
+          :rules="[
+            { required: true, message: 'Quận huyện là trường bắt buộc' }
+          ]"
         >
           <Select v-model:value="formState.districtId">
             <SelectOption
@@ -171,9 +173,9 @@ onMounted(() => {
         </FormItem>
 
         <FormItem
-          label="Ward"
+          label="Xã phường"
           name="wardId"
-          :rules="[{ required: true, message: 'Ward is required' }]"
+          :rules="[{ required: true, message: 'Xã phường là trường bắt buộc' }]"
         >
           <Select v-model:value="formState.wardId">
             <SelectOption v-for="ward of wards" :key="ward.id" :value="ward.id">
@@ -183,81 +185,89 @@ onMounted(() => {
         </FormItem>
 
         <FormItem
-          label="Price"
+          label="Giá (VND)"
           name="price"
-          :rules="[{ required: true, message: 'Price is required' }]"
+          :rules="[{ required: true, message: 'Giá (VND) là trường bắt buộc' }]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.price"
             :formatter="(value) => toVndPrefix(value)"
             :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
       </Col>
       <Col span="12">
         <FormItem
-          label="commission"
+          label="Hoa hồng (VND)"
           name="commission"
-          :rules="[{ required: true, message: 'commission is required' }]"
+          :rules="[
+            { required: true, message: 'Hoa hồng (VND) là trường bắt buộc' }
+          ]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.commission"
             :formatter="(value) => toVndPrefix(value)"
             :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
 
         <FormItem
-          label="acreage"
+          label="Diện tích (m²)"
           name="acreage"
-          :rules="[{ required: true, message: 'acreage is required' }]"
+          :rules="[
+            { required: true, message: 'Diện tích (m²) là trường bắt buộc' }
+          ]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.acreage"
-            :formatter="(value) => toVndPrefix(value)"
+            :formatter="(value) => toAcreage(value)"
             :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
 
         <FormItem
-          label="bedroom"
+          label="Số phòng ngủ"
           name="bedroom"
-          :rules="[{ required: true, message: 'bedroom is required' }]"
+          :rules="[
+            { required: true, message: 'Số phòng ngủ là trường bắt buộc' }
+          ]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.bedroom"
-            :formatter="(value) => toVndPrefix(value)"
-            :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
 
         <FormItem
-          label="bathroom"
+          label="Số phòng tắm"
           name="bathroom"
-          :rules="[{ required: true, message: 'bathroom is required' }]"
+          :rules="[
+            { required: true, message: 'Số phòng tắm là trường bắt buộc' }
+          ]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.bathroom"
-            :formatter="(value) => toVndPrefix(value)"
-            :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
 
         <FormItem
-          label="floor"
+          label="Số tầng"
           name="floor"
-          :rules="[{ required: true, message: 'floor is required' }]"
+          :rules="[{ required: true, message: 'Số tầng là trường bắt buộc' }]"
         >
           <InputNumber
             style="width: 100%"
             v-model:value="formState.floor"
-            :formatter="(value) => toVndPrefix(value)"
-            :parser="(value) => toRawNumber(value)"
+            :min="0"
           />
         </FormItem>
       </Col>
@@ -269,11 +279,11 @@ onMounted(() => {
     <Row>
       <Col span="24">
         <FormItem
-          label="description"
+          label="Mô tả"
           name="description"
           :label-col="{ span: 4 }"
           :wrapper-col="{ span: 20 }"
-          :rules="[{ required: true, message: 'description is required' }]"
+          :rules="[{ required: true, message: 'Mô tả là trường bắt buộc' }]"
         >
           <Textarea v-model:value="formState.description" :rows="4" />
         </FormItem>
@@ -286,7 +296,7 @@ onMounted(() => {
     <Row>
       <Col span="24">
         <FormItem
-          label="images"
+          label="Hình ảnh"
           name="images"
           :label-col="{ span: 4 }"
           :wrapper-col="{ span: 20 }"
@@ -302,17 +312,21 @@ onMounted(() => {
     <Row>
       <Col span="12">
         <FormItem
-          label="ownerName"
+          label="Tên chủ hộ"
           name="ownerName"
-          :rules="[{ required: true, message: 'ownerName is required' }]"
+          :rules="[
+            { required: true, message: 'Tên chủ hộ là trường bắt buộc' }
+          ]"
         >
           <Input v-model:value="formState.ownerName" />
         </FormItem>
 
         <FormItem
-          label="ownerAddress"
+          label="Địa chỉ chủ hộ"
           name="ownerAddress"
-          :rules="[{ required: true, message: 'ownerAddress is required' }]"
+          :rules="[
+            { required: true, message: 'Địa chỉ chủ hộ là trường bắt buộc' }
+          ]"
         >
           <Input v-model:value="formState.ownerAddress" />
         </FormItem>
@@ -320,9 +334,14 @@ onMounted(() => {
 
       <Col span="12">
         <FormItem
-          label="ownerPhone"
+          label="Số điện thoại chủ hộ"
           name="ownerPhone"
-          :rules="[{ required: true, message: 'ownerPhone is required' }]"
+          :rules="[
+            {
+              required: true,
+              message: 'Số điện thoại chủ hộ là trường bắt buộc'
+            }
+          ]"
         >
           <Input v-model:value="formState.ownerPhone" />
         </FormItem>
@@ -334,8 +353,10 @@ onMounted(() => {
     <Row>
       <Col span="12">
         <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Submit</Button>
-          <Button style="margin-left: 10px" @click="resetForm">Reset</Button>
+          <Button type="primary" html-type="submit">Tạo bài đăng</Button>
+          <Button style="margin-left: 10px" @click="resetForm">
+            Xóa tất cả
+          </Button>
         </FormItem>
       </Col>
     </Row>

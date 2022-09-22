@@ -21,6 +21,13 @@ export const toVndPrefix = (number: number | string) => {
   return `VND ${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export const toAcreage = (number: number | string) => {
+  const localNumber = Number(number)
+  if (isNaN(localNumber)) return String(number)
+
+  return `${number}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' m²'
+}
+
 export const toRawNumber = (value: string) => {
   return value.replace(/\D/g, '')
 }
