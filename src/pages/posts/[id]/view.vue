@@ -16,13 +16,17 @@ import { toVndPrefix, toAcreage } from '~/utils/formatter'
 import { usePostStore } from '~/store/stores/postStore'
 import { PostVerifyStatuses } from '~/interfaces/enums'
 
+interface IDenyFormState {
+  reason: string
+}
+
 const postStore = usePostStore()
 const router = useRouter()
 const route = useRoute()
 
 const post = ref<IPost>()
 
-const denyFormState = ref({
+const denyFormState = ref<IDenyFormState>({
   reason: ''
 })
 
@@ -56,13 +60,20 @@ const verifyStatusText = computed(() => {
   }
 })
 
-const denyPost = () => {
-  console.log('deny post')
+const denyPost = async (values: IDenyFormState) => {
+  await postStore.denyPost(id.value, values.reason)
+  router.push('/posts')
+}
+
+const approvePost = async () => {
+  await postStore.approvePost(id.value)
+  router.push('/posts')
 }
 
 onMounted(async () => {
   const response = await postStore.getPost(id.value)
   post.value = response.data.post
+  denyFormState.value.reason = response.data.post.denyReason
 })
 </script>
 
@@ -279,7 +290,7 @@ onMounted(async () => {
           </FormItem>
 
           <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-            <Button type="primary">Duyệt bài</Button>
+            <Button type="primary" @click="approvePost">Duyệt bài</Button>
             <Button
               type="primary"
               danger

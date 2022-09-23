@@ -17,10 +17,20 @@ export const usePostStore = defineStore('postStore', () => {
     return CommonService.createPost(post)
   }
 
+  const approvePost = (id: string) => {
+    return CommonService.approvePost(id)
+  }
+
+  const denyPost = (id: string, reason: string) => {
+    return CommonService.denyPost(id, reason)
+  }
+
   return {
     posts,
     getPosts,
     getPost,
-    createPost
+    createPost,
+    approvePost,
+    denyPost
   }
 })
