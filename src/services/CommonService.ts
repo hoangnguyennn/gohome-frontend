@@ -47,6 +47,10 @@ const getPosts = () => {
   return axiosClient.get<IPostsResponse>('/posts')
 }
 
+const getPostById = (id: string) => {
+  return axiosClient.get<IPostResponse>(`/posts/${id}`)
+}
+
 const createPost = (post: IPostCreate) => {
   return axiosClient.post<IPostResponse>('/posts', post)
 }
@@ -72,6 +76,7 @@ const CommonService = {
   getWardsByDistrictId,
   createDistrict,
   getPosts,
+  getPostById,
   createPost,
   getUsers,
   getWards,

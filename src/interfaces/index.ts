@@ -71,8 +71,8 @@ export interface IPost {
   hiddenAt?: string
   shownAt: string
 
-  category?: ICategoryResponse
-  ward?: IWardResponse
+  category?: ICategory
+  ward?: IWard
   createdBy?: IUser
   updatedBy?: IUser
   images?: IImage[]

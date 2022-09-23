@@ -9,6 +9,10 @@ export const usePostStore = defineStore('postStore', () => {
     posts.value = response.data.posts
   }
 
+  const getPost = async (id: string) => {
+    return CommonService.getPostById(id)
+  }
+
   const createPost = (post: IPostCreate) => {
     return CommonService.createPost(post)
   }
@@ -16,6 +20,7 @@ export const usePostStore = defineStore('postStore', () => {
   return {
     posts,
     getPosts,
+    getPost,
     createPost
   }
 })
