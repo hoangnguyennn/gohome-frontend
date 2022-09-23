@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Form, FormItem, Input, InputPassword, Button } from 'ant-design-vue'
-import { useAuthStore } from '../store/stores/authStore'
+import { useAuthStore } from '~/store/stores/authStore'
 
 interface ILoginFormState {
   username: string

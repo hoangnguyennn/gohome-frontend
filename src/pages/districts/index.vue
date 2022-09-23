@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IDistrict, Nullable } from '../../interfaces'
-import { useDistrictStore } from '../../store/stores/districtStore'
+import { IDistrict, Nullable } from '~/interfaces'
+import { useDistrictStore } from '~/store/stores/districtStore'
 
 const districtStore = useDistrictStore()
 const { districts } = storeToRefs(districtStore)

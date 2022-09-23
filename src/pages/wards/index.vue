@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IWard, Nullable } from '../../interfaces'
-import { useWardStore } from '../../store/stores/wardStore'
+import { IWard, Nullable } from '~/interfaces'
+import { useWardStore } from '~/store/stores/wardStore'
 
 const wardStore = useWardStore()
 const { wards } = storeToRefs(wardStore)

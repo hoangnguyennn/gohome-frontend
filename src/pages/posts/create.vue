@@ -17,12 +17,12 @@ import {
 import type { FormInstance } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 
-import { useDistrictStore } from '../../store/stores/districtStore'
-import { useCategoryStore } from '../../store/stores/categoryStore'
-import { toVndPrefix, toRawNumber, toAcreage } from '../../utils/formatter'
-import ImageUploader from '../../components/ImageUploader.vue'
-import { IPostCreate } from '../../interfaces'
-import { usePostStore } from '../../store/stores/postStore'
+import { useDistrictStore } from '~/store/stores/districtStore'
+import { useCategoryStore } from '~/store/stores/categoryStore'
+import { toVndPrefix, toRawNumber, toAcreage } from '~/utils/formatter'
+import ImageUploader from '~/components/ImageUploader.vue'
+import { IPostCreate } from '~/interfaces'
+import { usePostStore } from '~/store/stores/postStore'
 
 interface IFormState {
   title: string

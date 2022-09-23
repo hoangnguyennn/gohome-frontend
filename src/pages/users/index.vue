@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IUser, Nullable } from '../../interfaces'
-import { UserTypes } from '../../interfaces/enums'
-import { useUserStore } from '../../store/stores/userStore'
+import { IUser, Nullable } from '~/interfaces'
+import { UserTypes } from '~/interfaces/enums'
+import { useUserStore } from '~/store/stores/userStore'
 
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)

@@ -10,8 +10,8 @@ import {
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
-import { ICategoryCreate } from '../../interfaces'
-import { useCategoryStore } from '../../store/stores/categoryStore'
+import { ICategoryCreate } from '~/interfaces'
+import { useCategoryStore } from '~/store/stores/categoryStore'
 
 interface IFormState {
   name: string

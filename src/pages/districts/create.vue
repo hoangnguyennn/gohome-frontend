@@ -12,9 +12,9 @@ import {
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
-import { DISTRICT_TYPES } from '../../constants'
-import { useDistrictStore } from '../../store/stores/districtStore'
-import { IDistrictCreate } from '../../interfaces'
+import { DISTRICT_TYPES } from '~/constants'
+import { useDistrictStore } from '~/store/stores/districtStore'
+import { IDistrictCreate } from '~/interfaces'
 
 interface IFormState {
   name: string

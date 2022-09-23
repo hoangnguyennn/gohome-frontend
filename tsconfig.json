@@ -12,6 +12,9 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "types": ["vite-plugin-pages/client", "vite-plugin-vue-layouts/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

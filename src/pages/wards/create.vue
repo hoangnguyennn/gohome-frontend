@@ -12,10 +12,10 @@ import {
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
-import { WARD_TYPES } from '../../constants'
-import { useWardStore } from '../../store/stores/wardStore'
-import { IWardCreate } from '../../interfaces'
-import { useDistrictStore } from '../../store/stores/districtStore'
+import { WARD_TYPES } from '~/constants'
+import { useWardStore } from '~/store/stores/wardStore'
+import { IWardCreate } from '~/interfaces'
+import { useDistrictStore } from '~/store/stores/districtStore'
 import { storeToRefs } from 'pinia'
 
 interface IFormState {

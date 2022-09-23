@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { ICategory, Nullable } from '../../interfaces'
-import { useCategoryStore } from '../../store/stores/categoryStore'
+import { ICategory, Nullable } from '~/interfaces'
+import { useCategoryStore } from '~/store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)

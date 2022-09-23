@@ -10,10 +10,10 @@ import {
 } from 'ant-design-vue'
 import type { ColumnsType } from 'ant-design-vue/es/table/interface'
 import { storeToRefs } from 'pinia'
-import { IPost, Nullable } from '../../interfaces'
-import { PostVerifyStatuses } from '../../interfaces/enums'
-import { usePostStore } from '../../store/stores/postStore'
-import { toDateTime, toVND } from '../../utils/formatter'
+import { IPost, Nullable } from '~/interfaces'
+import { PostVerifyStatuses } from '~/interfaces/enums'
+import { usePostStore } from '~/store/stores/postStore'
+import { toDateTime, toVND } from '~/utils/formatter'
 
 const postStore = usePostStore()
 const { posts } = storeToRefs(postStore)
