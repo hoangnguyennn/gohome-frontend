@@ -1,5 +1,5 @@
-import { ICategory, ICategoryCreate } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { ICategory, ICategoryCreate } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const useCategoryStore = defineStore('categoryStore', () => {
   const categories = ref<ICategory[]>([])

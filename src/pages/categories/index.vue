@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { ICategory, Nullable } from '~/interfaces'
+import { ICategory, IFormConfirmState } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()
@@ -29,21 +29,27 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<Nullable<ICategory>>(null)
-const isOpenConfirmDeleteCategory = ref(false)
+const itemDelete = ref<IFormConfirmState<ICategory>>({
+  value: null,
+  isOpen: false
+})
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/categories/${id}/${action}`
 }
 
 const onClickDelete = (item: ICategory) => {
-  itemWillDelete.value = item
-  isOpenConfirmDeleteCategory.value = true
+  itemDelete.value = {
+    value: item,
+    isOpen: true
+  }
 }
 
-const onDelete = () => {
-  console.log('delete')
-  isOpenConfirmDeleteCategory.value = false
+const onDelete = async () => {
+  itemDelete.value = {
+    value: null,
+    isOpen: false
+  }
 }
 
 onMounted(() => {
@@ -77,11 +83,11 @@ onMounted(() => {
   </Table>
 
   <Modal
-    v-model:visible="isOpenConfirmDeleteCategory"
+    v-model:visible="itemDelete.isOpen"
     title="Xóa loại nhà đất?"
     @ok="onDelete"
   >
-    Bạn có chắc chắn muốn xóa loại nhà đất "{{ itemWillDelete?.name }}"?
+    Bạn có muốn xóa loại nhà đất "{{ itemDelete.value?.name }}"?
   </Modal>
 </template>
 

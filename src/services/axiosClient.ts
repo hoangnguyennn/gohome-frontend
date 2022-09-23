@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { message } from 'ant-design-vue'
-import { IErrorResponse } from '../interfaces'
-import { useAuthStore } from '../store/stores/authStore'
+import { IErrorResponse } from '~/interfaces'
+import { useAuthStore } from '~/store/stores/authStore'
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL

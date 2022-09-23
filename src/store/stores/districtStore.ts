@@ -1,5 +1,5 @@
-import { IDistrict, IDistrictCreate, IWard } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { IDistrict, IDistrictCreate, IWard } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const useDistrictStore = defineStore('districtStore', () => {
   const districts = ref<IDistrict[]>([])

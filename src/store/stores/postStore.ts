@@ -1,12 +1,18 @@
-import { IPost, IPostCreate } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { IPost, IPostCreate } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const usePostStore = defineStore('postStore', () => {
   const posts = ref<IPost[]>([])
+  const rentedPosts = ref<IPost[]>([])
 
   const getPosts = async () => {
     const response = await CommonService.getPosts()
     posts.value = response.data.posts
+  }
+
+  const getRentedPosts = async () => {
+    const response = await CommonService.getRentedPosts()
+    rentedPosts.value = response.data.posts
   }
 
   const getPost = async (id: string) => {
@@ -25,12 +31,19 @@ export const usePostStore = defineStore('postStore', () => {
     return CommonService.denyPost(id, reason)
   }
 
+  const markAsRented = (id: string) => {
+    return CommonService.markAsRented(id)
+  }
+
   return {
     posts,
+    rentedPosts,
     getPosts,
+    getRentedPosts,
     getPost,
     createPost,
     approvePost,
-    denyPost
+    denyPost,
+    markAsRented
   }
 })

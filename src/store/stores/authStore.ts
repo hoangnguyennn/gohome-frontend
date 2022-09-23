@@ -1,5 +1,5 @@
-import { IUser, Nullable } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { IUser, Nullable } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const useAuthStore = defineStore(
   'authStore',

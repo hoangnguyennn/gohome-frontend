@@ -12,7 +12,7 @@ import {
   IWardCreate,
   IWardResponse,
   IWardsResponse
-} from '../interfaces'
+} from '~/interfaces'
 import axiosClient from './axiosClient'
 
 const login = (username: string, password: string) => {
@@ -47,6 +47,10 @@ const getPosts = () => {
   return axiosClient.get<IPostsResponse>('/posts')
 }
 
+const getRentedPosts = () => {
+  return axiosClient.get<IPostsResponse>('/posts/rented')
+}
+
 const getPostById = (id: string) => {
   return axiosClient.get<IPostResponse>(`/posts/${id}`)
 }
@@ -61,6 +65,10 @@ const approvePost = (id: string) => {
 
 const denyPost = (id: string, reason: string) => {
   return axiosClient.post<IPostResponse>(`/posts/${id}/deny`, { reason })
+}
+
+const markAsRented = (id: string) => {
+  return axiosClient.post<IPostResponse>(`/posts/${id}/mark-as-rented`)
 }
 
 const getUsers = () => {
@@ -84,10 +92,12 @@ const CommonService = {
   getWardsByDistrictId,
   createDistrict,
   getPosts,
+  getRentedPosts,
   getPostById,
   createPost,
   approvePost,
   denyPost,
+  markAsRented,
   getUsers,
   getWards,
   createWard

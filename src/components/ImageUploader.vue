@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Upload, Modal, UploadChangeParam, UploadFile } from 'ant-design-vue'
-import type { UploadProps } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { FileType } from 'ant-design-vue/lib/upload/interface'
 

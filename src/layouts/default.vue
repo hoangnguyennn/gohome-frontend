@@ -6,7 +6,7 @@ import {
   LayoutHeader,
   LayoutContent
 } from 'ant-design-vue'
-import TheMenu from '../components/TheMenu.vue'
+import TheMenu from '~/components/TheMenu.vue'
 
 const collapsed = ref(false)
 </script>

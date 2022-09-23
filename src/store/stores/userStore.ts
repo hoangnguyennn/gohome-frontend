@@ -1,5 +1,5 @@
-import { IUser } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { IUser } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const useUserStore = defineStore('userStore', () => {
   const users = ref<IUser[]>([])

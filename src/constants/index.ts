@@ -1,4 +1,4 @@
-import { IMenuItem } from '../interfaces'
+import { IMenuItem } from '~/interfaces'
 
 export const DISTRICT_TYPES = [
   {
@@ -46,6 +46,11 @@ export const menuItems: IMenuItem[] = [
       },
       {
         id: '5_2',
+        title: 'Danh sách (đã thuê)',
+        link: '/posts/rented'
+      },
+      {
+        id: '5_3',
         title: 'Thêm mới',
         link: '/posts/create'
       }

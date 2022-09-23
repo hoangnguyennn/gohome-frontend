@@ -159,4 +159,9 @@ export interface IAuthResponse {
   token: string
 }
 
+export interface IFormConfirmState<T> {
+  value: Nullable<T>
+  isOpen: boolean
+}
+
 export type Nullable<T> = T | null

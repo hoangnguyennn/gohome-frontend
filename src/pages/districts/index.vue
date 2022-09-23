@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IDistrict, Nullable } from '~/interfaces'
+import { IDistrict, IFormConfirmState } from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
 
 const districtStore = useDistrictStore()
@@ -29,21 +29,27 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<Nullable<IDistrict>>(null)
-const isOpenConfirmDeleteDistrict = ref(false)
+const itemDelete = ref<IFormConfirmState<IDistrict>>({
+  value: null,
+  isOpen: false
+})
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/districts/${id}/${action}`
 }
 
 const onClickDelete = (item: IDistrict) => {
-  itemWillDelete.value = item
-  isOpenConfirmDeleteDistrict.value = true
+  itemDelete.value = {
+    value: item,
+    isOpen: true
+  }
 }
 
-const onDelete = () => {
-  console.log('delete')
-  isOpenConfirmDeleteDistrict.value = false
+const onDelete = async () => {
+  itemDelete.value = {
+    value: null,
+    isOpen: false
+  }
 }
 
 onMounted(() => {
@@ -77,11 +83,11 @@ onMounted(() => {
   </Table>
 
   <Modal
-    v-model:visible="isOpenConfirmDeleteDistrict"
+    v-model:visible="itemDelete.isOpen"
     title="Xóa quận huyện?"
     @ok="onDelete"
   >
-    Bạn có chắc chắn muốn xóa quận huyện "{{ itemWillDelete?.name }}"?
+    Bạn có muốn xóa quận huyện "{{ itemDelete.value?.name }}"?
   </Modal>
 </template>
 

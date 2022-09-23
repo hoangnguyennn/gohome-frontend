@@ -1,5 +1,5 @@
-import { IWard, IWardCreate } from '../../interfaces'
-import CommonService from '../../services/CommonService'
+import { IWard, IWardCreate } from '~/interfaces'
+import CommonService from '~/services/CommonService'
 
 export const useWardStore = defineStore('wardStore', () => {
   const wards = ref<IWard[]>([])

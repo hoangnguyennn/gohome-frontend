@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IUser, Nullable } from '~/interfaces'
+import { IUser, IFormConfirmState } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { useUserStore } from '~/store/stores/userStore'
 
@@ -35,21 +35,27 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<Nullable<IUser>>(null)
-const isOpenConfirmDeleteUser = ref(false)
+const itemDelete = ref<IFormConfirmState<IUser>>({
+  value: null,
+  isOpen: false
+})
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/users/${id}/${action}`
 }
 
 const onClickDelete = (item: IUser) => {
-  itemWillDelete.value = item
-  isOpenConfirmDeleteUser.value = true
+  itemDelete.value = {
+    value: item,
+    isOpen: true
+  }
 }
 
-const onDelete = () => {
-  console.log('delete')
-  isOpenConfirmDeleteUser.value = false
+const onDelete = async () => {
+  itemDelete.value = {
+    value: null,
+    isOpen: false
+  }
 }
 
 const getUserTypeText = (record: IUser) => {
@@ -104,12 +110,12 @@ onMounted(() => {
   </Table>
 
   <Modal
-    v-model:visible="isOpenConfirmDeleteUser"
+    v-model:visible="itemDelete.isOpen"
     title="Xóa người dùng?"
     @ok="onDelete"
   >
-    Bạn có chắc chắn muốn xóa người dùng "{{
-      itemWillDelete?.fullName || itemWillDelete?.username
+    Bạn có muốn xóa người dùng "{{
+      itemDelete.value?.fullName || itemDelete.value?.username
     }}"?
   </Modal>
 </template>

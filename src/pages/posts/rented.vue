@@ -16,7 +16,7 @@ import { usePostStore } from '~/store/stores/postStore'
 import { toDateTime, toVND } from '~/utils/formatter'
 
 const postStore = usePostStore()
-const { posts } = storeToRefs(postStore)
+const { rentedPosts } = storeToRefs(postStore)
 
 const columns: ColumnsType = [
   {
@@ -96,17 +96,13 @@ const columns: ColumnsType = [
 ]
 
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
-const isLoading = ref(false)
 
 const itemDelete = ref<IFormConfirmState<IPost>>({
   value: null,
   isOpen: false
 })
 
-const itemMarkAsRead = ref<IFormConfirmState<IPost>>({
-  value: null,
-  isOpen: false
-})
+const isLoading = ref(false)
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/posts/${id}/${action}`
@@ -145,29 +141,9 @@ const onClickDelete = (item: IPost) => {
   }
 }
 
-const onDelete = async () => {
+const onDelete = () => {
+  console.log('delete')
   itemDelete.value = {
-    value: null,
-    isOpen: false
-  }
-}
-
-const onClickMarkAsRead = (item: IPost) => {
-  itemMarkAsRead.value = {
-    value: item,
-    isOpen: true
-  }
-}
-
-const onMarkAsRead = async () => {
-  try {
-    isLoading.value = true
-    await postStore.markAsRented(itemMarkAsRead.value.value?.id as string)
-    await postStore.getPosts()
-  } catch {}
-
-  isLoading.value = false
-  itemMarkAsRead.value = {
     value: null,
     isOpen: false
   }
@@ -176,7 +152,7 @@ const onMarkAsRead = async () => {
 onMounted(async () => {
   try {
     isLoading.value = true
-    await postStore.getPosts()
+    await postStore.getRentedPosts()
   } catch {}
 
   isLoading.value = false
@@ -185,7 +161,7 @@ onMounted(async () => {
 
 <template>
   <PageHeader
-    title="Danh sách bài đăng"
+    title="Danh sách bài đăng (đã thuê)"
     back-icon=""
     style="padding-left: 0; padding-right: 0"
   >
@@ -197,7 +173,7 @@ onMounted(async () => {
   </PageHeader>
 
   <div class="responsive-wrapper">
-    <Table :columns="columns" :data-source="posts" :loading="isLoading">
+    <Table :columns="columns" :data-source="rentedPosts" :loading="isLoading">
       <template #headerCell="{ column }">
         <template v-if="column.key === 'verifyStatus'">
           <span class="line">Tình trạng</span>{{ ' ' }}
@@ -216,8 +192,6 @@ onMounted(async () => {
           <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
           <Divider type="vertical" />
           <a @click.prevent="onClickDelete(record)">Xóa</a>
-          <Divider type="vertical" />
-          <a @click.prevent="onClickMarkAsRead(record)">Đánh dấu đã thuê</a>
         </Row>
 
         <template v-else-if="column.key === 'images'">
@@ -265,20 +239,12 @@ onMounted(async () => {
   >
     Bạn có muốn xóa bài đăng "{{ itemDelete.value?.title }}"?
   </Modal>
-
-  <Modal
-    v-model:visible="itemMarkAsRead.isOpen"
-    title="Đánh dấu đã thuê?"
-    @ok="onMarkAsRead"
-  >
-    Bạn có muốn đánh dấu bài đăng "{{ itemMarkAsRead.value?.title }}" đã thuê?
-  </Modal>
 </template>
 
 <route lang="yaml">
 meta:
   layout: default
-  title: Danh sách bài đăng
+  title: Danh sách bài đăng (đã thuê)
 </route>
 
 <style lang="scss">

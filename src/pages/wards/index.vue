@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IWard, Nullable } from '~/interfaces'
+import { IFormConfirmState, IWard, Nullable } from '~/interfaces'
 import { useWardStore } from '~/store/stores/wardStore'
 
 const wardStore = useWardStore()
@@ -34,21 +34,27 @@ const columns = ref([
   }
 ])
 
-const itemWillDelete = ref<Nullable<IWard>>(null)
-const isOpenConfirmDeleteWard = ref(false)
+const itemDelete = ref<IFormConfirmState<IWard>>({
+  value: null,
+  isOpen: false
+})
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/wards/${id}/${action}`
 }
 
 const onClickDelete = (item: IWard) => {
-  itemWillDelete.value = item
-  isOpenConfirmDeleteWard.value = true
+  itemDelete.value = {
+    value: item,
+    isOpen: true
+  }
 }
 
-const onDelete = () => {
-  console.log('delete')
-  isOpenConfirmDeleteWard.value = false
+const onDelete = async () => {
+  itemDelete.value = {
+    value: null,
+    isOpen: false
+  }
 }
 
 onMounted(() => {
@@ -87,11 +93,11 @@ onMounted(() => {
   </Table>
 
   <Modal
-    v-model:visible="isOpenConfirmDeleteWard"
+    v-model:visible="itemDelete.isOpen"
     title="Xóa xã phường?"
     @ok="onDelete"
   >
-    Bạn có chắc chắn muốn xóa xã phường "{{ itemWillDelete?.name }}"?
+    Bạn có muốn xóa xã phường "{{ itemDelete.value?.name }}"?
   </Modal>
 </template>
 
