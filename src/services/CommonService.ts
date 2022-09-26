@@ -59,6 +59,10 @@ const createPost = (post: IPostCreate) => {
   return axiosClient.post<IPostResponse>('/posts', post)
 }
 
+const updatePostById = (id: string, post: IPostCreate) => {
+  return axiosClient.put<IPostResponse>(`/posts/${id}`, post)
+}
+
 const approvePost = (id: string) => {
   return axiosClient.post<IPostResponse>(`/posts/${id}/approve`)
 }
@@ -98,6 +102,7 @@ const CommonService = {
   approvePost,
   denyPost,
   markAsRented,
+  updatePostById,
   getUsers,
   getWards,
   createWard

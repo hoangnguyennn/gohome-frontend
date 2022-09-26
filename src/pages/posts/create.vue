@@ -105,9 +105,12 @@ const resetForm = () => {
 
 watch(
   () => formState.value.districtId,
-  (newValue: string) => {
+  (newDistrictId: string) => {
     formState.value.wardId = ''
-    districtStore.getWardsByDistrictId(newValue)
+
+    if (newDistrictId) {
+      districtStore.getWardsByDistrictId(newDistrictId)
+    }
   }
 )
 

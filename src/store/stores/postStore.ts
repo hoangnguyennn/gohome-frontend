@@ -35,6 +35,10 @@ export const usePostStore = defineStore('postStore', () => {
     return CommonService.markAsRented(id)
   }
 
+  const updatePost = (id: string, post: IPostCreate) => {
+    return CommonService.updatePostById(id, post)
+  }
+
   return {
     posts,
     rentedPosts,
@@ -44,6 +48,7 @@ export const usePostStore = defineStore('postStore', () => {
     createPost,
     approvePost,
     denyPost,
-    markAsRented
+    markAsRented,
+    updatePost
   }
 })

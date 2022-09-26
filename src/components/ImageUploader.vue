@@ -2,8 +2,10 @@
 import { Upload, Modal, UploadChangeParam, UploadFile } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { FileType } from 'ant-design-vue/lib/upload/interface'
+import { IImage } from '~/interfaces'
+import { getFilename, isIImage } from '~/utils/common'
 
-defineProps(['value'])
+const props = defineProps(['value'])
 const emit = defineEmits(['update:value'])
 
 const previewVisible = ref(false)
@@ -47,6 +49,26 @@ const handleChange = (info: UploadChangeParam<UploadFile>) => {
   fileList.value = info.fileList
   emit('update:value', info.fileList)
 }
+
+watch(
+  () => props.value,
+  (uploadedImages: (UploadFile | IImage)[]) => {
+    console.log({ uploadedImages })
+
+    fileList.value = uploadedImages.map((image) => {
+      if (isIImage(image)) {
+        return {
+          uid: image.id,
+          url: image.url,
+          name: getFilename(image.url)
+        }
+      }
+
+      return image
+    })
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
