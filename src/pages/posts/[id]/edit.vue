@@ -43,6 +43,8 @@ interface IFormState {
   ownerAddress: string
   isCheap: boolean
   isFeatured: boolean
+  isRented: boolean
+  isHide: boolean
   images: (UploadFile | IImage)[]
 }
 
@@ -75,6 +77,8 @@ const formState = ref<IFormState>({
   ownerAddress: '',
   isCheap: false,
   isFeatured: false,
+  isRented: false,
+  isHide: false,
   images: []
 })
 
@@ -82,21 +86,7 @@ const formRef = ref<FormInstance>()
 
 const onFinish = async (values: IFormState) => {
   const post: IPostCreate = {
-    title: values.title,
-    categoryId: values.categoryId,
-    wardId: values.wardId,
-    price: values.price,
-    commission: values.commission,
-    acreage: values.acreage,
-    bedroom: values.bedroom,
-    bathroom: values.bathroom,
-    floor: values.floor,
-    description: values.description,
-    ownerName: values.ownerName,
-    ownerPhone: values.ownerPhone,
-    ownerAddress: values.ownerAddress,
-    isCheap: values.isCheap,
-    isFeatured: values.isFeatured,
+    ...values,
     imagesId: values.images.map((image) => {
       if (isIImage(image)) {
         return (image as IImage).id
@@ -134,6 +124,8 @@ const setFormState = (post: IPost) => {
     ownerAddress: post.ownerAddress,
     isCheap: post.isCheap,
     isFeatured: post.isFeatured,
+    isRented: post.isRented,
+    isHide: post.isHide,
     images: post.images || []
   }
 }
@@ -380,6 +372,24 @@ onMounted(async () => {
           :wrapper-col="{ span: 20 }"
         >
           <Checkbox v-model:checked="formState.isCheap" />
+        </FormItem>
+
+        <FormItem
+          label="Đã thuê"
+          name="isRented"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 20 }"
+        >
+          <Checkbox v-model:checked="formState.isRented" />
+        </FormItem>
+
+        <FormItem
+          label="Đã thuê"
+          name="isRented"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 20 }"
+        >
+          <Checkbox v-model:checked="formState.isRented" />
         </FormItem>
       </Col>
     </Row>

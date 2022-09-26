@@ -12,7 +12,7 @@ import {
 } from 'ant-design-vue'
 
 import { IPost } from '~/interfaces'
-import { toVndPrefix, toAcreage } from '~/utils/formatter'
+import { toVndPrefix, toAcreage, toDateTime } from '~/utils/formatter'
 import { usePostStore } from '~/store/stores/postStore'
 import { PostVerifyStatuses } from '~/interfaces/enums'
 
@@ -211,6 +211,49 @@ onMounted(async () => {
               <img :src="image.url" alt="" />
             </div>
           </div>
+        </FormItem>
+      </Col>
+    </Row>
+
+    <Divider type="horizontal"></Divider>
+
+    <h3 class="section-title">Thời gian</h3>
+    <Row>
+      <Col span="12">
+        <FormItem
+          label="Thời gian cho thuê (gần nhất)"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <div v-if="post">
+            {{
+              post.rentedAt ? toDateTime(post.rentedAt) : 'Chưa từng được thuê'
+            }}
+          </div>
+        </FormItem>
+
+        <FormItem
+          label="Thời gian mở cho thuê (gần nhất)"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <div v-if="post">{{ toDateTime(post.openedForRentAt) }}</div>
+        </FormItem>
+
+        <FormItem
+          label="Thời gian cập nhật (gần nhất)"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <div v-if="post">{{ toDateTime(post.updatedAt) }}</div>
+        </FormItem>
+
+        <FormItem
+          label="Thời gian tạo"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <div v-if="post">{{ toDateTime(post.createdAt) }}</div>
         </FormItem>
       </Col>
     </Row>

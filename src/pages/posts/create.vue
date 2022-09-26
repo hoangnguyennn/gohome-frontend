@@ -77,21 +77,7 @@ const formRef = ref<FormInstance>()
 
 const onFinish = async (values: IFormState) => {
   const post: IPostCreate = {
-    title: values.title,
-    categoryId: values.categoryId,
-    wardId: values.wardId,
-    price: values.price,
-    commission: values.commission,
-    acreage: values.acreage,
-    bedroom: values.bedroom,
-    bathroom: values.bathroom,
-    floor: values.floor,
-    description: values.description,
-    ownerName: values.ownerName,
-    ownerPhone: values.ownerPhone,
-    ownerAddress: values.ownerAddress,
-    isCheap: values.isCheap,
-    isFeatured: values.isFeatured,
+    ...values,
     imagesId: values.images.map((image) => image.response?.image.id)
   }
 

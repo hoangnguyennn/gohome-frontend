@@ -68,8 +68,11 @@ export interface IPost {
   isCheap: boolean
   isFeatured: boolean
   isRented: boolean
-  hiddenAt?: string
-  shownAt: string
+  isHide: boolean
+  rentedAt?: string
+  openedForRentAt: string
+  createdAt: string
+  updatedAt: string
 
   category?: ICategory
   ward?: IWard
@@ -94,6 +97,8 @@ export interface IPostCreate {
   ownerAddress: string
   isCheap: boolean
   isFeatured: boolean
+  isRented?: boolean
+  isHide?: boolean
   imagesId: string[]
 }
 
