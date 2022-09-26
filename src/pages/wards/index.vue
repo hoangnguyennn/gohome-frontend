@@ -105,4 +105,5 @@ onMounted(() => {
 meta:
   layout: default
   title: Danh sách xã phường
+  requireAuth: true
 </route>

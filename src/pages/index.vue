@@ -5,4 +5,5 @@
 <route lang="yaml">
 meta:
   layout: default
+  requireAuth: true
 </route>

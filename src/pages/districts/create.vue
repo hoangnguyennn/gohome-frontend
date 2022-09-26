@@ -93,4 +93,5 @@ const resetForm = () => {
 meta:
   layout: default
   title: Thêm quận, huyện mới
+  requireAuth: true
 </route>

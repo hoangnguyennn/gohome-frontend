@@ -83,4 +83,5 @@ const resetForm = () => {
 meta:
   layout: default
   title: Thêm loại nhà đất mới
+  requireAuth: true
 </route>

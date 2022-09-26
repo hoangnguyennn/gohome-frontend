@@ -279,6 +279,7 @@ onMounted(async () => {
 meta:
   layout: default
   title: Danh sách bài đăng
+  requireAuth: true
 </route>
 
 <style lang="scss">

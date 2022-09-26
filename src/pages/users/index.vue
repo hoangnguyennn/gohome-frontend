@@ -124,4 +124,5 @@ onMounted(() => {
 meta:
   layout: default
   title: Danh sách người dùng
+  requireAuth: true
 </route>

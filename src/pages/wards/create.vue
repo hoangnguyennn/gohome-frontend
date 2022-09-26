@@ -122,4 +122,5 @@ onMounted(() => {
 meta:
   layout: default
   title: Thêm xã phường mới
+  requireAuth: true
 </route>

@@ -157,7 +157,7 @@ onMounted(() => {
               :key="district.id"
               :value="district.id"
             >
-              {{ district.name }}
+              {{ district.type }} {{ district.name }}
             </SelectOption>
           </Select>
         </FormItem>
@@ -169,7 +169,7 @@ onMounted(() => {
         >
           <Select v-model:value="formState.wardId">
             <SelectOption v-for="ward of wards" :key="ward.id" :value="ward.id">
-              {{ ward.name }}
+              {{ ward.type }} {{ ward.name }}
             </SelectOption>
           </Select>
         </FormItem>
@@ -382,6 +382,7 @@ onMounted(() => {
 meta:
   layout: default
   title: Thêm bài đăng mới
+  requireAuth: true
 </route>
 
 <style scoped lang="scss">

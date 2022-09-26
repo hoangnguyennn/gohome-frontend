@@ -95,4 +95,5 @@ onMounted(() => {
 meta:
   layout: default
   title: Danh sách loại nhà đất
+  requireAuth: true
 </route>

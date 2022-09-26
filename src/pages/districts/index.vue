@@ -95,4 +95,5 @@ onMounted(() => {
 meta:
   layout: default
   title: Danh sách quận huyện
+  requireAuth: true
 </route>
