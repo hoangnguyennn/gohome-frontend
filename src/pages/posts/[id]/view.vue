@@ -80,6 +80,9 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chi tiết bài đăng" @back="router.back">
     <template #extra>
+      <Tag v-if="post?.isCheap" color="blue">Giá rẻ</Tag>
+      <Tag v-if="post?.isFeatured" color="pink">Nổi bật</Tag>
+      <Tag v-if="post?.isRented" color="default">Đã thuê</Tag>
       <Tag :color="verifyStatusColor">
         {{ verifyStatusText }}
       </Tag>

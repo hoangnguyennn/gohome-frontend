@@ -7,6 +7,7 @@ import {
   InputNumber,
   Select,
   SelectOption,
+  Checkbox,
   Row,
   Col,
   Button,
@@ -302,6 +303,31 @@ onMounted(() => {
           :wrapper-col="{ span: 20 }"
         >
           <ImageUploader v-model:value="formState.images" />
+        </FormItem>
+      </Col>
+    </Row>
+
+    <Divider type="horizontal"></Divider>
+
+    <h3 class="section-title"></h3>
+    <Row>
+      <Col span="24">
+        <FormItem
+          label="Nổi bật"
+          name="isFeatured"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 20 }"
+        >
+          <Checkbox v-model:checked="formState.isFeatured" />
+        </FormItem>
+
+        <FormItem
+          label="Giá rẻ"
+          name="isCheap"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 20 }"
+        >
+          <Checkbox v-model:checked="formState.isCheap" />
         </FormItem>
       </Col>
     </Row>

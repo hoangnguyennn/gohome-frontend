@@ -20,7 +20,7 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (res) => res,
   (error: AxiosError<IErrorResponse>) => {
-    const errorMessage = error.response?.data.message
+    const errorMessage = error.response?.data?.message || error.message
     message.error(errorMessage)
     throw error
   }
