@@ -71,9 +71,13 @@ const approvePost = async () => {
 }
 
 onMounted(async () => {
-  const response = await postStore.getPost(id.value)
-  post.value = response.data.post
-  denyFormState.value.reason = response.data.post.denyReason
+  try {
+    const response = await postStore.getPost(id.value)
+    post.value = response.data.post
+    denyFormState.value.reason = response.data.post.denyReason
+  } catch {
+    router.push('/posts')
+  }
 })
 </script>
 

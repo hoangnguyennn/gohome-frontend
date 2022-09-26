@@ -152,11 +152,15 @@ watch(post, (newPost: Nullable<IPost>) => {
 })
 
 onMounted(async () => {
+  try {
+    const response = await postStore.getPost(id)
+    post.value = response.data.post
+  } catch {
+    router.push('/posts')
+  }
+
   await categoryStore.getCategories()
   await districtStore.getDistricts()
-
-  const response = await postStore.getPost(id)
-  post.value = response.data.post
 })
 </script>
 
