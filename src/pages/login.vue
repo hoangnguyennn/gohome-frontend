@@ -16,7 +16,6 @@ const formState = ref<ILoginFormState>({
 })
 
 const onLogin = async (values: ILoginFormState) => {
-  console.log('login', values)
   await authStore.login(values.username, values.password)
   await authStore.getCurrentUser()
   router.push('/')

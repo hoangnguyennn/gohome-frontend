@@ -53,8 +53,6 @@ const handleChange = (info: UploadChangeParam<UploadFile>) => {
 watch(
   () => props.value,
   (uploadedImages: (UploadFile | IImage)[]) => {
-    console.log({ uploadedImages })
-
     fileList.value = uploadedImages.map((image) => {
       if (isIImage(image)) {
         return {
