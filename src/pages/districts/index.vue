@@ -7,6 +7,8 @@ import { useDistrictStore } from '~/store/stores/districtStore'
 const districtStore = useDistrictStore()
 const { districts } = storeToRefs(districtStore)
 
+const isLoading = ref(false)
+
 const columns = ref([
   {
     title: '#',
@@ -52,8 +54,13 @@ const onDelete = async () => {
   }
 }
 
-onMounted(() => {
-  districtStore.getDistricts()
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await districtStore.getDistricts()
+  } catch {}
+
+  isLoading.value = false
 })
 </script>
 
@@ -70,7 +77,7 @@ onMounted(() => {
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="districts">
+  <Table :columns="columns" :data-source="districts" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>

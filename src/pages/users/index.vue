@@ -8,6 +8,8 @@ import { useUserStore } from '~/store/stores/userStore'
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
 
+const isLoading = ref(false)
+
 const columns = ref([
   {
     title: '#',
@@ -80,8 +82,13 @@ const getUserTypeColor = (record: IUser) => {
   }
 }
 
-onMounted(() => {
-  userStore.getUsers()
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await userStore.getUsers()
+  } catch {}
+
+  isLoading.value = false
 })
 </script>
 
@@ -92,7 +99,7 @@ onMounted(() => {
     style="padding-left: 0; padding-right: 0"
   ></PageHeader>
 
-  <Table :columns="columns" :data-source="users">
+  <Table :columns="columns" :data-source="users" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>

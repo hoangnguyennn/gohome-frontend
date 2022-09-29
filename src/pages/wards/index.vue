@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
-import { IFormConfirmState, IWard, Nullable } from '~/interfaces'
+import { IFormConfirmState, IWard } from '~/interfaces'
 import { useWardStore } from '~/store/stores/wardStore'
 
 const wardStore = useWardStore()
 const { wards } = storeToRefs(wardStore)
+
+const isLoading = ref(false)
 
 const columns = ref([
   {
@@ -57,8 +59,13 @@ const onDelete = async () => {
   }
 }
 
-onMounted(() => {
-  wardStore.getWards()
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await wardStore.getWards()
+  } catch {}
+
+  isLoading.value = false
 })
 </script>
 
@@ -75,7 +82,7 @@ onMounted(() => {
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="wards">
+  <Table :columns="columns" :data-source="wards" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>
