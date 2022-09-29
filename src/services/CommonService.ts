@@ -11,7 +11,7 @@ import {
   IPostsResponse,
   IUserResponse,
   IUsersResponse,
-  IWardCreate,
+  IWardRequest,
   IWardResponse,
   IWardsResponse
 } from '~/interfaces'
@@ -101,8 +101,16 @@ const getWards = () => {
   return axiosClient.get<IWardsResponse>('/wards')
 }
 
-const createWard = (ward: IWardCreate) => {
+const getWardById = (id: string) => {
+  return axiosClient.get<IWardResponse>(`/wards/${id}`)
+}
+
+const createWard = (ward: IWardRequest) => {
   return axiosClient.post<IWardResponse>('/wards', ward)
+}
+
+const updateWardById = (id: string, ward: IWardRequest) => {
+  return axiosClient.put<IWardResponse>(`/wards/${id}`, ward)
 }
 
 const CommonService = {
@@ -121,12 +129,14 @@ const CommonService = {
   getPosts,
   getRentedPosts,
   getUsers,
+  getWardById,
   getWards,
   getWardsByDistrictId,
   login,
   markAsRented,
   updateCategoryById,
   updateDistrictById,
-  updatePostById
+  updatePostById,
+  updateWardById
 }
 export default CommonService

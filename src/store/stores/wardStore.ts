@@ -1,4 +1,4 @@
-import { IWard, IWardCreate } from '~/interfaces'
+import { IWard, IWardRequest } from '~/interfaces'
 import CommonService from '~/services/CommonService'
 
 export const useWardStore = defineStore('wardStore', () => {
@@ -9,13 +9,23 @@ export const useWardStore = defineStore('wardStore', () => {
     wards.value = response.data.wards
   }
 
-  const createWard = (ward: IWardCreate) => {
+  const getWardById = (id: string) => {
+    return CommonService.getWardById(id)
+  }
+
+  const createWard = (ward: IWardRequest) => {
     return CommonService.createWard(ward)
+  }
+
+  const updateWardById = (id: string, wardUpdate: IWardRequest) => {
+    return CommonService.updateWardById(id, wardUpdate)
   }
 
   return {
     wards,
+    createWard,
+    getWardById,
     getWards,
-    createWard
+    updateWardById
   }
 })

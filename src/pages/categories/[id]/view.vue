@@ -30,7 +30,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chỉnh sửa loại nhà đất" @back="router.back"></PageHeader>
+  <PageHeader title="Chi tiết loại nhà đất" @back="router.back"></PageHeader>
 
   <div>
     <Row>
@@ -73,6 +73,6 @@ onMounted(async () => {
 <route lang="yaml">
 meta:
   layout: default
-  title: Chỉnh sửa loại nhà đất
+  title: Chi tiết loại nhà đất
   requireAuth: true
 </route>

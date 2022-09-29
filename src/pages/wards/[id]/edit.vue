@@ -14,7 +14,7 @@ import type { FormInstance } from 'ant-design-vue'
 
 import { WARD_TYPES } from '~/constants'
 import { useWardStore } from '~/store/stores/wardStore'
-import { IWardRequest } from '~/interfaces'
+import { IWard, IWardRequest, Nullable } from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
 import { storeToRefs } from 'pinia'
 
@@ -27,8 +27,12 @@ interface IFormState {
 const districtStore = useDistrictStore()
 const wardStore = useWardStore()
 const router = useRouter()
+const route = useRoute()
+const id = route.params.id as string
 
 const { districts } = storeToRefs(districtStore)
+
+const ward = ref<Nullable<IWard>>(null)
 
 const formState = ref<IFormState>({
   name: '',
@@ -39,21 +43,44 @@ const formState = ref<IFormState>({
 const formRef = ref<FormInstance>()
 
 const onFinish = async (values: IFormState) => {
-  await wardStore.createWard(values as IWardRequest)
+  await wardStore.updateWardById(id, values as IWardRequest)
   router.push('/wards')
 }
 
 const resetForm = () => {
-  formRef.value?.resetFields()
+  if (ward.value) {
+    setFormState(ward.value)
+  }
 }
 
-onMounted(() => {
+const setFormState = (ward: IWard) => {
+  formState.value = {
+    name: ward.name,
+    type: ward.type,
+    districtId: ward.district?.id || ''
+  }
+}
+
+watch(ward, (newValue: Nullable<IWard>) => {
+  if (newValue) {
+    setFormState(newValue)
+  }
+})
+
+onMounted(async () => {
   districtStore.getDistricts()
+
+  try {
+    const response = await wardStore.getWardById(id)
+    ward.value = response.data.ward
+  } catch {
+    router.push('/wards')
+  }
 })
 </script>
 
 <template>
-  <PageHeader title="Thêm xã phường mới" @back="router.back"></PageHeader>
+  <PageHeader title="Chỉnh sửa xã phường" @back="router.back"></PageHeader>
 
   <Form
     name="basic"
@@ -107,7 +134,9 @@ onMounted(() => {
         </FormItem>
 
         <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Tạo loại nhà đất</Button>
+          <Button type="primary" html-type="submit">
+            Cập nhật xã phường
+          </Button>
           <Button style="margin-left: 10px" @click="resetForm">
             Xóa tất cả
           </Button>
@@ -121,6 +150,6 @@ onMounted(() => {
 <route lang="yaml">
 meta:
   layout: default
-  title: Thêm xã phường mới
+  title: Chỉnh sửa xã phường
   requireAuth: true
 </route>

@@ -134,7 +134,7 @@ export interface IWard {
   district?: IDistrict
 }
 
-export interface IWardCreate {
+export interface IWardRequest {
   name: string
   type: WardTypes
   districtId: string

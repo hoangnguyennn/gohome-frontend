@@ -12,29 +12,37 @@ import {
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
-import { DISTRICT_TYPES } from '~/constants'
+import { WARD_TYPES } from '~/constants'
+import { useWardStore } from '~/store/stores/wardStore'
+import { IWard, IWardRequest, Nullable } from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
-import { IDistrict, Nullable } from '~/interfaces'
+import { storeToRefs } from 'pinia'
 
-const districtStore = useDistrictStore()
+interface IFormState {
+  name: string
+  type: string
+  districtId: string
+}
+
+const wardStore = useWardStore()
 const router = useRouter()
 const route = useRoute()
 const id = route.params.id as string
 
-const district = ref<Nullable<IDistrict>>(null)
+const ward = ref<Nullable<IWard>>(null)
 
 onMounted(async () => {
   try {
-    const response = await districtStore.getDistrictById(id)
-    district.value = response.data.district
+    const response = await wardStore.getWardById(id)
+    ward.value = response.data.ward
   } catch {
-    router.push('/districts')
+    router.push('/wards')
   }
 })
 </script>
 
 <template>
-  <PageHeader title="Chi tiết quận, huyện" @back="router.back"></PageHeader>
+  <PageHeader title="Chi tiết xã phường" @back="router.back"></PageHeader>
 
   <div>
     <Row>
@@ -44,24 +52,34 @@ onMounted(async () => {
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 16 }"
         >
-          <div>{{ district?.name }}</div>
+          <div>{{ ward?.name }}</div>
         </FormItem>
         <FormItem
           label="Loại"
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 16 }"
         >
-          <div>{{ district?.type }}</div>
+          <div>{{ ward?.type }}</div>
+        </FormItem>
+
+        <FormItem
+          label="Quận huyện"
+          :label-col="{ span: 8 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <router-link :to="`/districts/${ward?.district?.id}/view`">
+            {{ ward?.district?.name }}
+          </router-link>
         </FormItem>
 
         <FormItem :wrapper-col="{ offset: 8, span: 16 }">
           <Button type="primary">
-            <router-link :to="`/districts/${id}/edit`">
+            <router-link :to="`/wards/${id}/edit`">
               Đi tới trang chỉnh sửa
             </router-link>
           </Button>
           <Button style="margin-left: 10px">
-            <router-link to="/districts">Quay lại</router-link>
+            <router-link to="/wards">Quay lại</router-link>
           </Button>
         </FormItem>
       </Col>
@@ -73,6 +91,6 @@ onMounted(async () => {
 <route lang="yaml">
 meta:
   layout: default
-  title: Chi tiết quận, huyện
+  title: Chi tiết xã phường
   requireAuth: true
 </route>
