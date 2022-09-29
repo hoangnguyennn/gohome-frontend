@@ -9,13 +9,23 @@ export const useCategoryStore = defineStore('categoryStore', () => {
     categories.value = response.data.categories
   }
 
+  const getCategoryById = (id: string) => {
+    return CommonService.getCategoryById(id)
+  }
+
   const createCategory = (category: ICategoryCreate) => {
     return CommonService.createCategory(category)
+  }
+
+  const updateCategoryById = (id: string, category: ICategoryCreate) => {
+    return CommonService.updateCategoryById(id, category)
   }
 
   return {
     categories,
     getCategories,
-    createCategory
+    getCategoryById,
+    createCategory,
+    updateCategoryById
   }
 })

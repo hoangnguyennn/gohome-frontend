@@ -21,8 +21,8 @@ const columns = ref([
   },
   {
     title: 'Họ tên',
-    dataIndex: 'fullname',
-    key: 'fullname'
+    dataIndex: 'fullName',
+    key: 'fullName'
   },
   {
     title: 'Loại',

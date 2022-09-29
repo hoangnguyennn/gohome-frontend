@@ -6,6 +6,7 @@ import { useCategoryStore } from '~/store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
+const isLoading = ref(false)
 
 const columns = ref([
   {
@@ -52,8 +53,13 @@ const onDelete = async () => {
   }
 }
 
-onMounted(() => {
-  categoryStore.getCategories()
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    await categoryStore.getCategories()
+  } catch {}
+
+  isLoading.value = false
 })
 </script>
 
@@ -70,7 +76,7 @@ onMounted(() => {
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="categories">
+  <Table :columns="columns" :data-source="categories" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>
