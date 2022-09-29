@@ -30,7 +30,7 @@ export interface IDistrict {
   type: DistrictTypes
 }
 
-export interface IDistrictCreate {
+export interface IDistrictRequest {
   name: string
   type: DistrictTypes
 }

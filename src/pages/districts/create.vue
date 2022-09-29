@@ -14,7 +14,7 @@ import type { FormInstance } from 'ant-design-vue'
 
 import { DISTRICT_TYPES } from '~/constants'
 import { useDistrictStore } from '~/store/stores/districtStore'
-import { IDistrictCreate } from '~/interfaces'
+import { IDistrictRequest } from '~/interfaces'
 
 interface IFormState {
   name: string
@@ -32,7 +32,7 @@ const formState = ref<IFormState>({
 const formRef = ref<FormInstance>()
 
 const onFinish = async (values: IFormState) => {
-  await districtStore.createDistrict(values as IDistrictCreate)
+  await districtStore.createDistrict(values as IDistrictRequest)
   router.push('/districts')
 }
 

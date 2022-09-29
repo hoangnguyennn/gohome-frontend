@@ -1,4 +1,4 @@
-import { IDistrict, IDistrictCreate, IWard } from '~/interfaces'
+import { IDistrict, IDistrictRequest, IWard } from '~/interfaces'
 import CommonService from '~/services/CommonService'
 
 export const useDistrictStore = defineStore('districtStore', () => {
@@ -10,21 +10,31 @@ export const useDistrictStore = defineStore('districtStore', () => {
     districts.value = response.data.districts
   }
 
+  const getDistrictById = (id: string) => {
+    return CommonService.getDistrictById(id)
+  }
+
   const getWardsByDistrictId = async (districtId: string) => {
     wards.value = []
     const response = await CommonService.getWardsByDistrictId(districtId)
     wards.value = response.data.wards
   }
 
-  const createDistrict = async (district: IDistrictCreate) => {
+  const createDistrict = async (district: IDistrictRequest) => {
     return CommonService.createDistrict(district)
+  }
+
+  const updateDistrictById = (id: string, district: IDistrictRequest) => {
+    return CommonService.updateDistrictById(id, district)
   }
 
   return {
     districts,
     wards,
+    createDistrict,
+    getDistrictById,
     getDistricts,
     getWardsByDistrictId,
-    createDistrict
+    updateDistrictById
   }
 })

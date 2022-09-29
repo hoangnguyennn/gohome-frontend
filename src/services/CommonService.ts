@@ -3,7 +3,8 @@ import {
   ICategoriesResponse,
   ICategoryCreate,
   ICategoryResponse,
-  IDistrictCreate,
+  IDistrictRequest,
+  IDistrictResponse,
   IDistrictsResponse,
   IPostCreate,
   IPostResponse,
@@ -44,12 +45,20 @@ const getDistricts = () => {
   return axiosClient.get<IDistrictsResponse>('/districts')
 }
 
+const getDistrictById = (id: string) => {
+  return axiosClient.get<IDistrictResponse>(`/districts/${id}`)
+}
+
 const getWardsByDistrictId = (districtId: string) => {
   return axiosClient.get<IWardsResponse>(`/districts/${districtId}/wards`)
 }
 
-const createDistrict = (district: IDistrictCreate) => {
+const createDistrict = (district: IDistrictRequest) => {
   return axiosClient.post<IDistrictsResponse>('/districts', district)
+}
+
+const updateDistrictById = (id: string, districtUpdate: IDistrictRequest) => {
+  return axiosClient.put<IDistrictRequest>(`/districts/${id}`, districtUpdate)
 }
 
 const getPosts = () => {
@@ -106,6 +115,7 @@ const CommonService = {
   getCategories,
   getCategoryById,
   getCurrentUser,
+  getDistrictById,
   getDistricts,
   getPostById,
   getPosts,
@@ -116,6 +126,7 @@ const CommonService = {
   login,
   markAsRented,
   updateCategoryById,
+  updateDistrictById,
   updatePostById
 }
 export default CommonService
