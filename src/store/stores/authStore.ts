@@ -1,4 +1,4 @@
-import { IUser, Nullable } from '~/interfaces'
+import { IChangePassword, IUpdateInfo, IUser, Nullable } from '~/interfaces'
 import CommonService from '~/services/CommonService'
 
 export const useAuthStore = defineStore(
@@ -17,6 +17,15 @@ export const useAuthStore = defineStore(
       currentUser.value = response.data.user
     }
 
+    const changePassword = (changePasswordInfo: IChangePassword) => {
+      return CommonService.changePassword(changePasswordInfo)
+    }
+
+    const updateInfo = async (updateInfo: IUpdateInfo) => {
+      const response = await CommonService.updateInfo(updateInfo)
+      currentUser.value = response.data.user
+    }
+
     const logout = () => {
       token.value = ''
       currentUser.value = null
@@ -25,12 +34,16 @@ export const useAuthStore = defineStore(
     return {
       token,
       currentUser,
-      login,
+      changePassword,
       getCurrentUser,
-      logout
+      login,
+      logout,
+      updateInfo
     }
   },
   {
-    persist: true
+    persist: {
+      paths: ['token']
+    }
   }
 )

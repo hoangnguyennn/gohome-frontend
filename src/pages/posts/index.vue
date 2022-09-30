@@ -11,9 +11,13 @@ import {
 import type { ColumnsType } from 'ant-design-vue/es/table/interface'
 import { storeToRefs } from 'pinia'
 import { IPost, IFormConfirmState } from '~/interfaces'
-import { PostVerifyStatuses } from '~/interfaces/enums'
 import { usePostStore } from '~/store/stores/postStore'
-import { toDateTime, toVND } from '~/utils/formatter'
+import {
+  getVerifyStatusColor,
+  getVerifyStatusText,
+  toDateTime,
+  toVND
+} from '~/utils/formatter'
 
 const postStore = usePostStore()
 const { posts } = storeToRefs(postStore)
@@ -110,32 +114,6 @@ const itemMarkAsRead = ref<IFormConfirmState<IPost>>({
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/posts/${id}/${action}`
-}
-
-const getVerifyStatusColor = (record: IPost) => {
-  switch (record.verifyStatus) {
-    case PostVerifyStatuses.PENDING:
-      return 'warning'
-    case PostVerifyStatuses.APPROVED:
-      return 'success'
-    case PostVerifyStatuses.DENIED:
-      return 'error'
-    default:
-      return 'warning'
-  }
-}
-
-const getVerifyStatusText = (record: IPost) => {
-  switch (record.verifyStatus) {
-    case PostVerifyStatuses.PENDING:
-      return 'Chờ duyệt'
-    case PostVerifyStatuses.APPROVED:
-      return 'Đã duyệt'
-    case PostVerifyStatuses.DENIED:
-      return 'Đã từ chối'
-    default:
-      return ''
-  }
 }
 
 const onClickDelete = (item: IPost) => {
@@ -236,8 +214,8 @@ onMounted(async () => {
 
         <template v-else-if="column.key === 'verifyStatus'">
           <div style="text-align: center">
-            <Tag :color="getVerifyStatusColor(record)">
-              {{ getVerifyStatusText(record) }}
+            <Tag :color="getVerifyStatusColor(record.verifyStatus)">
+              {{ getVerifyStatusText(record.verifyStatus) }}
             </Tag>
           </div>
         </template>

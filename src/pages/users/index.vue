@@ -2,8 +2,8 @@
 import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { IUser, IFormConfirmState } from '~/interfaces'
-import { UserTypes } from '~/interfaces/enums'
 import { useUserStore } from '~/store/stores/userStore'
+import { getUserTypeText, getUserTypeColor } from '~/utils/formatter'
 
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
@@ -60,28 +60,6 @@ const onDelete = async () => {
   }
 }
 
-const getUserTypeText = (record: IUser) => {
-  switch (record.type) {
-    case UserTypes.ROOT:
-      return 'Root'
-    case UserTypes.ADMIN:
-      return 'Quản trị viên'
-    case UserTypes.EMPLOYEE:
-      return 'Nhân viên'
-  }
-}
-
-const getUserTypeColor = (record: IUser) => {
-  switch (record.type) {
-    case UserTypes.ROOT:
-      return 'error'
-    case UserTypes.ADMIN:
-      return 'success'
-    case UserTypes.EMPLOYEE:
-      return 'default'
-  }
-}
-
 onMounted(async () => {
   try {
     isLoading.value = true
@@ -109,8 +87,8 @@ onMounted(async () => {
         <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
       <template v-else-if="column.key === 'type'">
-        <Tag :color="getUserTypeColor(record)">
-          {{ getUserTypeText(record) }}
+        <Tag :color="getUserTypeColor(record.type)">
+          {{ getUserTypeText(record.type) }}
         </Tag>
       </template>
     </template>

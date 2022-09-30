@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { PostVerifyStatuses, UserTypes } from '~/interfaces/enums'
 
 export const toDateTime = (date: Date | string | number) => {
   return moment(date).format('DD/MM/YYYY HH:mm:ss')
@@ -30,4 +31,52 @@ export const toAcreage = (number: number | string) => {
 
 export const toRawNumber = (value: string) => {
   return value.replace(/\D/g, '')
+}
+
+export const getUserTypeText = (type?: UserTypes) => {
+  switch (type) {
+    case UserTypes.ROOT:
+      return 'ROOT'
+    case UserTypes.ADMIN:
+      return 'Quản trị viên'
+    case UserTypes.EMPLOYEE:
+      return 'Nhân viên'
+  }
+}
+
+export const getUserTypeColor = (type?: UserTypes) => {
+  switch (type) {
+    case UserTypes.ROOT:
+      return 'error'
+    case UserTypes.ADMIN:
+      return 'success'
+    case UserTypes.EMPLOYEE:
+      return 'default'
+  }
+}
+
+export const getVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
+  switch (verifyStatus) {
+    case PostVerifyStatuses.PENDING:
+      return 'warning'
+    case PostVerifyStatuses.APPROVED:
+      return 'success'
+    case PostVerifyStatuses.DENIED:
+      return 'error'
+    default:
+      return 'warning'
+  }
+}
+
+export const getVerifyStatusText = (verifyStatus?: PostVerifyStatuses) => {
+  switch (verifyStatus) {
+    case PostVerifyStatuses.PENDING:
+      return 'Chờ duyệt'
+    case PostVerifyStatuses.APPROVED:
+      return 'Đã duyệt'
+    case PostVerifyStatuses.DENIED:
+      return 'Đã từ chối'
+    default:
+      return ''
+  }
 }

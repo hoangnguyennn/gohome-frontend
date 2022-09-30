@@ -3,12 +3,14 @@ import {
   ICategoriesResponse,
   ICategoryCreate,
   ICategoryResponse,
+  IChangePassword,
   IDistrictRequest,
   IDistrictResponse,
   IDistrictsResponse,
   IPostCreate,
   IPostResponse,
   IPostsResponse,
+  IUpdateInfo,
   IUserResponse,
   IUsersResponse,
   IWardRequest,
@@ -113,8 +115,20 @@ const updateWardById = (id: string, ward: IWardRequest) => {
   return axiosClient.put<IWardResponse>(`/wards/${id}`, ward)
 }
 
+const changePassword = (changePasswordInfo: IChangePassword) => {
+  return axiosClient.post<IUserResponse>(
+    '/account/change-password',
+    changePasswordInfo
+  )
+}
+
+const updateInfo = (userInfo: IUpdateInfo) => {
+  return axiosClient.post<IUserResponse>('/account/update-info', userInfo)
+}
+
 const CommonService = {
   approvePost,
+  changePassword,
   createCategory,
   createDistrict,
   createPost,
@@ -136,6 +150,7 @@ const CommonService = {
   markAsRented,
   updateCategoryById,
   updateDistrictById,
+  updateInfo,
   updatePostById,
   updateWardById
 }

@@ -164,6 +164,15 @@ export interface IAuthResponse {
   token: string
 }
 
+export interface IUpdateInfo {
+  fullName?: string
+  avatar?: string
+}
+
+export interface IChangePassword {
+  newPassword: string
+}
+
 export interface IFormConfirmState<T> {
   value: Nullable<T>
   isOpen: boolean

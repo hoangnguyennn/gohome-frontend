@@ -11,10 +11,15 @@ import {
   Textarea
 } from 'ant-design-vue'
 
-import { IPost } from '~/interfaces'
-import { toVndPrefix, toAcreage, toDateTime } from '~/utils/formatter'
+import { IPost, Nullable } from '~/interfaces'
+import {
+  toVndPrefix,
+  toAcreage,
+  toDateTime,
+  getVerifyStatusColor,
+  getVerifyStatusText
+} from '~/utils/formatter'
 import { usePostStore } from '~/store/stores/postStore'
-import { PostVerifyStatuses } from '~/interfaces/enums'
 
 interface IDenyFormState {
   reason: string
@@ -24,7 +29,7 @@ const postStore = usePostStore()
 const router = useRouter()
 const route = useRoute()
 
-const post = ref<IPost>()
+const post = ref<Nullable<IPost>>(null)
 
 const denyFormState = ref<IDenyFormState>({
   reason: ''
@@ -32,32 +37,6 @@ const denyFormState = ref<IDenyFormState>({
 
 const id = computed(() => {
   return route.params.id as string
-})
-
-const verifyStatusColor = computed(() => {
-  switch (post.value?.verifyStatus) {
-    case PostVerifyStatuses.PENDING:
-      return 'warning'
-    case PostVerifyStatuses.APPROVED:
-      return 'success'
-    case PostVerifyStatuses.DENIED:
-      return 'error'
-    default:
-      return 'warning'
-  }
-})
-
-const verifyStatusText = computed(() => {
-  switch (post.value?.verifyStatus) {
-    case PostVerifyStatuses.PENDING:
-      return 'Chờ duyệt'
-    case PostVerifyStatuses.APPROVED:
-      return 'Đã duyệt'
-    case PostVerifyStatuses.DENIED:
-      return 'Đã từ chối'
-    default:
-      return ''
-  }
 })
 
 const denyPost = async (values: IDenyFormState) => {
@@ -87,8 +66,8 @@ onMounted(async () => {
       <Tag v-if="post?.isCheap" color="blue">Giá rẻ</Tag>
       <Tag v-if="post?.isFeatured" color="pink">Nổi bật</Tag>
       <Tag v-if="post?.isRented" color="default">Đã thuê</Tag>
-      <Tag :color="verifyStatusColor">
-        {{ verifyStatusText }}
+      <Tag :color="getVerifyStatusColor(post?.verifyStatus)">
+        {{ getVerifyStatusText(post?.verifyStatus) }}
       </Tag>
     </template>
   </PageHeader>

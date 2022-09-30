@@ -4,9 +4,17 @@ import {
   Layout,
   LayoutSider,
   LayoutHeader,
-  LayoutContent
+  LayoutContent,
+  Dropdown,
+  Avatar,
+  Menu,
+  MenuItem
 } from 'ant-design-vue'
 import TheMenu from '~/components/TheMenu.vue'
+import { useAuthStore } from '~/store/stores/authStore'
+
+const authStore = useAuthStore()
+const { currentUser } = storeToRefs(authStore)
 
 const collapsed = ref(false)
 </script>
@@ -18,7 +26,15 @@ const collapsed = ref(false)
       <TheMenu />
     </LayoutSider>
     <Layout>
-      <LayoutHeader style="background: #fff; padding: 0">
+      <LayoutHeader
+        style="
+          background: #fff;
+          padding: 0;
+          display: flex;
+          justify-content: space-between;
+          padding-right: 16px;
+        "
+      >
         <menu-unfold-outlined
           v-if="collapsed"
           class="trigger"
@@ -29,6 +45,25 @@ const collapsed = ref(false)
           class="trigger"
           @click="() => (collapsed = !collapsed)"
         />
+        <div>
+          <Dropdown :trigger="['click']">
+            <div style="cursor: pointer; display: flex; align-items: center">
+              <Avatar :src="currentUser?.avatar" style="margin-right: 10px">
+                {{ currentUser?.fullName || currentUser?.username }}
+              </Avatar>
+              <p style="margin: 0">
+                {{ currentUser?.fullName || currentUser?.username }}
+              </p>
+            </div>
+            <template #overlay>
+              <Menu>
+                <MenuItem>
+                  <router-link to="/account">Thông tin tài khoản</router-link>
+                </MenuItem>
+              </Menu>
+            </template>
+          </Dropdown>
+        </div>
       </LayoutHeader>
       <LayoutContent
         :style="{
