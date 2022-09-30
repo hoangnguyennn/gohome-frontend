@@ -23,6 +23,13 @@ const login = (username: string, password: string) => {
   return axiosClient.post<IAuthResponse>('/auth/login', { username, password })
 }
 
+const register = (username: string, password: string) => {
+  return axiosClient.post<IAuthResponse>('/auth/register', {
+    username,
+    password
+  })
+}
+
 const getCurrentUser = () => {
   return axiosClient.get<IUserResponse>('/auth/me')
 }
@@ -148,6 +155,7 @@ const CommonService = {
   getWardsByDistrictId,
   login,
   markAsRented,
+  register,
   updateCategoryById,
   updateDistrictById,
   updateInfo,

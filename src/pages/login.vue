@@ -33,15 +33,21 @@ const onLogin = async (values: ILoginFormState) => {
     >
       <FormItem
         name="username"
-        :rules="[{ required: true, message: 'Please input your username!' }]"
+        :rules="[{ required: true, message: 'Vui lòng nhập tên tài khoản!' }]"
       >
-        <Input v-model:value="formState.username" />
+        <Input
+          v-model:value="formState.username"
+          placeholder="Tên tài khoản (*)"
+        />
       </FormItem>
       <FormItem
         name="password"
-        :rules="[{ required: true, message: 'Please input your password!' }]"
+        :rules="[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]"
       >
-        <InputPassword v-model:value="formState.password" />
+        <InputPassword
+          v-model:value="formState.password"
+          placeholder="Mật khẩu (*)"
+        />
       </FormItem>
       <FormItem>
         <Button block type="primary" html-type="submit">Đăng nhập</Button>

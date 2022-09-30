@@ -1,3 +1,4 @@
+import { VALID_PASSWORD } from '~/constants/RegExp'
 import { IImage } from '~/interfaces'
 
 export const isIImage = (object: any): object is IImage => {
@@ -6,4 +7,8 @@ export const isIImage = (object: any): object is IImage => {
 
 export const getFilename = (url: string): string => {
   return url.split('/').reverse()[0] || ''
+}
+
+export const isValidPassword = (password: string) => {
+  return VALID_PASSWORD.test(password)
 }

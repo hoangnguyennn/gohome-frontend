@@ -12,6 +12,11 @@ export const useAuthStore = defineStore(
       token.value = response.data.token
     }
 
+    const register = async (username: string, password: string) => {
+      const response = await CommonService.register(username, password)
+      token.value = response.data.token
+    }
+
     const getCurrentUser = async () => {
       const response = await CommonService.getCurrentUser()
       currentUser.value = response.data.user
@@ -38,6 +43,7 @@ export const useAuthStore = defineStore(
       getCurrentUser,
       login,
       logout,
+      register,
       updateInfo
     }
   },
