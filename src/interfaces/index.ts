@@ -116,6 +116,7 @@ export interface IUser {
   fullName?: string
   avatar?: string
   type: UserTypes
+  isVerified: boolean
   createdAt: string
 }
 

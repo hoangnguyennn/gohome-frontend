@@ -26,18 +26,20 @@ router.beforeEach(async (to, from, next) => {
 
   const authStore = useAuthStore()
 
-  if (authStore.currentUser) {
-    return next()
-  }
-
-  try {
-    await authStore.getCurrentUser()
-
-    if (!authStore.currentUser) {
+  if (!authStore.currentUser) {
+    try {
+      await authStore.getCurrentUser()
+    } catch {
       return next('/login')
     }
-  } catch {
+  }
+
+  if (!authStore.currentUser) {
     return next('/login')
+  }
+
+  if (!authStore.currentUser.isVerified) {
+    return next('/unverify')
   }
 
   const permissions = (to.meta.permissions || []) as UserTypes[]
