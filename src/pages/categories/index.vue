@@ -102,4 +102,5 @@ meta:
   layout: default
   title: Danh sách loại nhà đất
   requireAuth: true
+  permissions: [0, 1]
 </route>

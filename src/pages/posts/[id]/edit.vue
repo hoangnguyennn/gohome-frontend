@@ -460,6 +460,7 @@ meta:
   layout: default
   title: Chỉnh sửa bài đăng
   requireAuth: true
+  permissions: [0, 1, 2]
 </route>
 
 <style scoped lang="scss">

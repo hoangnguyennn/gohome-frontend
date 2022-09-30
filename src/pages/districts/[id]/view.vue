@@ -75,4 +75,5 @@ meta:
   layout: default
   title: Chi tiết quận, huyện
   requireAuth: true
+  permissions: [0, 1]
 </route>

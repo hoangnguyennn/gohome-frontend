@@ -93,4 +93,5 @@ meta:
   layout: default
   title: Chi tiết xã phường
   requireAuth: true
+  permissions: [0, 1]
 </route>

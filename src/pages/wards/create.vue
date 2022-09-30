@@ -123,4 +123,5 @@ meta:
   layout: default
   title: Thêm xã phường mới
   requireAuth: true
+  permissions: [0, 1]
 </route>

@@ -94,4 +94,5 @@ meta:
   layout: default
   title: Thêm quận, huyện mới
   requireAuth: true
+  permissions: [0, 1]
 </route>

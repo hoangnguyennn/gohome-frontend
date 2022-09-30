@@ -258,6 +258,7 @@ meta:
   layout: default
   title: Danh sách bài đăng
   requireAuth: true
+  permissions: [0, 1, 2]
 </route>
 
 <style lang="scss">

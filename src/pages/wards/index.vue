@@ -113,4 +113,5 @@ meta:
   layout: default
   title: Danh sách xã phường
   requireAuth: true
+  permissions: [0, 1]
 </route>

@@ -158,6 +158,7 @@ export interface IMenuItem {
   title: string
   link?: string
   children?: IMenuItem[]
+  permissions?: UserTypes[]
 }
 
 export interface IAuthResponse {

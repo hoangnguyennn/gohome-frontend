@@ -122,4 +122,5 @@ meta:
   layout: default
   title: Chỉnh sửa quận, huyện
   requireAuth: true
+  permissions: [0, 1]
 </route>

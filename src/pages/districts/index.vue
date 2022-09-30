@@ -103,4 +103,5 @@ meta:
   layout: default
   title: Danh sách quận huyện
   requireAuth: true
+  permissions: [0, 1]
 </route>

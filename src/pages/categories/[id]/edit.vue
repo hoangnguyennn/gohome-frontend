@@ -111,4 +111,5 @@ meta:
   layout: default
   title: Chỉnh sửa loại nhà đất
   requireAuth: true
+  permissions: [0, 1]
 </route>

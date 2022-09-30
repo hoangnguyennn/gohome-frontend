@@ -7,6 +7,8 @@ const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
+const { currentUser } = storeToRefs(authStore)
+
 const selectedKeys = ref<(number | string)[]>([])
 
 const onLogout = () => {
@@ -46,36 +48,41 @@ watch(
 
 <template>
   <Menu
+    v-if="currentUser"
     v-model:selectedKeys="selectedKeys"
     theme="dark"
     mode="inline"
     class="sidebar-menu"
   >
     <template v-for="menuItem in menuItems" :key="menuItem.id">
-      <SubMenu
-        v-if="menuItem.children"
-        :key="menuItem.id"
-        :title="menuItem.title"
-      >
-        <MenuItem v-for="child in menuItem.children" :key="child.id">
-          <router-link v-if="child.link" :to="child.link">
-            {{ child.title }}
-          </router-link>
-          <template v-else>
-            {{ child.title }}
-          </template>
-        </MenuItem>
-      </SubMenu>
+      <template v-if="menuItem.permissions?.includes(currentUser.type)">
+        <SubMenu
+          v-if="menuItem.children"
+          :key="menuItem.id"
+          :title="menuItem.title"
+        >
+          <MenuItem v-for="child in menuItem.children" :key="child.id">
+            <template v-if="child.permissions?.includes(currentUser.type)">
+              <router-link v-if="child.link" :to="child.link">
+                {{ child.title }}
+              </router-link>
+              <template v-else>
+                {{ child.title }}
+              </template>
+            </template>
+          </MenuItem>
+        </SubMenu>
 
-      <template v-else>
-        <MenuItem :key="menuItem.id">
-          <router-link v-if="menuItem.link" :to="menuItem.link">
-            {{ menuItem.title }}
-          </router-link>
-          <template v-else>
-            {{ menuItem.title }}
-          </template>
-        </MenuItem>
+        <template v-else>
+          <MenuItem :key="menuItem.id">
+            <router-link v-if="menuItem.link" :to="menuItem.link">
+              {{ menuItem.title }}
+            </router-link>
+            <template v-else>
+              {{ menuItem.title }}
+            </template>
+          </MenuItem>
+        </template>
       </template>
     </template>
     <MenuItem :key="-1" @click="onLogout">Đăng xuất</MenuItem>

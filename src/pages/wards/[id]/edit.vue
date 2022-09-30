@@ -152,4 +152,5 @@ meta:
   layout: default
   title: Chỉnh sửa xã phường
   requireAuth: true
+  permissions: [0, 1]
 </route>

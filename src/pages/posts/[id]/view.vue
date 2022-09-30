@@ -357,6 +357,7 @@ meta:
   layout: default
   title: Chi tiết bài đăng
   requireAuth: true
+  permissions: [0, 1, 2]
 </route>
 
 <style scoped lang="scss">
