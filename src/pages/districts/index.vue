@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IDistrict, IFormConfirmState } from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
@@ -9,7 +10,7 @@ const { districts } = storeToRefs(districtStore)
 
 const isLoading = ref(false)
 
-const columns = ref([
+const columns = ref<ColumnType<IDistrict>[]>([
   {
     title: '#',
     dataIndex: 'id',
@@ -18,12 +19,36 @@ const columns = ref([
   {
     title: 'Tên',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    sorter: {
+      compare: (a, b) => {
+        if (a.name > b.name) {
+          return 1
+        } else if (a.name < b.name) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại',
     dataIndex: 'type',
-    key: 'type'
+    key: 'type',
+    sorter: {
+      compare: (a, b) => {
+        if (a.type > b.type) {
+          return 1
+        } else if (a.type < b.type) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hành động',

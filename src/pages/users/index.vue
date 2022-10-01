@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IUser, IFormConfirmState } from '~/interfaces'
 import { useUserStore } from '~/store/stores/userStore'
@@ -15,7 +16,7 @@ const { users } = storeToRefs(userStore)
 
 const isLoading = ref(false)
 
-const columns = ref([
+const columns = ref<ColumnType<IUser>[]>([
   {
     title: '#',
     dataIndex: 'id',
@@ -24,22 +25,72 @@ const columns = ref([
   {
     title: 'Tên đăng nhập',
     dataIndex: 'username',
-    key: 'username'
+    key: 'username',
+    sorter: {
+      compare: (a, b) => {
+        if (a.username > b.username) {
+          return 1
+        } else if (a.username < b.username) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Họ tên',
     dataIndex: 'fullName',
-    key: 'fullName'
+    key: 'fullName',
+    sorter: {
+      compare: (a, b) => {
+        const aFullname = a.fullName || ''
+        const bFullname = b.fullName || ''
+        if (aFullname > bFullname) {
+          return 1
+        } else if (aFullname < bFullname) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại tài khoản',
     dataIndex: 'type',
-    key: 'type'
+    key: 'type',
+    sorter: {
+      compare: (a, b) => {
+        if (a.type > b.type) {
+          return 1
+        } else if (a.type < b.type) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Xác thực',
     dataIndex: 'isVerified',
-    key: 'isVerified'
+    key: 'isVerified',
+    sorter: {
+      compare: (a, b) => {
+        if (a.isVerified > b.isVerified) {
+          return 1
+        } else if (a.isVerified < b.isVerified) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hành động',

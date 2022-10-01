@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { ICategory, IFormConfirmState } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
@@ -8,7 +9,7 @@ const categoryStore = useCategoryStore()
 const { categories } = storeToRefs(categoryStore)
 const isLoading = ref(false)
 
-const columns = ref([
+const columns = ref<ColumnType<ICategory>[]>([
   {
     title: '#',
     dataIndex: 'id',
@@ -17,12 +18,36 @@ const columns = ref([
   {
     title: 'Tên loại',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    sorter: {
+      compare: (a, b) => {
+        if (a.name > b.name) {
+          return 1
+        } else if (a.name < b.name) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Mã loại',
     dataIndex: 'code',
-    key: 'code'
+    key: 'code',
+    sorter: {
+      compare: (a, b) => {
+        if (a.code > b.code) {
+          return 1
+        } else if (a.code < b.code) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hành động',

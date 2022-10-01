@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IFormConfirmState, IWard } from '~/interfaces'
 import { useWardStore } from '~/store/stores/wardStore'
@@ -9,7 +10,7 @@ const { wards } = storeToRefs(wardStore)
 
 const isLoading = ref(false)
 
-const columns = ref([
+const columns = ref<ColumnType<IWard>[]>([
   {
     title: '#',
     dataIndex: 'id',
@@ -18,17 +19,53 @@ const columns = ref([
   {
     title: 'Tên',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    sorter: {
+      compare: (a, b) => {
+        if (a.type > b.type) {
+          return 1
+        } else if (a.type < b.type) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại',
     dataIndex: 'type',
-    key: 'type'
+    key: 'type',
+    sorter: {
+      compare: (a, b) => {
+        if (a.type > b.type) {
+          return 1
+        } else if (a.type < b.type) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    }
   },
   {
     title: 'Quận huyện',
     dataIndex: 'district',
-    key: 'district'
+    key: 'district',
+    sorter: {
+      compare: (a, b) => {
+        const aDistrictName = a.district?.name || ''
+        const bDistrictName = b.district?.name || ''
+        if (aDistrictName > bDistrictName) {
+          return 1
+        } else if (aDistrictName < bDistrictName) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    }
   },
   {
     title: 'Hành động',

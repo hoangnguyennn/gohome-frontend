@@ -8,7 +8,7 @@ import {
   PageHeader,
   Tag
 } from 'ant-design-vue'
-import type { ColumnsType } from 'ant-design-vue/es/table/interface'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IPost, IFormConfirmState } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
@@ -22,48 +22,110 @@ import {
 const postStore = usePostStore()
 const { posts } = storeToRefs(postStore)
 
-const columns: ColumnsType = [
+const columns = ref<ColumnType<IPost>[]>([
   {
     title: '#',
     dataIndex: 'code',
     key: 'code',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148,
+    sorter: {
+      compare: (a, b) => {
+        if (a.code > b.code) {
+          return 1
+        } else if (a.code < b.code) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hình ảnh',
     dataIndex: 'images',
     key: 'images',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148
   },
   {
     title: 'Tiêu đề',
     dataIndex: 'title',
     key: 'title',
     width: 224,
-    maxWidth: 224
+    maxWidth: 224,
+    sorter: {
+      compare: (a, b) => {
+        if (a.title > b.title) {
+          return 1
+        } else if (a.title < b.title) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Tạo bởi',
     dataIndex: 'createdBy',
     key: 'createdBy',
     width: 120,
-    maxWidth: 120
+    maxWidth: 120,
+    sorter: {
+      compare: (a, b) => {
+        const aCreatedBy = a.createdBy?.fullName || a.createdBy?.username || ''
+        const bCreatedBy = b.createdBy?.fullName || b.createdBy?.username || ''
+        if (aCreatedBy > bCreatedBy) {
+          return 1
+        } else if (aCreatedBy < bCreatedBy) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hoa hồng',
     dataIndex: 'commission',
     key: 'commission',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148,
+    sorter: {
+      compare: (a, b) => {
+        if (a.commission > b.commission) {
+          return 1
+        } else if (a.commission < b.commission) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Tình trạng duyệt',
     dataIndex: 'verifyStatus',
     key: 'verifyStatus',
     width: 150,
-    maxWidth: 150
+    maxWidth: 150,
+    sorter: {
+      compare: (a, b) => {
+        if (a.verifyStatus > b.verifyStatus) {
+          return 1
+        } else if (a.verifyStatus < b.verifyStatus) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Lý do từ chối',
@@ -76,28 +138,64 @@ const columns: ColumnsType = [
     title: 'Ẩn/Hiện',
     dataIndex: 'isHide',
     key: 'isHide',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148,
+    sorter: {
+      compare: (a, b) => {
+        if (a.isHide > b.isHide) {
+          return 1
+        } else if (a.isHide < b.isHide) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Ngày tạo',
     dataIndex: 'createdAt',
     key: 'createdAt',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148,
+    sorter: {
+      compare: (a, b) => {
+        if (new Date(a.createdAt) > new Date(b.createdAt)) {
+          return 1
+        } else if (new Date(a.createdAt) < new Date(b.createdAt)) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Ngày cập nhật',
     dataIndex: 'updatedAt',
     key: 'updatedAt',
-    width: 124,
-    maxWidth: 124
+    width: 148,
+    maxWidth: 148,
+    sorter: {
+      compare: (a, b) => {
+        if (new Date(a.updatedAt) > new Date(b.updatedAt)) {
+          return 1
+        } else if (new Date(a.updatedAt) < new Date(b.updatedAt)) {
+          return -1
+        } else {
+          return 0
+        }
+      }
+    },
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hành động',
     key: 'actions'
   }
-]
+])
 
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
 const isLoading = ref(false)
