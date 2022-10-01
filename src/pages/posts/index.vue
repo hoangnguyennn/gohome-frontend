@@ -13,8 +13,8 @@ import { storeToRefs } from 'pinia'
 import { IPost, IFormConfirmState } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
 import {
-  getVerifyStatusColor,
-  getVerifyStatusText,
+  getPostVerifyStatusColor,
+  getPostVerifyStatusText,
   toDateTime,
   toVND
 } from '~/utils/formatter'
@@ -214,8 +214,8 @@ onMounted(async () => {
 
         <template v-else-if="column.key === 'verifyStatus'">
           <div style="text-align: center">
-            <Tag :color="getVerifyStatusColor(record.verifyStatus)">
-              {{ getVerifyStatusText(record.verifyStatus) }}
+            <Tag :color="getPostVerifyStatusColor(record.verifyStatus)">
+              {{ getPostVerifyStatusText(record.verifyStatus) }}
             </Tag>
           </div>
         </template>

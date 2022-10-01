@@ -3,7 +3,12 @@ import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { IUser, IFormConfirmState } from '~/interfaces'
 import { useUserStore } from '~/store/stores/userStore'
-import { getUserTypeText, getUserTypeColor } from '~/utils/formatter'
+import {
+  getUserTypeText,
+  getUserTypeColor,
+  getUserVerifyStatusColor,
+  getUserVerifyStatusText
+} from '~/utils/formatter'
 
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
@@ -27,9 +32,14 @@ const columns = ref([
     key: 'fullName'
   },
   {
-    title: 'Loại',
+    title: 'Loại tài khoản',
     dataIndex: 'type',
     key: 'type'
+  },
+  {
+    title: 'Xác thực',
+    dataIndex: 'isVerified',
+    key: 'isVerified'
   },
   {
     title: 'Hành động',
@@ -89,6 +99,11 @@ onMounted(async () => {
       <template v-else-if="column.key === 'type'">
         <Tag :color="getUserTypeColor(record.type)">
           {{ getUserTypeText(record.type) }}
+        </Tag>
+      </template>
+      <template v-else-if="column.key === 'isVerified'">
+        <Tag :color="getUserVerifyStatusColor(record.isVerified)">
+          {{ getUserVerifyStatusText(record.isVerified) }}
         </Tag>
       </template>
     </template>

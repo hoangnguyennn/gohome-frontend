@@ -55,7 +55,23 @@ export const getUserTypeColor = (type?: UserTypes) => {
   }
 }
 
-export const getVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
+export const getUserVerifyStatusColor = (isVerified: boolean) => {
+  if (isVerified) {
+    return 'green'
+  }
+
+  return 'yellow'
+}
+
+export const getUserVerifyStatusText = (isVerified: boolean) => {
+  if (isVerified) {
+    return 'Đã xác thực'
+  }
+
+  return 'Chưa xác thực'
+}
+
+export const getPostVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
   switch (verifyStatus) {
     case PostVerifyStatuses.PENDING:
       return 'warning'
@@ -68,7 +84,7 @@ export const getVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
   }
 }
 
-export const getVerifyStatusText = (verifyStatus?: PostVerifyStatuses) => {
+export const getPostVerifyStatusText = (verifyStatus?: PostVerifyStatuses) => {
   switch (verifyStatus) {
     case PostVerifyStatuses.PENDING:
       return 'Chờ duyệt'

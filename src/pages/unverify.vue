@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import { Button } from 'ant-design-vue'
+import { IUser, Nullable } from '~/interfaces'
 import { useAuthStore } from '~/store/stores/authStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
+const { currentUser } = storeToRefs(authStore)
+
 const onLogout = () => {
   authStore.logout()
   router.push('/login')
 }
+
+watch(currentUser, (newValue: Nullable<IUser>) => {
+  if (newValue?.isVerified) {
+    router.replace('/')
+  }
+})
+
+onMounted(() => {
+  authStore.getCurrentUser()
+})
 </script>
 
 <template>

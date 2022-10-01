@@ -16,8 +16,8 @@ import {
   toVndPrefix,
   toAcreage,
   toDateTime,
-  getVerifyStatusColor,
-  getVerifyStatusText
+  getPostVerifyStatusColor,
+  getPostVerifyStatusText
 } from '~/utils/formatter'
 import { usePostStore } from '~/store/stores/postStore'
 
@@ -66,8 +66,8 @@ onMounted(async () => {
       <Tag v-if="post?.isCheap" color="blue">Giá rẻ</Tag>
       <Tag v-if="post?.isFeatured" color="pink">Nổi bật</Tag>
       <Tag v-if="post?.isRented" color="default">Đã thuê</Tag>
-      <Tag :color="getVerifyStatusColor(post?.verifyStatus)">
-        {{ getVerifyStatusText(post?.verifyStatus) }}
+      <Tag :color="getPostVerifyStatusColor(post?.verifyStatus)">
+        {{ getPostVerifyStatusText(post?.verifyStatus) }}
       </Tag>
     </template>
   </PageHeader>
