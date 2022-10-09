@@ -9,8 +9,18 @@ export const useUserStore = defineStore('userStore', () => {
     users.value = response.data.users
   }
 
+  const getUserById = (id: string) => {
+    return CommonService.getUserById(id)
+  }
+
+  const verifyUser = (id: string) => {
+    return CommonService.verifyUser(id)
+  }
+
   return {
     users,
-    getUsers
+    getUsers,
+    getUserById,
+    verifyUser
   }
 })

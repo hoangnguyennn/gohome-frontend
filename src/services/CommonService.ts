@@ -106,6 +106,14 @@ const getUsers = () => {
   return axiosClient.get<IUsersResponse>('/users')
 }
 
+const getUserById = (id: string) => {
+  return axiosClient.get<IUserResponse>(`/users/${id}`)
+}
+
+const verifyUser = (id: string) => {
+  return axiosClient.post<IUserResponse>(`/users/${id}/verify`)
+}
+
 const getWards = () => {
   return axiosClient.get<IWardsResponse>('/wards')
 }
@@ -149,6 +157,7 @@ const CommonService = {
   getPostById,
   getPosts,
   getRentedPosts,
+  getUserById,
   getUsers,
   getWardById,
   getWards,
@@ -160,6 +169,7 @@ const CommonService = {
   updateDistrictById,
   updateInfo,
   updatePostById,
-  updateWardById
+  updateWardById,
+  verifyUser
 }
 export default CommonService

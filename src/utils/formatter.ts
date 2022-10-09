@@ -55,7 +55,7 @@ export const getUserTypeColor = (type?: UserTypes) => {
   }
 }
 
-export const getUserVerifyStatusColor = (isVerified: boolean) => {
+export const getUserVerifyStatusColor = (isVerified?: boolean) => {
   if (isVerified) {
     return 'green'
   }
@@ -63,7 +63,7 @@ export const getUserVerifyStatusColor = (isVerified: boolean) => {
   return 'yellow'
 }
 
-export const getUserVerifyStatusText = (isVerified: boolean) => {
+export const getUserVerifyStatusText = (isVerified?: boolean) => {
   if (isVerified) {
     return 'Đã xác thực'
   }

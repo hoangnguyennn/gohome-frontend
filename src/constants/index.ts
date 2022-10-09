@@ -1,5 +1,6 @@
 import { IMenuItem } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
+import { getUserTypeText } from '~/utils/formatter'
 
 export const DISTRICT_TYPES = [
   {
@@ -32,6 +33,21 @@ export const WARD_TYPES = [
   {
     value: 'Thị trấn',
     title: 'Thị trấn'
+  }
+]
+
+export const USER_TYPES = [
+  {
+    value: UserTypes.ROOT,
+    title: getUserTypeText(UserTypes.ROOT)
+  },
+  {
+    value: UserTypes.ADMIN,
+    title: getUserTypeText(UserTypes.ADMIN)
+  },
+  {
+    value: UserTypes.EMPLOYEE,
+    title: getUserTypeText(UserTypes.EMPLOYEE)
   }
 ]
 
