@@ -1,16 +1,7 @@
 <script setup lang="ts">
-import {
-  Form,
-  FormItem,
-  Input,
-  Row,
-  Col,
-  Button,
-  PageHeader
-} from 'ant-design-vue'
-import type { FormInstance } from 'ant-design-vue'
+import { FormItem, Row, Col, Button, PageHeader } from 'ant-design-vue'
 
-import { ICategory, ICategoryCreate, Nullable } from '~/interfaces'
+import { ICategory, Nullable } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()

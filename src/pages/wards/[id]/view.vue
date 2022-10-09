@@ -1,22 +1,8 @@
 <script setup lang="ts">
-import {
-  Form,
-  FormItem,
-  Input,
-  Select,
-  SelectOption,
-  Row,
-  Col,
-  Button,
-  PageHeader
-} from 'ant-design-vue'
-import type { FormInstance } from 'ant-design-vue'
+import { FormItem, Row, Col, Button, PageHeader } from 'ant-design-vue'
 
-import { WARD_TYPES } from '~/constants'
 import { useWardStore } from '~/store/stores/wardStore'
-import { IWard, IWardRequest, Nullable } from '~/interfaces'
-import { useDistrictStore } from '~/store/stores/districtStore'
-import { storeToRefs } from 'pinia'
+import { IWard, Nullable } from '~/interfaces'
 
 interface IFormState {
   name: string

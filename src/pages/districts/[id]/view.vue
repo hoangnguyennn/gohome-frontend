@@ -1,18 +1,6 @@
 <script setup lang="ts">
-import {
-  Form,
-  FormItem,
-  Input,
-  Select,
-  SelectOption,
-  Row,
-  Col,
-  Button,
-  PageHeader
-} from 'ant-design-vue'
-import type { FormInstance } from 'ant-design-vue'
+import { FormItem, Row, Col, Button, PageHeader } from 'ant-design-vue'
 
-import { DISTRICT_TYPES } from '~/constants'
 import { useDistrictStore } from '~/store/stores/districtStore'
 import { IDistrict, Nullable } from '~/interfaces'
 
