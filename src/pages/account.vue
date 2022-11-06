@@ -141,7 +141,13 @@ watch(
           </FormItem>
 
           <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-            <Button type="primary" html-type="submit">Đổi</Button>
+            <Button
+              type="primary"
+              html-type="submit"
+              :disabled="!changePasswordFormState.newPassword"
+            >
+              Đổi
+            </Button>
           </FormItem>
         </Col>
         <Col span="12"></Col>
