@@ -6,6 +6,14 @@ export const isIImage = (object: any): object is IImage => {
   return ['id', 'url'].every((key) => key in object)
 }
 
+export const getAvatarLink = (filename: string): string => {
+  return `https://gohomenhatrang.com/avatars/${filename}`
+}
+
+export const getPostImageLink = (filename: string): string => {
+  return `https://gohomenhatrang.com/upload/${filename}`
+}
+
 export const getFilename = (url: string): string => {
   return url.split('/').reverse()[0] || ''
 }

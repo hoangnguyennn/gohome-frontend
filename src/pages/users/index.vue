@@ -14,7 +14,7 @@ import { IUser, IFormConfirmState } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { useAuthStore } from '~/store/stores/authStore'
 import { useUserStore } from '~/store/stores/userStore'
-import { isAdmin } from '~/utils/common'
+import { getAvatarLink, isAdmin } from '~/utils/common'
 import {
   getUserTypeText,
   getUserTypeColor,
@@ -34,6 +34,11 @@ const columns = ref<ColumnType<IUser>[]>([
     title: '#',
     dataIndex: 'id',
     key: 'id'
+  },
+  {
+    title: 'Avatar',
+    dataIndex: 'avatar',
+    key: 'avatar'
   },
   {
     title: 'Tên đăng nhập',
@@ -198,6 +203,13 @@ onMounted(() => getUsers())
           <a @click.prevent="onClickVerify(record)">Xác thực</a>
         </template>
       </Row>
+      <template v-else-if="column.key === 'avatar'">
+        <img
+          v-if="record.avatar"
+          :src="getAvatarLink(record.avatar)"
+          width="100"
+        />
+      </template>
       <template v-else-if="column.key === 'type'">
         <Tag :color="getUserTypeColor(record.type)">
           {{ getUserTypeText(record.type) }}

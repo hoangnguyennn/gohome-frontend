@@ -334,7 +334,7 @@ onMounted(async () => {
           :wrapper-col="{ span: 20 }"
           :rules="[{ required: true, message: 'Mô tả là trường bắt buộc' }]"
         >
-          <Textarea v-model:value="formState.description" :rows="4" />
+          <Textarea v-model:value="formState.description" :rows="12" />
         </FormItem>
       </Col>
     </Row>

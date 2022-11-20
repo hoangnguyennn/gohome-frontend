@@ -12,6 +12,7 @@ import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IPost, IFormConfirmState } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
+import { getPostImageLink } from '~/utils/common'
 import {
   getPostVerifyStatusColor,
   getPostVerifyStatusText,
@@ -273,7 +274,11 @@ onMounted(() => getRentedPosts())
         </Row>
 
         <template v-else-if="column.key === 'images'">
-          <img v-if="record.images.length" :src="record.images[0].url" alt="" />
+          <img
+            v-if="record.images.length"
+            :src="getPostImageLink(record.images[0].url)"
+            alt=""
+          />
         </template>
 
         <template v-else-if="column.key === 'createdBy'">
