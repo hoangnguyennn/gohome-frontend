@@ -154,8 +154,9 @@ const onVerify = async () => {
   if (itemVerify.value.value) {
     try {
       await userStore.verifyUser(itemVerify.value.value.id)
-
       message.success('Xác thực người dùng thành công')
+
+      getUsers()
     } finally {
       itemVerify.value = {
         value: null,
@@ -165,14 +166,16 @@ const onVerify = async () => {
   }
 }
 
-onMounted(async () => {
+const getUsers = async () => {
   try {
     isLoading.value = true
     await userStore.getUsers()
   } finally {
     isLoading.value = false
   }
-})
+}
+
+onMounted(() => getUsers())
 </script>
 
 <template>

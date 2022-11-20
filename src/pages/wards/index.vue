@@ -96,14 +96,16 @@ const onDelete = async () => {
   }
 }
 
-onMounted(async () => {
+const getWards = async () => {
   try {
     isLoading.value = true
     await wardStore.getWards()
-  } catch {}
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  isLoading.value = false
-})
+onMounted(() => getWards())
 </script>
 
 <template>

@@ -78,14 +78,16 @@ const onDelete = async () => {
   }
 }
 
-onMounted(async () => {
+const getCategories = async () => {
   try {
     isLoading.value = true
     await categoryStore.getCategories()
-  } catch {}
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  isLoading.value = false
-})
+onMounted(() => getCategories())
 </script>
 
 <template>

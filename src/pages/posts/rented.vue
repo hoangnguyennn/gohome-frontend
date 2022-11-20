@@ -225,14 +225,16 @@ const onDelete = () => {
   }
 }
 
-onMounted(async () => {
+const getRentedPosts = async () => {
   try {
     isLoading.value = true
     await postStore.getRentedPosts()
-  } catch {}
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  isLoading.value = false
-})
+onMounted(() => getRentedPosts())
 </script>
 
 <template>

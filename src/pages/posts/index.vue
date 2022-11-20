@@ -249,14 +249,16 @@ const onMarkAsRead = async () => {
   }
 }
 
-onMounted(async () => {
+const getPosts = async () => {
   try {
     isLoading.value = true
     await postStore.getPosts()
-  } catch {}
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  isLoading.value = false
-})
+onMounted(() => getPosts())
 </script>
 
 <template>

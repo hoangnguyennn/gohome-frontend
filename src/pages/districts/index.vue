@@ -79,14 +79,16 @@ const onDelete = async () => {
   }
 }
 
-onMounted(async () => {
+const getDistricts = async () => {
   try {
     isLoading.value = true
     await districtStore.getDistricts()
-  } catch {}
+  } finally {
+    isLoading.value = false
+  }
+}
 
-  isLoading.value = false
-})
+onMounted(() => getDistricts())
 </script>
 
 <template>
