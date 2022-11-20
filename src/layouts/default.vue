@@ -21,7 +21,7 @@ const collapsed = ref(false)
 
 <template>
   <Layout id="layout-default">
-    <LayoutSider v-model:collapsed="collapsed" :trigger="null" collapsible>
+    <LayoutSider v-model:collapsed="collapsed" collapsible :trigger="null">
       <div class="logo"></div>
       <TheMenu />
     </LayoutSider>

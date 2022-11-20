@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Menu, SubMenu, MenuItem } from 'ant-design-vue'
+import { ExportOutlined } from '@ant-design/icons-vue'
 import { menuItems } from '~/constants'
 import { useAuthStore } from '~/store/stores/authStore'
 
@@ -61,6 +62,9 @@ watch(
           :key="menuItem.id"
           :title="menuItem.title"
         >
+          <template #icon>
+            <component :is="menuItem.icon" />
+          </template>
           <MenuItem v-for="child in menuItem.children" :key="child.id">
             <template v-if="child.permissions?.includes(currentUser.type)">
               <router-link v-if="child.link" :to="child.link">
@@ -75,6 +79,9 @@ watch(
 
         <template v-else>
           <MenuItem :key="menuItem.id">
+            <template #icon>
+              <component :is="menuItem.icon" />
+            </template>
             <router-link v-if="menuItem.link" :to="menuItem.link">
               {{ menuItem.title }}
             </router-link>
@@ -85,7 +92,12 @@ watch(
         </template>
       </template>
     </template>
-    <MenuItem :key="-1" @click="onLogout">Đăng xuất</MenuItem>
+    <MenuItem :key="-1" @click="onLogout">
+      <template #icon>
+        <export-outlined />
+      </template>
+      Đăng xuất
+    </MenuItem>
   </Menu>
 </template>
 

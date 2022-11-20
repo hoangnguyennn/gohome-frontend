@@ -91,7 +91,7 @@ watch(
       @finish="onUpdateInfo"
     >
       <Row>
-        <Col span="12">
+        <Col :span="24" :xl="12">
           <FormItem label="Họ và tên" name="fullName">
             <Input
               v-model:value="updateInfoFormState.fullName"
@@ -101,17 +101,18 @@ watch(
           <FormItem label="Loại tài khoản">
             <div>{{ getUserTypeText(currentUser?.type) }}</div>
           </FormItem>
-          <FormItem :wrapper-col="{ offset: 8, span: 16 }">
+          <FormItem>
             <Button
               type="primary"
               html-type="submit"
               :disabled="!isUserInfoChanged"
+              style="margin-right: 10px; margin-bottom: 10px"
             >
               Đổi
             </Button>
           </FormItem>
         </Col>
-        <Col span="12"></Col>
+        <Col :span="24" :xl="12"></Col>
       </Row>
     </Form>
 
@@ -127,7 +128,7 @@ watch(
       @finish="onChangePassword"
     >
       <Row>
-        <Col span="12">
+        <Col :span="24" :xl="12">
           <FormItem
             label="Mật khẩu mới"
             name="newPassword"
@@ -140,17 +141,17 @@ watch(
             />
           </FormItem>
 
-          <FormItem :wrapper-col="{ offset: 8, span: 16 }">
+          <FormItem>
             <Button
               type="primary"
               html-type="submit"
               :disabled="!changePasswordFormState.newPassword"
+              style="margin-right: 10px; margin-bottom: 10px"
             >
               Đổi
             </Button>
           </FormItem>
         </Col>
-        <Col span="12"></Col>
       </Row>
     </Form>
   </div>

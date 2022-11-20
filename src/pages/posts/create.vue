@@ -119,7 +119,7 @@ onMounted(() => {
   >
     <h3 class="section-title">Thông tin cơ bản</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tiêu đề"
           name="title"
@@ -188,7 +188,7 @@ onMounted(() => {
           />
         </FormItem>
       </Col>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Hoa hồng (VND)"
           name="commission"
@@ -325,7 +325,7 @@ onMounted(() => {
 
     <h3 class="section-title">Thông tin chủ hộ</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên chủ hộ"
           name="ownerName"
@@ -347,7 +347,7 @@ onMounted(() => {
         </FormItem>
       </Col>
 
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Số điện thoại chủ hộ"
           name="ownerPhone"
@@ -366,12 +366,16 @@ onMounted(() => {
     <Divider type="horizontal"></Divider>
 
     <Row>
-      <Col span="12">
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Tạo bài đăng</Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
+      <Col :span="24" :xl="12">
+        <FormItem>
+          <Button
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            Tạo bài đăng
           </Button>
+          <Button @click="resetForm">Xóa tất cả</Button>
         </FormItem>
       </Col>
     </Row>

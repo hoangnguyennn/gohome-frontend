@@ -50,7 +50,7 @@ const resetForm = () => {
     @finish="onFinish"
   >
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên loại"
           name="name"
@@ -67,14 +67,18 @@ const resetForm = () => {
           <Input v-model:value="formState.code" />
         </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Tạo loại nhà đất</Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
+        <FormItem>
+          <Button
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            Tạo loại nhà đất
           </Button>
+          <Button @click="resetForm"> Xóa tất cả </Button>
         </FormItem>
       </Col>
-      <Col span="12"></Col>
+      <Col :span="24" :xl="12"></Col>
     </Row>
   </Form>
 </template>

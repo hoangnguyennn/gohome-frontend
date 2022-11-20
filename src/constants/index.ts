@@ -1,3 +1,9 @@
+import {
+  GoldOutlined,
+  ProfileOutlined,
+  TableOutlined,
+  UserOutlined
+} from '@ant-design/icons-vue'
 import { IMenuItem } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { getUserTypeText } from '~/utils/formatter'
@@ -55,6 +61,7 @@ export const menuItems: IMenuItem[] = [
   {
     id: '5',
     title: 'Bài đăng',
+    icon: TableOutlined,
     permissions: [UserTypes.ROOT, UserTypes.ADMIN, UserTypes.EMPLOYEE],
     children: [
       {
@@ -80,6 +87,7 @@ export const menuItems: IMenuItem[] = [
   {
     id: '1',
     title: 'Loại nhà đất',
+    icon: GoldOutlined,
     permissions: [UserTypes.ROOT, UserTypes.ADMIN],
     children: [
       {
@@ -99,6 +107,7 @@ export const menuItems: IMenuItem[] = [
   {
     id: '2',
     title: 'Quận huyện',
+    icon: ProfileOutlined,
     permissions: [UserTypes.ROOT, UserTypes.ADMIN],
     children: [
       {
@@ -118,6 +127,7 @@ export const menuItems: IMenuItem[] = [
   {
     id: '3',
     title: 'Xã phường',
+    icon: ProfileOutlined,
     permissions: [UserTypes.ROOT, UserTypes.ADMIN],
     children: [
       {
@@ -137,6 +147,7 @@ export const menuItems: IMenuItem[] = [
   {
     id: '4',
     title: 'Người dùng',
+    icon: UserOutlined,
     permissions: [UserTypes.ROOT, UserTypes.ADMIN],
     children: [
       {

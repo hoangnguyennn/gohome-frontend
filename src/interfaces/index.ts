@@ -157,6 +157,7 @@ export interface IErrorResponse {
 export interface IMenuItem {
   id: string | number
   title: string
+  icon?: any
   link?: string
   children?: IMenuItem[]
   permissions?: UserTypes[]
