@@ -1,9 +1,20 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Tag, Row, PageHeader } from 'ant-design-vue'
+import {
+  Table,
+  Divider,
+  Modal,
+  Tag,
+  Row,
+  PageHeader,
+  message
+} from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IUser, IFormConfirmState } from '~/interfaces'
+import { UserTypes } from '~/interfaces/enums'
+import { useAuthStore } from '~/store/stores/authStore'
 import { useUserStore } from '~/store/stores/userStore'
+import { isAdmin } from '~/utils/common'
 import {
   getUserTypeText,
   getUserTypeColor,
@@ -11,7 +22,9 @@ import {
   getUserVerifyStatusText
 } from '~/utils/formatter'
 
+const authStore = useAuthStore()
 const userStore = useUserStore()
+const { currentUser } = storeToRefs(authStore)
 const { users } = storeToRefs(userStore)
 
 const isLoading = ref(false)
@@ -103,12 +116,28 @@ const itemDelete = ref<IFormConfirmState<IUser>>({
   isOpen: false
 })
 
+const itemVerify = ref<IFormConfirmState<IUser>>({
+  value: null,
+  isOpen: false
+})
+
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/users/${id}/${action}`
 }
 
+const isVerifiable = (item: IUser) => {
+  return !item.isVerified && isAdmin(currentUser.value?.type as UserTypes)
+}
+
 const onClickDelete = (item: IUser) => {
   itemDelete.value = {
+    value: item,
+    isOpen: true
+  }
+}
+
+const onClickVerify = (item: IUser) => {
+  itemVerify.value = {
     value: item,
     isOpen: true
   }
@@ -121,13 +150,28 @@ const onDelete = async () => {
   }
 }
 
+const onVerify = async () => {
+  if (itemVerify.value.value) {
+    try {
+      await userStore.verifyUser(itemVerify.value.value.id)
+
+      message.success('Xác thực người dùng thành công')
+    } finally {
+      itemVerify.value = {
+        value: null,
+        isOpen: false
+      }
+    }
+  }
+}
+
 onMounted(async () => {
   try {
     isLoading.value = true
     await userStore.getUsers()
-  } catch {}
-
-  isLoading.value = false
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>
 
@@ -146,6 +190,10 @@ onMounted(async () => {
         <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
         <Divider type="vertical" />
         <a @click.prevent="onClickDelete(record)">Xóa</a>
+        <template v-if="isVerifiable(record)">
+          <Divider type="vertical" />
+          <a @click.prevent="onClickVerify(record)">Xác thực</a>
+        </template>
       </Row>
       <template v-else-if="column.key === 'type'">
         <Tag :color="getUserTypeColor(record.type)">
@@ -167,6 +215,15 @@ onMounted(async () => {
   >
     Bạn có muốn xóa người dùng "{{
       itemDelete.value?.fullName || itemDelete.value?.username
+    }}"?
+  </Modal>
+  <Modal
+    v-model:visible="itemVerify.isOpen"
+    title="Xác thực người dùng?"
+    @ok="onVerify"
+  >
+    Bạn có muốn xác thực người dùng "{{
+      itemVerify.value?.fullName || itemVerify.value?.username
     }}"?
   </Modal>
 </template>
