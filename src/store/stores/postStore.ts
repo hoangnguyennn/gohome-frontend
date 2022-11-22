@@ -1,18 +1,22 @@
 import { IPost, IPostCreate } from '~/interfaces'
 import CommonService from '~/services/CommonService'
+import { useDataListStore } from './dataListStore'
 
 export const usePostStore = defineStore('postStore', () => {
+  const dataListStore = useDataListStore()
   const posts = ref<IPost[]>([])
   const rentedPosts = ref<IPost[]>([])
 
   const getPosts = async () => {
     const response = await CommonService.getPosts()
     posts.value = response.data.data
+    dataListStore.setTotal(response.data.total)
   }
 
   const getRentedPosts = async () => {
     const response = await CommonService.getRentedPosts()
     rentedPosts.value = response.data.data
+    dataListStore.setTotal(response.data.total)
   }
 
   const getPost = async (id: string) => {
@@ -39,6 +43,12 @@ export const usePostStore = defineStore('postStore', () => {
     return CommonService.updatePostById(id, post)
   }
 
+  const reset = () => {
+    posts.value = []
+    rentedPosts.value = []
+    dataListStore.reset()
+  }
+
   return {
     posts,
     rentedPosts,
@@ -49,6 +59,7 @@ export const usePostStore = defineStore('postStore', () => {
     approvePost,
     denyPost,
     markAsRented,
-    updatePost
+    updatePost,
+    reset
   }
 })

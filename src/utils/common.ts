@@ -11,7 +11,7 @@ export const getAvatarLink = (filename: string): string => {
 }
 
 export const getPostImageLink = (filename: string): string => {
-  return `https://gohomenhatrang.com/upload/${filename}`
+  return ''
 }
 
 export const getFilename = (url: string): string => {

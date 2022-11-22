@@ -20,6 +20,13 @@ export interface ICategoryResponse {
   data: ICategory
 }
 
+export interface IDataListFilter<T = any> {
+  limit?: number
+  offset?: number
+  sortBy?: keyof T
+  sortDirection?: string
+}
+
 export interface IDataListResponse<T> {
   total: number
   data: T[]
@@ -170,4 +177,4 @@ export interface IFormConfirmState<T> {
   isOpen: boolean
 }
 
-export type Nullable<T> = T | null
+export type Nullable<T> = T | null | undefined

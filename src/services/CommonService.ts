@@ -104,8 +104,8 @@ const markAsRented = (id: string) => {
   return axiosClient.post<IPostResponse>(`/posts/${id}/mark-as-rented`)
 }
 
-const getUsers = () => {
-  return axiosClient.get<IDataListResponse<IUser>>('/users')
+const getUsers = (params?: any) => {
+  return axiosClient.get<IDataListResponse<IUser>>('/users', { params })
 }
 
 const getUserById = (id: string) => {
