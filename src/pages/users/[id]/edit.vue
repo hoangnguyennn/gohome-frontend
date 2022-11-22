@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import {
   PageHeader,
-  Tag,
   Row,
   Col,
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Select,
+  Input as AInput,
+  Select as ASelect,
   SelectOption,
-  Button
+  Button as AButton
 } from 'ant-design-vue'
 import { USER_TYPES } from '~/constants'
 import { IUser, Nullable } from '~/interfaces'
@@ -59,7 +58,7 @@ watch(user, (newValue: Nullable<IUser>) => {
 onMounted(async () => {
   try {
     const response = await userStore.getUserById(id.value)
-    user.value = response.data.user
+    user.value = response.data.data
   } catch {
     router.push('/users')
   }
@@ -69,16 +68,17 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chỉnh sửa người dùng" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên đăng nhập"
           :label-col="{ span: 8 }"
@@ -92,7 +92,7 @@ onMounted(async () => {
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 16 }"
         >
-          <Input v-model:value="formState.fullName" />
+          <AInput v-model:value="formState.fullName" />
         </FormItem>
 
         <FormItem
@@ -100,7 +100,7 @@ onMounted(async () => {
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 16 }"
         >
-          <Select v-model:value="formState.type">
+          <ASelect v-model:value="formState.type">
             <SelectOption
               v-for="userType of USER_TYPES"
               :key="userType.value"
@@ -108,19 +108,28 @@ onMounted(async () => {
             >
               {{ userType.title }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
             Cập nhật loại nhà đất
-          </Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
-          </Button>
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
-      <Col span="12"></Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: default
+  title: Chỉnh sửa người dùng
+  requireAuth: true
+  permissions: [0, 1]
+</route>

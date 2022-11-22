@@ -6,7 +6,7 @@ export const useUserStore = defineStore('userStore', () => {
 
   const getUsers = async () => {
     const response = await CommonService.getUsers()
-    users.value = response.data.users
+    users.value = response.data.data
   }
 
   const getUserById = (id: string) => {

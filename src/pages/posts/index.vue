@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {
-  Table,
+  Table as ATable,
   Divider,
   Modal,
-  Button,
+  Button as AButton,
   Row,
   PageHeader,
   Tag
@@ -270,13 +270,13 @@ onMounted(() => getPosts())
   >
     <template #extra>
       <router-link to="/posts/create">
-        <Button type="primary">Thêm bài đăng mới</Button>
+        <AButton type="primary">Thêm bài đăng mới</AButton>
       </router-link>
     </template>
   </PageHeader>
 
   <div class="responsive-wrapper">
-    <Table :columns="columns" :data-source="posts" :loading="isLoading">
+    <ATable :columns="columns" :data-source="posts" :loading="isLoading">
       <template #headerCell="{ column }">
         <template v-if="column.key === 'verifyStatus'">
           <span class="line">Tình trạng</span>{{ ' ' }}
@@ -338,7 +338,7 @@ onMounted(() => getPosts())
           </template>
         </template>
       </template>
-    </Table>
+    </ATable>
   </div>
 
   <Modal

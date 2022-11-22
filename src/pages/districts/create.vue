@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Select,
+  Input as AInput,
+  Select as ASelect,
   SelectOption,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -44,9 +44,10 @@ const resetForm = () => {
 <template>
   <PageHeader title="Thêm quận, huyện mới" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
@@ -59,14 +60,14 @@ const resetForm = () => {
           name="name"
           :rules="[{ required: true, message: 'Tên là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.name" />
+          <AInput v-model:value="formState.name" />
         </FormItem>
         <FormItem
           label="Loại"
           name="type"
           :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.type">
+          <ASelect v-model:value="formState.type">
             <SelectOption
               v-for="districtType of DISTRICT_TYPES"
               :key="districtType.value"
@@ -74,23 +75,22 @@ const resetForm = () => {
             >
               {{ districtType.title }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
-        <FormItem>
-          <Button
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
             type="primary"
             html-type="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
             Tạo quận huyện
-          </Button>
-          <Button @click="resetForm"> Xóa tất cả </Button>
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
-      <Col :span="24" :xl="12"></Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

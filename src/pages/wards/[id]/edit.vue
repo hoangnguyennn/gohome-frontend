@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Select,
+  Input as AInput,
+  Select as ASelect,
   SelectOption,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -72,7 +72,7 @@ onMounted(async () => {
 
   try {
     const response = await wardStore.getWardById(id)
-    ward.value = response.data.ward
+    ward.value = response.data.data
   } catch {
     router.push('/wards')
   }
@@ -82,29 +82,30 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chỉnh sửa xã phường" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên"
           name="name"
           :rules="[{ required: true, message: 'Tên là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.name" />
+          <AInput v-model:value="formState.name" />
         </FormItem>
         <FormItem
           label="Loại"
           name="type"
           :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.type">
+          <ASelect v-model:value="formState.type">
             <SelectOption
               v-for="wardType of WARD_TYPES"
               :key="wardType.value"
@@ -112,7 +113,7 @@ onMounted(async () => {
             >
               {{ wardType.title }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -122,7 +123,7 @@ onMounted(async () => {
             { required: true, message: 'Quận huyện là trường bắt buộc' }
           ]"
         >
-          <Select v-model:value="formState.districtId">
+          <ASelect v-model:value="formState.districtId">
             <SelectOption
               v-for="district of districts"
               :key="district.id"
@@ -130,21 +131,22 @@ onMounted(async () => {
             >
               {{ district.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
             Cập nhật xã phường
-          </Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
-          </Button>
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
-      <Col span="12"></Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

@@ -19,7 +19,7 @@ export const useAuthStore = defineStore(
 
     const getCurrentUser = async () => {
       const response = await CommonService.getCurrentUser()
-      currentUser.value = response.data.user
+      currentUser.value = response.data.data
     }
 
     const changePassword = (changePasswordInfo: IChangePassword) => {
@@ -28,7 +28,7 @@ export const useAuthStore = defineStore(
 
     const updateInfo = async (updateInfo: IUpdateInfo) => {
       const response = await CommonService.updateInfo(updateInfo)
-      currentUser.value = response.data.user
+      currentUser.value = response.data.data
     }
 
     const logout = () => {

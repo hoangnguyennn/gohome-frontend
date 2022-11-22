@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import {
+  Table as ATable,
+  Divider,
+  Modal,
+  Button as AButton,
+  Row,
+  PageHeader
+} from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { IFormConfirmState, IWard } from '~/interfaces'
@@ -116,12 +123,12 @@ onMounted(() => getWards())
   >
     <template #extra>
       <router-link to="/wards/create">
-        <Button type="primary">Thêm xã phường mới</Button>
+        <AButton type="primary">Thêm xã phường mới</AButton>
       </router-link>
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="wards" :loading="isLoading">
+  <ATable :columns="columns" :data-source="wards" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>
@@ -136,7 +143,7 @@ onMounted(() => getWards())
         </router-link>
       </template>
     </template>
-  </Table>
+  </ATable>
 
   <Modal
     v-model:visible="itemDelete.isOpen"

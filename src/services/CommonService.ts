@@ -1,18 +1,20 @@
 import {
   IAuthResponse,
-  ICategoriesResponse,
+  ICategory,
   ICategoryCreate,
   ICategoryResponse,
   IChangePassword,
+  IDataListResponse,
+  IDistrict,
   IDistrictRequest,
   IDistrictResponse,
-  IDistrictsResponse,
+  IPost,
   IPostCreate,
   IPostResponse,
-  IPostsResponse,
   IUpdateInfo,
+  IUser,
   IUserResponse,
-  IUsersResponse,
+  IWard,
   IWardRequest,
   IWardResponse,
   IWardsResponse
@@ -35,7 +37,7 @@ const getCurrentUser = () => {
 }
 
 const getCategories = () => {
-  return axiosClient.get<ICategoriesResponse>('/categories')
+  return axiosClient.get<IDataListResponse<ICategory>>('/categories')
 }
 
 const getCategoryById = (id: string) => {
@@ -51,7 +53,7 @@ const updateCategoryById = (id: string, category: ICategoryCreate) => {
 }
 
 const getDistricts = () => {
-  return axiosClient.get<IDistrictsResponse>('/districts')
+  return axiosClient.get<IDataListResponse<IDistrict>>('/districts')
 }
 
 const getDistrictById = (id: string) => {
@@ -63,7 +65,7 @@ const getWardsByDistrictId = (districtId: string) => {
 }
 
 const createDistrict = (district: IDistrictRequest) => {
-  return axiosClient.post<IDistrictsResponse>('/districts', district)
+  return axiosClient.post<IDistrictResponse>('/districts', district)
 }
 
 const updateDistrictById = (id: string, districtUpdate: IDistrictRequest) => {
@@ -71,11 +73,11 @@ const updateDistrictById = (id: string, districtUpdate: IDistrictRequest) => {
 }
 
 const getPosts = () => {
-  return axiosClient.get<IPostsResponse>('/posts')
+  return axiosClient.get<IDataListResponse<IPost>>('/posts')
 }
 
 const getRentedPosts = () => {
-  return axiosClient.get<IPostsResponse>('/posts/rented')
+  return axiosClient.get<IDataListResponse<IPost>>('/posts/rented')
 }
 
 const getPostById = (id: string) => {
@@ -103,7 +105,7 @@ const markAsRented = (id: string) => {
 }
 
 const getUsers = () => {
-  return axiosClient.get<IUsersResponse>('/users')
+  return axiosClient.get<IDataListResponse<IUser>>('/users')
 }
 
 const getUserById = (id: string) => {
@@ -115,7 +117,7 @@ const verifyUser = (id: string) => {
 }
 
 const getWards = () => {
-  return axiosClient.get<IWardsResponse>('/wards')
+  return axiosClient.get<IDataListResponse<IWard>>('/wards')
 }
 
 const getWardById = (id: string) => {

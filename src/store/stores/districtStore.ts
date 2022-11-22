@@ -7,7 +7,7 @@ export const useDistrictStore = defineStore('districtStore', () => {
 
   const getDistricts = async () => {
     const response = await CommonService.getDistricts()
-    districts.value = response.data.districts
+    districts.value = response.data.data
   }
 
   const getDistrictById = (id: string) => {
@@ -17,7 +17,7 @@ export const useDistrictStore = defineStore('districtStore', () => {
   const getWardsByDistrictId = async (districtId: string) => {
     wards.value = []
     const response = await CommonService.getWardsByDistrictId(districtId)
-    wards.value = response.data.wards
+    wards.value = response.data.data
   }
 
   const createDistrict = async (district: IDistrictRequest) => {

@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { Table, Divider, Modal, Button, Row, PageHeader } from 'ant-design-vue'
+import {
+  Table as ATable,
+  Divider,
+  Modal,
+  Button as AButton,
+  Row,
+  PageHeader
+} from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
 import { ICategory, IFormConfirmState } from '~/interfaces'
@@ -98,12 +105,12 @@ onMounted(() => getCategories())
   >
     <template #extra>
       <router-link to="/categories/create">
-        <Button type="primary">Thêm loại nhà đất mới</Button>
+        <AButton type="primary">Thêm loại nhà đất mới</AButton>
       </router-link>
     </template>
   </PageHeader>
 
-  <Table :columns="columns" :data-source="categories" :loading="isLoading">
+  <ATable :columns="columns" :data-source="categories" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>
@@ -113,7 +120,7 @@ onMounted(() => getCategories())
         <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
     </template>
-  </Table>
+  </ATable>
 
   <Modal
     v-model:visible="itemDelete.isOpen"

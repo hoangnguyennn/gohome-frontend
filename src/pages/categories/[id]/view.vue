@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { FormItem, Row, Col, Button, PageHeader } from 'ant-design-vue'
+import {
+  FormItem,
+  Row,
+  Col,
+  Button as AButton,
+  PageHeader
+} from 'ant-design-vue'
 
 import { ICategory, Nullable } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
@@ -13,7 +19,7 @@ const category = ref<Nullable<ICategory>>(null)
 onMounted(async () => {
   try {
     const response = await categoryStore.getCategoryById(id)
-    category.value = response.data.category
+    category.value = response.data.data
   } catch {
     router.push('/categories')
   }
@@ -23,42 +29,36 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chi tiết loại nhà đất" @back="router.back"></PageHeader>
 
-  <div>
-    <Row>
-      <Col span="12">
-        <FormItem
-          label="Tên loại"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ category?.name }}</div>
-        </FormItem>
+  <Row v-bind="$attrs">
+    <Col :span="24" :lg="12">
+      <FormItem
+        label="Tên loại"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ category?.name }}</div>
+      </FormItem>
 
-        <FormItem
-          label="Mã loại"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ category?.code }}</div>
-        </FormItem>
-      </Col>
-      <Col span="12"></Col>
-    </Row>
-    <Row>
-      <Col span="12">
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary">
-            <router-link :to="`/categories/${id}/edit`">
-              Đi tới trang chỉnh sửa
-            </router-link>
-          </Button>
-          <Button style="margin-left: 10px">
-            <router-link to="/categories">Quay lại</router-link>
-          </Button>
-        </FormItem>
-      </Col>
-    </Row>
-  </div>
+      <FormItem
+        label="Mã loại"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ category?.code }}</div>
+      </FormItem>
+
+      <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
+          <router-link :to="`/categories/${id}/edit`">
+            Đi tới trang chỉnh sửa
+          </router-link>
+        </AButton>
+        <AButton>
+          <router-link to="/categories">Quay lại</router-link>
+        </AButton>
+      </FormItem>
+    </Col>
+  </Row>
 </template>
 
 <route lang="yaml">

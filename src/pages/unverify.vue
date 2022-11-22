@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'ant-design-vue'
+import { Button as AButton } from 'ant-design-vue'
 import { IUser, Nullable } from '~/interfaces'
 import { useAuthStore } from '~/store/stores/authStore'
 
@@ -31,7 +31,7 @@ onMounted(() => {
         Tài khoản của bạn chưa được xác thực, vui lòng liên hệ quản trị viên để
         biết thêm chi tiết
       </p>
-      <Button type="primary" @click="onLogout">Đăng xuất</Button>
+      <AButton type="primary" @click="onLogout">Đăng xuất</AButton>
     </div>
   </div>
 </template>

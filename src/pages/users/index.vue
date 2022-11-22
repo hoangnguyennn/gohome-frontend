@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  Table,
+  Table as ATable,
   Divider,
   Modal,
   Tag,
@@ -188,9 +188,9 @@ onMounted(() => getUsers())
     title="Người dùng"
     back-icon=""
     style="padding-left: 0; padding-right: 0"
-  ></PageHeader>
+  />
 
-  <Table :columns="columns" :data-source="users" :loading="isLoading">
+  <ATable :columns="columns" :data-source="users" :loading="isLoading">
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>
@@ -207,6 +207,7 @@ onMounted(() => getUsers())
         <img
           v-if="record.avatar"
           :src="getAvatarLink(record.avatar)"
+          alt=""
           width="100"
         />
       </template>
@@ -221,7 +222,7 @@ onMounted(() => getUsers())
         </Tag>
       </template>
     </template>
-  </Table>
+  </ATable>
 
   <Modal
     v-model:visible="itemDelete.isOpen"

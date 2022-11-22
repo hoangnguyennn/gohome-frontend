@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { PageHeader, Tag, Row, Col, FormItem, Button } from 'ant-design-vue'
+import {
+  PageHeader,
+  Tag,
+  Row,
+  Col,
+  FormItem,
+  Button as AButton
+} from 'ant-design-vue'
 import { IUser, Nullable } from '~/interfaces'
 import { useUserStore } from '~/store/stores/userStore'
 import {
@@ -22,7 +29,7 @@ const user = ref<Nullable<IUser>>(null)
 onMounted(async () => {
   try {
     const response = await userStore.getUserById(id.value)
-    user.value = response.data.user
+    user.value = response.data.data
   } catch {
     router.push('/users')
   }
@@ -38,51 +45,52 @@ onMounted(async () => {
     </template>
   </PageHeader>
 
-  <div>
-    <Row>
-      <Col span="12">
-        <FormItem
-          label="Tên đăng nhập"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ user?.username }}</div>
-        </FormItem>
+  <Row v-bind="$attrs">
+    <Col :span="24" :xl="12">
+      <FormItem
+        label="Tên đăng nhập"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ user?.username }}</div>
+      </FormItem>
 
-        <FormItem
-          label="Họ và tên"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ user?.fullName || '(Rỗng)' }}</div>
-        </FormItem>
+      <FormItem
+        label="Họ và tên"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ user?.fullName || '(Rỗng)' }}</div>
+      </FormItem>
 
-        <FormItem
-          label="Loại tài khoản"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <Tag :color="getUserTypeColor(user?.type)">
-            {{ getUserTypeText(user?.type) }}
-          </Tag>
-        </FormItem>
-      </Col>
-      <Col span="12"></Col>
-    </Row>
+      <FormItem
+        label="Loại tài khoản"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <Tag :color="getUserTypeColor(user?.type)">
+          {{ getUserTypeText(user?.type) }}
+        </Tag>
+      </FormItem>
 
-    <Row>
-      <Col span="12">
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary">
-            <router-link :to="`/users/${id}/edit`">
-              Đi tới trang chỉnh sửa
-            </router-link>
-          </Button>
-          <Button style="margin-left: 10px">
-            <router-link to="/users">Quay lại</router-link>
-          </Button>
-        </FormItem>
-      </Col>
-    </Row>
-  </div>
+      <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
+          <router-link :to="`/users/${id}/edit`">
+            Đi tới trang chỉnh sửa
+          </router-link>
+        </AButton>
+        <AButton>
+          <router-link to="/users">Quay lại</router-link>
+        </AButton>
+      </FormItem>
+    </Col>
+  </Row>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: default
+  title: Chi tiết người dùng
+  requireAuth: true
+  permissions: [0, 1]
+</route>

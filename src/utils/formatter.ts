@@ -1,5 +1,12 @@
 import moment from 'moment'
-import { PostVerifyStatuses, UserTypes } from '~/interfaces/enums'
+import {
+  Colors,
+  PostVerifyStatuses,
+  PostVerifyStatusTexts,
+  UserTypes,
+  UserTypeTexts,
+  UserVerifyStatusTexts
+} from '~/interfaces/enums'
 
 export const toDateTime = (date: Date | string | number) => {
   return moment(date).format('DD/MM/YYYY HH:mm:ss')
@@ -36,62 +43,62 @@ export const toRawNumber = (value: string) => {
 export const getUserTypeText = (type?: UserTypes) => {
   switch (type) {
     case UserTypes.ROOT:
-      return 'ROOT'
+      return UserTypeTexts.ROOT
     case UserTypes.ADMIN:
-      return 'Quản trị viên'
+      return UserTypeTexts.ADMIN
     case UserTypes.EMPLOYEE:
-      return 'Nhân viên'
+      return UserTypeTexts.EMPLOYEE
   }
 }
 
 export const getUserTypeColor = (type?: UserTypes) => {
   switch (type) {
     case UserTypes.ROOT:
-      return 'error'
+      return Colors.ERROR
     case UserTypes.ADMIN:
-      return 'success'
+      return Colors.SUCCESS
     case UserTypes.EMPLOYEE:
-      return 'default'
+      return Colors.DEFAULT
   }
 }
 
 export const getUserVerifyStatusColor = (isVerified?: boolean) => {
   if (isVerified) {
-    return 'green'
+    return Colors.GREEN
   }
 
-  return 'yellow'
+  return Colors.YELLOW
 }
 
 export const getUserVerifyStatusText = (isVerified?: boolean) => {
   if (isVerified) {
-    return 'Đã xác thực'
+    return UserVerifyStatusTexts.VEFIRIED
   }
 
-  return 'Chưa xác thực'
+  return UserVerifyStatusTexts.UNVERIFY
 }
 
 export const getPostVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
   switch (verifyStatus) {
     case PostVerifyStatuses.PENDING:
-      return 'warning'
+      return Colors.WARNING
     case PostVerifyStatuses.APPROVED:
-      return 'success'
+      return Colors.WARNING
     case PostVerifyStatuses.DENIED:
-      return 'error'
+      return Colors.ERROR
     default:
-      return 'warning'
+      return Colors.WARNING
   }
 }
 
 export const getPostVerifyStatusText = (verifyStatus?: PostVerifyStatuses) => {
   switch (verifyStatus) {
     case PostVerifyStatuses.PENDING:
-      return 'Chờ duyệt'
+      return PostVerifyStatusTexts.PENDING
     case PostVerifyStatuses.APPROVED:
-      return 'Đã duyệt'
+      return PostVerifyStatusTexts.APPROVED
     case PostVerifyStatuses.DENIED:
-      return 'Đã từ chối'
+      return PostVerifyStatusTexts.DENIED
     default:
       return ''
   }

@@ -6,7 +6,7 @@ export const useCategoryStore = defineStore('categoryStore', () => {
 
   const getCategories = async () => {
     const response = await CommonService.getCategories()
-    categories.value = response.data.categories
+    categories.value = response.data.data
   }
 
   const getCategoryById = (id: string) => {

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Textarea,
+  Input as AInput,
+  Textarea as ATextarea,
   InputNumber,
-  Select,
+  Select as ASelect,
   SelectOption,
   Checkbox,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader,
   Divider,
   UploadFile
@@ -109,9 +109,10 @@ onMounted(() => {
 <template>
   <PageHeader title="Thêm bài đăng mới" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
@@ -125,7 +126,7 @@ onMounted(() => {
           name="title"
           :rules="[{ required: true, message: 'Tiêu đề là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.title" />
+          <AInput v-model:value="formState.title" />
         </FormItem>
 
         <FormItem
@@ -133,7 +134,7 @@ onMounted(() => {
           name="categoryId"
           :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.categoryId">
+          <ASelect v-model:value="formState.categoryId">
             <SelectOption
               v-for="category of categories"
               :key="category.id"
@@ -141,7 +142,7 @@ onMounted(() => {
             >
               {{ category.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -151,7 +152,7 @@ onMounted(() => {
             { required: true, message: 'Quận huyện là trường bắt buộc' }
           ]"
         >
-          <Select v-model:value="formState.districtId">
+          <ASelect v-model:value="formState.districtId">
             <SelectOption
               v-for="district of districts"
               :key="district.id"
@@ -159,7 +160,7 @@ onMounted(() => {
             >
               {{ district.type }} {{ district.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -167,11 +168,11 @@ onMounted(() => {
           name="wardId"
           :rules="[{ required: true, message: 'Xã phường là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.wardId">
+          <ASelect v-model:value="formState.wardId">
             <SelectOption v-for="ward of wards" :key="ward.id" :value="ward.id">
               {{ ward.type }} {{ ward.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -275,7 +276,7 @@ onMounted(() => {
           :wrapper-col="{ span: 20 }"
           :rules="[{ required: true, message: 'Mô tả là trường bắt buộc' }]"
         >
-          <Textarea v-model:value="formState.description" :rows="4" />
+          <ATextarea v-model:value="formState.description" :rows="4" />
         </FormItem>
       </Col>
     </Row>
@@ -333,7 +334,7 @@ onMounted(() => {
             { required: true, message: 'Tên chủ hộ là trường bắt buộc' }
           ]"
         >
-          <Input v-model:value="formState.ownerName" />
+          <AInput v-model:value="formState.ownerName" />
         </FormItem>
 
         <FormItem
@@ -343,7 +344,7 @@ onMounted(() => {
             { required: true, message: 'Địa chỉ chủ hộ là trường bắt buộc' }
           ]"
         >
-          <Input v-model:value="formState.ownerAddress" />
+          <AInput v-model:value="formState.ownerAddress" />
         </FormItem>
       </Col>
 
@@ -358,7 +359,7 @@ onMounted(() => {
             }
           ]"
         >
-          <Input v-model:value="formState.ownerPhone" />
+          <AInput v-model:value="formState.ownerPhone" />
         </FormItem>
       </Col>
     </Row>
@@ -366,20 +367,20 @@ onMounted(() => {
     <Divider type="horizontal"></Divider>
 
     <Row>
-      <Col :span="24" :xl="12">
+      <Col :span="24" :xl="{ offset: 4, span: 20 }">
         <FormItem>
-          <Button
+          <AButton
             type="primary"
             html-type="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
             Tạo bài đăng
-          </Button>
-          <Button @click="resetForm">Xóa tất cả</Button>
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

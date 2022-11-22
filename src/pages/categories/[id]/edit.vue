@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
+  Input as AInput,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -56,7 +56,7 @@ watch(category, (newValue: Nullable<ICategory>) => {
 onMounted(async () => {
   try {
     const response = await categoryStore.getCategoryById(id)
-    category.value = response.data.category
+    category.value = response.data.data
   } catch {
     router.push('/categories')
   }
@@ -66,22 +66,23 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chỉnh sửa loại nhà đất" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
     <Row>
-      <Col span="12">
+      <Col :span="24" :lg="12">
         <FormItem
           label="Tên loại"
           name="name"
           :rules="[{ required: true, message: 'Tên loại là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.name" />
+          <AInput v-model:value="formState.name" />
         </FormItem>
 
         <FormItem
@@ -89,21 +90,22 @@ onMounted(async () => {
           name="code"
           :rules="[{ required: true, message: 'Mã loại là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.code" />
+          <AInput v-model:value="formState.code" />
         </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
             Cập nhật loại nhà đất
-          </Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
-          </Button>
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
-      <Col span="12"></Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

@@ -7,7 +7,7 @@ import {
   FormItem,
   Input,
   InputPassword,
-  Button,
+  Button as AButton,
   Divider,
   FormInstance,
   message
@@ -102,14 +102,14 @@ watch(
             <div>{{ getUserTypeText(currentUser?.type) }}</div>
           </FormItem>
           <FormItem>
-            <Button
+            <AButton
               type="primary"
               html-type="submit"
               :disabled="!isUserInfoChanged"
               style="margin-right: 10px; margin-bottom: 10px"
             >
               Đổi
-            </Button>
+            </AButton>
           </FormItem>
         </Col>
         <Col :span="24" :xl="12"></Col>

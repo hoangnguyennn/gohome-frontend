@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Textarea,
+  Input as AInput,
+  Textarea as ATextarea,
   InputNumber,
-  Select,
+  Select as ASelect,
   SelectOption,
   Checkbox,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader,
   Divider,
   UploadFile
@@ -89,7 +89,7 @@ const onFinish = async (values: IFormState) => {
     ...values,
     imagesId: values.images.map((image) => {
       if (isIImage(image)) {
-        return (image as IImage).id
+        return image.id
       } else {
         return image.response?.image.id || image.uid
       }
@@ -154,7 +154,7 @@ watch(post, (newPost: Nullable<IPost>) => {
 onMounted(async () => {
   try {
     const response = await postStore.getPost(id)
-    post.value = response.data.post
+    post.value = response.data.data
   } catch {
     router.push('/posts')
   }
@@ -167,24 +167,24 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chỉnh sửa bài đăng" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
-    v-bind="$attrs"
     @finish="onFinish"
   >
     <h3 class="section-title">Thông tin cơ bản</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tiêu đề"
           name="title"
           :rules="[{ required: true, message: 'Tiêu đề là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.title" />
+          <AInput v-model:value="formState.title" />
         </FormItem>
 
         <FormItem
@@ -192,7 +192,7 @@ onMounted(async () => {
           name="categoryId"
           :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.categoryId">
+          <ASelect v-model:value="formState.categoryId">
             <SelectOption
               v-for="category of categories"
               :key="category.id"
@@ -200,7 +200,7 @@ onMounted(async () => {
             >
               {{ category.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -210,7 +210,7 @@ onMounted(async () => {
             { required: true, message: 'Quận huyện là trường bắt buộc' }
           ]"
         >
-          <Select v-model:value="formState.districtId">
+          <ASelect v-model:value="formState.districtId">
             <SelectOption
               v-for="district of districts"
               :key="district.id"
@@ -218,7 +218,7 @@ onMounted(async () => {
             >
               {{ district.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -226,11 +226,11 @@ onMounted(async () => {
           name="wardId"
           :rules="[{ required: true, message: 'Xã phường là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.wardId">
+          <ASelect v-model:value="formState.wardId">
             <SelectOption v-for="ward of wards" :key="ward.id" :value="ward.id">
               {{ ward.name }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
         <FormItem
@@ -247,7 +247,7 @@ onMounted(async () => {
           />
         </FormItem>
       </Col>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Hoa hồng (VND)"
           name="commission"
@@ -334,7 +334,7 @@ onMounted(async () => {
           :wrapper-col="{ span: 20 }"
           :rules="[{ required: true, message: 'Mô tả là trường bắt buộc' }]"
         >
-          <Textarea v-model:value="formState.description" :rows="12" />
+          <ATextarea v-model:value="formState.description" :rows="12" />
         </FormItem>
       </Col>
     </Row>
@@ -388,12 +388,12 @@ onMounted(async () => {
         </FormItem>
 
         <FormItem
-          label="Đã thuê"
-          name="isRented"
+          label="Ẩn"
+          name="isHide"
           :label-col="{ span: 4 }"
           :wrapper-col="{ span: 20 }"
         >
-          <Checkbox v-model:checked="formState.isRented" />
+          <Checkbox v-model:checked="formState.isHide" />
         </FormItem>
       </Col>
     </Row>
@@ -402,7 +402,7 @@ onMounted(async () => {
 
     <h3 class="section-title">Thông tin chủ hộ</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên chủ hộ"
           name="ownerName"
@@ -410,7 +410,7 @@ onMounted(async () => {
             { required: true, message: 'Tên chủ hộ là trường bắt buộc' }
           ]"
         >
-          <Input v-model:value="formState.ownerName" />
+          <AInput v-model:value="formState.ownerName" />
         </FormItem>
 
         <FormItem
@@ -420,11 +420,11 @@ onMounted(async () => {
             { required: true, message: 'Địa chỉ chủ hộ là trường bắt buộc' }
           ]"
         >
-          <Input v-model:value="formState.ownerAddress" />
+          <AInput v-model:value="formState.ownerAddress" />
         </FormItem>
       </Col>
 
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Số điện thoại chủ hộ"
           name="ownerPhone"
@@ -435,7 +435,7 @@ onMounted(async () => {
             }
           ]"
         >
-          <Input v-model:value="formState.ownerPhone" />
+          <AInput v-model:value="formState.ownerPhone" />
         </FormItem>
       </Col>
     </Row>
@@ -444,15 +444,19 @@ onMounted(async () => {
 
     <Row>
       <Col span="12">
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Cập nhật bài đăng</Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
-          </Button>
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            Cập nhật bài đăng
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

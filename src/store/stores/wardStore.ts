@@ -6,7 +6,7 @@ export const useWardStore = defineStore('wardStore', () => {
 
   const getWards = async () => {
     const response = await CommonService.getWards()
-    wards.value = response.data.wards
+    wards.value = response.data.data
   }
 
   const getWardById = (id: string) => {

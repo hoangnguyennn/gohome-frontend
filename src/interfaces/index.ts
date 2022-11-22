@@ -17,11 +17,12 @@ export interface ICategoryCreate {
 }
 
 export interface ICategoryResponse {
-  category: ICategory
+  data: ICategory
 }
 
-export interface ICategoriesResponse {
-  categories: ICategory[]
+export interface IDataListResponse<T> {
+  total: number
+  data: T[]
 }
 
 export interface IDistrict {
@@ -35,12 +36,8 @@ export interface IDistrictRequest {
   type: DistrictTypes
 }
 
-export interface IDistrictsResponse {
-  districts: IDistrict[]
-}
-
 export interface IDistrictResponse {
-  district: IDistrict
+  data: IDistrict
 }
 
 export interface IImage {
@@ -103,11 +100,7 @@ export interface IPostCreate {
 }
 
 export interface IPostResponse {
-  post: IPost
-}
-
-export interface IPostsResponse {
-  posts: IPost[]
+  data: IPost
 }
 
 export interface IUser {
@@ -121,11 +114,7 @@ export interface IUser {
 }
 
 export interface IUserResponse {
-  user: IUser
-}
-
-export interface IUsersResponse {
-  users: IUser[]
+  data: IUser
 }
 
 export interface IWard {
@@ -141,12 +130,12 @@ export interface IWardRequest {
   districtId: string
 }
 
-export interface IWardsResponse {
-  wards: IWard[]
+export interface IWardResponse {
+  data: IWard
 }
 
-export interface IWardResponse {
-  ward: IWard
+export interface IWardsResponse {
+  data: IWard[]
 }
 
 export interface IErrorResponse {

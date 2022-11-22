@@ -29,7 +29,6 @@ const getMenuItemId = (path: string) => {
       menuItem.children.forEach((child) => {
         if (child.link === path) {
           id = child.id
-          return
         }
       })
     }

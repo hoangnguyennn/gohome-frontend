@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
-  Select,
+  Input as AInput,
+  Select as ASelect,
   SelectOption,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -62,7 +62,7 @@ watch(district, (newValue: Nullable<IDistrict>) => {
 onMounted(async () => {
   try {
     const response = await districtStore.getDistrictById(id)
-    district.value = response.data.district
+    district.value = response.data.data
   } catch {
     router.push('/districts')
   }
@@ -72,29 +72,30 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chỉnh sửa quận, huyện" @back="router.back"></PageHeader>
 
-  <Form
+  <AForm
     name="basic"
     ref="formRef"
+    v-bind="$attrs"
     :model="formState"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên"
           name="name"
           :rules="[{ required: true, message: 'Tên là trường bắt buộc' }]"
         >
-          <Input v-model:value="formState.name" />
+          <AInput v-model:value="formState.name" />
         </FormItem>
         <FormItem
           label="Loại"
           name="type"
           :rules="[{ required: true, message: 'Loại là trường bắt buộc' }]"
         >
-          <Select v-model:value="formState.type">
+          <ASelect v-model:value="formState.type">
             <SelectOption
               v-for="districtType of DISTRICT_TYPES"
               :key="districtType.value"
@@ -102,19 +103,22 @@ onMounted(async () => {
             >
               {{ districtType.title }}
             </SelectOption>
-          </Select>
+          </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary" html-type="submit">Cập nhật quận huyện</Button>
-          <Button style="margin-left: 10px" @click="resetForm">
-            Xóa tất cả
-          </Button>
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            html-type="submit"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            Cập nhật quận huyện
+          </AButton>
+          <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>
       </Col>
-      <Col span="12"></Col>
     </Row>
-  </Form>
+  </AForm>
 </template>
 
 <route lang="yaml">

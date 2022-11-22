@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Form, FormItem, Input, InputPassword, Button } from 'ant-design-vue'
+import {
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  InputPassword,
+  Button as AButton
+} from 'ant-design-vue'
 import { Rule } from 'ant-design-vue/lib/form'
 import { useAuthStore } from '~/store/stores/authStore'
 import { isValidPassword } from '~/utils/common'
@@ -68,7 +74,7 @@ const onRegister = async (values: IRegisterFormState) => {
 
 <template>
   <div class="register-page">
-    <Form
+    <AForm
       :model="formState"
       name="register-form"
       autocomplete="off"
@@ -77,7 +83,7 @@ const onRegister = async (values: IRegisterFormState) => {
       @finish="onRegister"
     >
       <FormItem name="username">
-        <Input
+        <AInput
           v-model:value="formState.username"
           placeholder="Tên tài khoản (*)"
         />
@@ -95,13 +101,13 @@ const onRegister = async (values: IRegisterFormState) => {
         />
       </FormItem>
       <FormItem>
-        <Button block type="primary" html-type="submit">Đăng ký</Button>
+        <AButton block type="primary" html-type="submit">Đăng ký</AButton>
       </FormItem>
       <p class="actions">
         Đã có tài khoản?
         <router-link to="/login">Đăng nhập</router-link>
       </p>
-    </Form>
+    </AForm>
   </div>
 </template>
 

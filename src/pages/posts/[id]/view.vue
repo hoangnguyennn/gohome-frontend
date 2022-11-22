@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {
-  Form,
+  Form as AForm,
   FormItem,
   Row,
   Col,
-  Button,
+  Button as AButton,
   PageHeader,
   Divider,
   Tag,
-  Textarea
+  Textarea as ATextarea
 } from 'ant-design-vue'
 
 import { IPost, Nullable } from '~/interfaces'
@@ -52,8 +52,8 @@ const approvePost = async () => {
 onMounted(async () => {
   try {
     const response = await postStore.getPost(id.value)
-    post.value = response.data.post
-    denyFormState.value.reason = response.data.post.denyReason
+    post.value = response.data.data
+    denyFormState.value.reason = response.data.data.denyReason
   } catch {
     router.push('/posts')
   }
@@ -75,7 +75,7 @@ onMounted(async () => {
   <div class="post-detail" v-bind="$attrs">
     <h3 class="section-title">Thông tin cơ bản</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tiêu đề"
           :label-col="{ span: 8 }"
@@ -116,7 +116,7 @@ onMounted(async () => {
           <div>{{ toVndPrefix(post?.price || 0) }}</div>
         </FormItem>
       </Col>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Hoa hồng (VND)"
           :label-col="{ span: 8 }"
@@ -202,7 +202,7 @@ onMounted(async () => {
 
     <h3 class="section-title">Thời gian</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Thời gian cho thuê (gần nhất)"
           :label-col="{ span: 8 }"
@@ -245,7 +245,7 @@ onMounted(async () => {
 
     <h3 class="section-title">Thông tin chủ hộ</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên chủ hộ"
           :label-col="{ span: 8 }"
@@ -278,7 +278,7 @@ onMounted(async () => {
 
     <h3 class="section-title">Thông tin người đăng</h3>
     <Row>
-      <Col span="12">
+      <Col :span="24" :xl="12">
         <FormItem
           label="Tên người đăng"
           :label-col="{ span: 8 }"
@@ -289,13 +289,11 @@ onMounted(async () => {
           </div>
         </FormItem>
       </Col>
-
-      <Col span="12"> </Col>
     </Row>
 
     <Divider type="horizontal"></Divider>
 
-    <Form
+    <AForm
       name="basic"
       :model="denyFormState"
       :label-col="{ span: 8 }"
@@ -303,7 +301,7 @@ onMounted(async () => {
       @finish="denyPost"
     >
       <Row>
-        <Col span="12">
+        <Col :span="24" :xl="12">
           <FormItem
             label="Lý do không duyệt"
             name="reason"
@@ -311,41 +309,45 @@ onMounted(async () => {
               { required: true, message: 'Vui lòng nhập lý do không duyệt' }
             ]"
           >
-            <Textarea
+            <ATextarea
               v-model:value="denyFormState.reason"
               placeholder="Nếu không duyệt, vui lòng nhập lý do"
               :rows="4"
-            ></Textarea>
+            />
           </FormItem>
 
-          <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-            <Button type="primary" @click="approvePost">Duyệt bài</Button>
-            <Button
+          <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+            <AButton
               type="primary"
-              danger
-              style="margin-left: 10px"
-              html-type="submit"
+              style="margin-right: 10px; margin-bottom: 10px"
+              @click="approvePost"
             >
+              Duyệt bài
+            </AButton>
+            <AButton type="primary" danger html-type="submit">
               Không duyệt
-            </Button>
+            </AButton>
           </FormItem>
         </Col>
       </Row>
-    </Form>
+    </AForm>
 
     <Divider type="horizontal"></Divider>
 
     <Row>
-      <Col span="12">
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary">
+      <Col :span="24" :xl="12">
+        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+          <AButton
+            type="primary"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
             <router-link :to="`/posts/${id}/edit`">
               Đi tới trang chỉnh sửa
             </router-link>
-          </Button>
-          <Button style="margin-left: 10px">
+          </AButton>
+          <AButton>
             <router-link to="/posts">Quay lại</router-link>
-          </Button>
+          </AButton>
         </FormItem>
       </Col>
     </Row>

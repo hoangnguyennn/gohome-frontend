@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Form, FormItem, Input, InputPassword, Button } from 'ant-design-vue'
+import {
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  InputPassword,
+  Button as AButton
+} from 'ant-design-vue'
 import { useAuthStore } from '~/store/stores/authStore'
 
 interface ILoginFormState {
@@ -24,7 +30,7 @@ const onLogin = async (values: ILoginFormState) => {
 
 <template>
   <div class="login-page">
-    <Form
+    <AForm
       :model="formState"
       name="login-form"
       autocomplete="off"
@@ -35,7 +41,7 @@ const onLogin = async (values: ILoginFormState) => {
         name="username"
         :rules="[{ required: true, message: 'Vui lòng nhập tên tài khoản!' }]"
       >
-        <Input
+        <AInput
           v-model:value="formState.username"
           placeholder="Tên tài khoản (*)"
         />
@@ -50,13 +56,13 @@ const onLogin = async (values: ILoginFormState) => {
         />
       </FormItem>
       <FormItem>
-        <Button block type="primary" html-type="submit">Đăng nhập</Button>
+        <AButton block type="primary" html-type="submit">Đăng nhập</AButton>
       </FormItem>
       <p class="actions">
         Không có tài khoản?
         <router-link to="/register">Đăng ký ngay</router-link>
       </p>
-    </Form>
+    </AForm>
   </div>
 </template>
 

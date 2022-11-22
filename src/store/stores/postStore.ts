@@ -7,12 +7,12 @@ export const usePostStore = defineStore('postStore', () => {
 
   const getPosts = async () => {
     const response = await CommonService.getPosts()
-    posts.value = response.data.posts
+    posts.value = response.data.data
   }
 
   const getRentedPosts = async () => {
     const response = await CommonService.getRentedPosts()
-    rentedPosts.value = response.data.posts
+    rentedPosts.value = response.data.data
   }
 
   const getPost = async (id: string) => {

@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { FormItem, Row, Col, Button, PageHeader } from 'ant-design-vue'
+import {
+  FormItem,
+  Row,
+  Col,
+  Button as AButton,
+  PageHeader
+} from 'ant-design-vue'
 
 import { useDistrictStore } from '~/store/stores/districtStore'
 import { IDistrict, Nullable } from '~/interfaces'
@@ -14,7 +20,7 @@ const district = ref<Nullable<IDistrict>>(null)
 onMounted(async () => {
   try {
     const response = await districtStore.getDistrictById(id)
-    district.value = response.data.district
+    district.value = response.data.data
   } catch {
     router.push('/districts')
   }
@@ -24,38 +30,35 @@ onMounted(async () => {
 <template>
   <PageHeader title="Chi tiết quận, huyện" @back="router.back"></PageHeader>
 
-  <div>
-    <Row>
-      <Col span="12">
-        <FormItem
-          label="Tên"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ district?.name }}</div>
-        </FormItem>
-        <FormItem
-          label="Loại"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div>{{ district?.type }}</div>
-        </FormItem>
+  <Row v-bind="$attrs">
+    <Col :span="24" :xl="12">
+      <FormItem
+        label="Tên"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ district?.name }}</div>
+      </FormItem>
+      <FormItem
+        label="Loại"
+        :label-col="{ span: 8 }"
+        :wrapper-col="{ span: 16 }"
+      >
+        <div>{{ district?.type }}</div>
+      </FormItem>
 
-        <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-          <Button type="primary">
-            <router-link :to="`/districts/${id}/edit`">
-              Đi tới trang chỉnh sửa
-            </router-link>
-          </Button>
-          <Button style="margin-left: 10px">
-            <router-link to="/districts">Quay lại</router-link>
-          </Button>
-        </FormItem>
-      </Col>
-      <Col span="12"></Col>
-    </Row>
-  </div>
+      <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
+          <router-link :to="`/districts/${id}/edit`">
+            Đi tới trang chỉnh sửa
+          </router-link>
+        </AButton>
+        <AButton>
+          <router-link to="/districts">Quay lại</router-link>
+        </AButton>
+      </FormItem>
+    </Col>
+  </Row>
 </template>
 
 <route lang="yaml">
