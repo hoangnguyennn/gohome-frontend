@@ -11,13 +11,34 @@ import {
   Modal,
   Button as AButton,
   Row,
-  PageHeader
+  Col,
+  PageHeader,
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  Select as ASelect,
+  SelectOption
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import { LocationQueryRaw } from 'vue-router'
+import { DISTRICT_TYPES } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
-import { IDistrict, IFormConfirmState } from '~/interfaces'
+import {
+  IDataListFilter,
+  IDistrict,
+  IFormConfirmState,
+  Nullable
+} from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
+import { removeUndefined } from '~/utils/formatter'
+
+interface IFormSearch {
+  name?: Nullable<string>
+  type?: Nullable<string>
+}
+
+interface ISearchOptions extends IFormSearch, IDataListFilter {}
 
 const districtStore = useDistrictStore()
 const route = useRoute()
@@ -28,8 +49,9 @@ const {
   sortDirection,
   pagination,
   dataListSearchOptions,
-  initFromQuery,
-  onChange
+  initFromQuery: initDataListSearchFromQuery,
+  onChange,
+  pushRoute
 } = useDataListSearch()
 
 const isLoading = ref(false)
@@ -99,8 +121,34 @@ const itemDelete = ref<IFormConfirmState<IDistrict>>({
 })
 
 const searchOptions = computed(() => {
-  return dataListSearchOptions.value
+  const params: ISearchOptions = { ...dataListSearchOptions.value }
+  const query = route.query
+
+  if (query.name) {
+    params.name = query.name as string
+  }
+
+  if (query.type) {
+    params.type = query.type as string
+  }
+
+  return params
 })
+
+const formSearch = ref<IFormSearch>({
+  name: '',
+  type: ''
+})
+
+const initFromQuery = () => {
+  initDataListSearchFromQuery()
+
+  const { name, type } = route.query
+  formSearch.value = {
+    name: name as string,
+    type: type as string
+  }
+}
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/districts/${id}/${action}`
@@ -118,6 +166,16 @@ const onDelete = async () => {
     value: null,
     isOpen: false
   }
+}
+
+const onFinish = async (values: IFormSearch) => {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    name: values.name || undefined,
+    type: values.type || undefined
+  }
+
+  pushRoute(removeUndefined(query))
 }
 
 const getDistricts = async () => {
@@ -138,7 +196,7 @@ onBeforeUnmount(() => {
   districtStore.reset()
 })
 
-watch(route, () => getDistricts())
+watch(route, getDistricts)
 </script>
 
 <template>
@@ -153,6 +211,45 @@ watch(route, () => getDistricts())
       </router-link>
     </template>
   </PageHeader>
+
+  <Divider />
+
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    style="margin-bottom: 48px"
+    :model="formSearch"
+    @finish="onFinish"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Tên" name="name">
+          <AInput v-model:value="formSearch.name" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Loại" name="type">
+          <ASelect v-model:value="formSearch.type" allowClear>
+            <SelectOption
+              v-for="districtType of DISTRICT_TYPES"
+              :key="districtType.value"
+              :value="districtType.value"
+            >
+              {{ districtType.title }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24">
+        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+      </Col>
+    </Row>
+  </AForm>
+
+  <Divider />
 
   <ATable
     :columns="columnsComputed"
