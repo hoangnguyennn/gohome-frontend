@@ -11,25 +11,48 @@ import {
   Modal,
   Button as AButton,
   Row,
-  PageHeader
+  Col,
+  PageHeader,
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  Select as ASelect,
+  SelectOption
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import { LocationQueryRaw } from 'vue-router'
+import { WARD_TYPES } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
-import { IFormConfirmState, IWard } from '~/interfaces'
+import {
+  IDataListFilter,
+  IFormConfirmState,
+  IWard,
+  Nullable
+} from '~/interfaces'
 import { useWardStore } from '~/store/stores/wardStore'
+import { removeUndefined } from '~/utils/formatter'
+
+interface IFormSearch {
+  name?: Nullable<string>
+  type?: Nullable<string>
+  districtId?: Nullable<string>
+}
+
+interface ISearchOptions extends IFormSearch, IDataListFilter {}
 
 const wardStore = useWardStore()
 const route = useRoute()
-const { wards } = storeToRefs(wardStore)
+const { districts, wards } = storeToRefs(wardStore)
 
 const {
   sortBy,
   sortDirection,
   pagination,
   dataListSearchOptions,
-  initFromQuery,
-  onChange
+  initFromQuery: initDataListSearchFromQuery,
+  onChange,
+  pushRoute
 } = useDataListSearch()
 
 const isLoading = ref(false)
@@ -116,8 +139,40 @@ const itemDelete = ref<IFormConfirmState<IWard>>({
 })
 
 const searchOptions = computed(() => {
-  return dataListSearchOptions.value
+  const params: ISearchOptions = { ...dataListSearchOptions.value }
+  const query = route.query
+
+  if (query.name) {
+    params.name = query.name as string
+  }
+
+  if (query.type) {
+    params.type = query.type as string
+  }
+
+  if (query.districtId) {
+    params.districtId = query.districtId as string
+  }
+
+  return params
 })
+
+const formSearch = ref<IFormSearch>({
+  name: '',
+  type: '',
+  districtId: null
+})
+
+const initFromQuery = () => {
+  initDataListSearchFromQuery()
+
+  const { name, type, districtId } = route.query
+  formSearch.value = {
+    name: name as string,
+    type: type as string,
+    districtId: districtId as string
+  }
+}
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/wards/${id}/${action}`
@@ -137,6 +192,17 @@ const onDelete = async () => {
   }
 }
 
+const onFinish = async (values: IFormSearch) => {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    name: values.name || undefined,
+    type: values.type || undefined,
+    districtId: values.districtId ?? undefined
+  }
+
+  pushRoute(removeUndefined(query))
+}
+
 const getWards = async () => {
   try {
     isLoading.value = true
@@ -149,13 +215,14 @@ const getWards = async () => {
 onMounted(() => {
   initFromQuery()
   getWards()
+  wardStore.getDistricts()
 })
 
 onBeforeUnmount(() => {
   wardStore.reset()
 })
 
-watch(route, () => getWards())
+watch(route, getWards)
 </script>
 
 <template>
@@ -170,6 +237,58 @@ watch(route, () => getWards())
       </router-link>
     </template>
   </PageHeader>
+
+  <Divider />
+
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    style="margin-bottom: 48px"
+    :model="formSearch"
+    @finish="onFinish"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Tên" name="name">
+          <AInput v-model:value="formSearch.name" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Loại" name="type">
+          <ASelect v-model:value="formSearch.type" allowClear>
+            <SelectOption
+              v-for="wardType of WARD_TYPES"
+              :key="wardType.value"
+              :value="wardType.value"
+            >
+              {{ wardType.title }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Quận huyện" name="districtId">
+          <ASelect v-model:value="formSearch.districtId" allowClear>
+            <SelectOption
+              v-for="district of districts"
+              :key="district.id"
+              :value="district.id"
+            >
+              {{ district.type }} {{ district.name }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24">
+        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+      </Col>
+    </Row>
+  </AForm>
+
+  <Divider />
 
   <ATable
     :columns="columnsComputed"

@@ -19,6 +19,7 @@ const useDataListSearch = () => {
       total: total.value,
       current: currentPage.value,
       pageSize: itemsPerPage.value,
+      showSizeChanger: true,
       showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
     }
   })

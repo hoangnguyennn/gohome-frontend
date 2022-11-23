@@ -1,10 +1,16 @@
-import { IWard, IWardRequest } from '~/interfaces'
+import { IDistrict, IWard, IWardRequest } from '~/interfaces'
 import CommonService from '~/services/CommonService'
 import { useDataListStore } from './dataListStore'
 
 export const useWardStore = defineStore('wardStore', () => {
   const dataListStore = useDataListStore()
   const wards = ref<IWard[]>([])
+  const districts = ref<IDistrict[]>([])
+
+  const getDistricts = async () => {
+    const response = await CommonService.getDistricts()
+    districts.value = response.data.data
+  }
 
   const getWards = async (params?: any) => {
     const response = await CommonService.getWards(params)
@@ -30,8 +36,10 @@ export const useWardStore = defineStore('wardStore', () => {
   }
 
   return {
+    districts,
     wards,
     createWard,
+    getDistricts,
     getWardById,
     getWards,
     updateWardById,
