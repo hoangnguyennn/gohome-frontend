@@ -11,13 +11,31 @@ import {
   Modal,
   Button as AButton,
   Row,
-  PageHeader
+  Col,
+  PageHeader,
+  Form as AForm,
+  FormItem,
+  Input as AInput
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import { LocationQueryRaw } from 'vue-router'
 import useDataListSearch from '~/hooks/useDataListSearch'
-import { ICategory, IFormConfirmState } from '~/interfaces'
+import {
+  ICategory,
+  IDataListFilter,
+  IFormConfirmState,
+  Nullable
+} from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
+import { removeUndefined } from '~/utils/formatter'
+
+interface IFormSearch {
+  name?: Nullable<string>
+  code?: Nullable<string>
+}
+
+interface ISearchOptions extends IFormSearch, IDataListFilter {}
 
 const categoryStore = useCategoryStore()
 const route = useRoute()
@@ -28,8 +46,9 @@ const {
   sortDirection,
   dataListSearchOptions,
   pagination,
-  initFromQuery,
-  onChange
+  initFromQuery: initDataListSearchFromQuery,
+  onChange,
+  pushRoute
 } = useDataListSearch()
 
 const isLoading = ref(false)
@@ -99,8 +118,34 @@ const itemDelete = ref<IFormConfirmState<ICategory>>({
 })
 
 const searchOptions = computed(() => {
-  return dataListSearchOptions.value
+  const params: ISearchOptions = { ...dataListSearchOptions.value }
+  const query = route.query
+
+  if (query.name) {
+    params.name = query.name as string
+  }
+
+  if (query.code) {
+    params.code = query.code as string
+  }
+
+  return params
 })
+
+const formSearch = ref<IFormSearch>({
+  name: '',
+  code: ''
+})
+
+const initFromQuery = () => {
+  initDataListSearchFromQuery()
+
+  const { name, code } = route.query
+  formSearch.value = {
+    name: name as string,
+    code: code as string
+  }
+}
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/categories/${id}/${action}`
@@ -118,6 +163,16 @@ const onDelete = async () => {
     value: null,
     isOpen: false
   }
+}
+
+const onFinish = async (values: IFormSearch) => {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    name: values.name || undefined,
+    code: values.code || undefined
+  }
+
+  pushRoute(removeUndefined(query))
 }
 
 const getCategories = async () => {
@@ -138,7 +193,7 @@ onBeforeUnmount(() => {
   categoryStore.reset()
 })
 
-watch(route, () => getCategories())
+watch(route, getCategories)
 </script>
 
 <template>
@@ -153,6 +208,37 @@ watch(route, () => getCategories())
       </router-link>
     </template>
   </PageHeader>
+
+  <Divider />
+
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    style="margin-bottom: 48px"
+    :model="formSearch"
+    @finish="onFinish"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Tên loại" name="name">
+          <AInput v-model:value="formSearch.name" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Mã loại" name="code">
+          <AInput v-model:value="formSearch.code" allowClear />
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24">
+        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+      </Col>
+    </Row>
+  </AForm>
+
+  <Divider />
 
   <ATable
     :columns="columnsComputed"
