@@ -7,7 +7,7 @@ export const isIImage = (object: any): object is IImage => {
 }
 
 export const getAvatarLink = (filename: string): string => {
-  return `https://gohomenhatrang.com/avatars/${filename}`
+  return ''
 }
 
 export const getPostImageLink = (filename: string): string => {
