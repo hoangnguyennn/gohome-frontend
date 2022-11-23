@@ -98,15 +98,33 @@ onMounted(async () => {
         </FormItem>
 
         <FormItem label="Loại">
-          <div>{{ post?.category?.name }}</div>
+          <router-link
+            v-if="post?.category?.id"
+            :to="`/categories/${post?.category?.id}/view`"
+          >
+            {{ post?.category?.name }}
+          </router-link>
+          <div v-else>{{ post?.category?.name }}</div>
         </FormItem>
 
         <FormItem label="Quận huyện">
-          <div>{{ post?.ward?.district?.name }}</div>
+          <router-link
+            v-if="post?.ward?.district?.id"
+            :to="`/districts/${post?.ward?.district?.id}/view`"
+          >
+            {{ post?.ward?.district?.name }}
+          </router-link>
+          <div v-else>{{ post?.ward?.district?.name }}</div>
         </FormItem>
 
         <FormItem label="Xã phường">
-          <div>{{ post?.ward?.name }}</div>
+          <router-link
+            v-if="post?.ward?.id"
+            :to="`/wards/${post?.ward?.id}/view`"
+          >
+            {{ post?.ward?.name }}
+          </router-link>
+          <div v-else>{{ post?.ward?.name }}</div>
         </FormItem>
 
         <FormItem label="Giá (VND)">
@@ -223,7 +241,13 @@ onMounted(async () => {
     <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem label="Tên người đăng">
-          <div>
+          <router-link
+            v-if="post?.createdBy?.id"
+            :to="`/users/${post?.createdBy?.id}/view`"
+          >
+            {{ post?.createdBy?.fullName || post?.createdBy?.username }}
+          </router-link>
+          <div v-else>
             {{ post?.createdBy?.fullName || post?.createdBy?.username }}
           </div>
         </FormItem>
