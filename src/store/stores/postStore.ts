@@ -7,14 +7,14 @@ export const usePostStore = defineStore('postStore', () => {
   const posts = ref<IPost[]>([])
   const rentedPosts = ref<IPost[]>([])
 
-  const getPosts = async () => {
-    const response = await CommonService.getPosts()
+  const getPosts = async (params?: any) => {
+    const response = await CommonService.getPosts(params)
     posts.value = response.data.data
     dataListStore.setTotal(response.data.total)
   }
 
-  const getRentedPosts = async () => {
-    const response = await CommonService.getRentedPosts()
+  const getRentedPosts = async (params?: any) => {
+    const response = await CommonService.getRentedPosts(params)
     rentedPosts.value = response.data.data
     dataListStore.setTotal(response.data.total)
   }

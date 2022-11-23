@@ -32,13 +32,13 @@ export const useDataListStore = defineStore('dataListStore', () => {
   const initFromQuery = (query: LocationQueryRaw) => {
     const limit = Number(query.limit) || ITEMS_PER_PAGE_DEFAULT
     const offset = Number(query.offset) || 0
-    const querySortBy = String(query.sortBy) || null
-    const querySortDirection = String(query.sortDirection) || null
+    const querySortBy = query.sortBy || null
+    const querySortDirection = query.sortDirection || null
 
     itemsPerPage.value = limit
     currentPage.value = Math.floor(offset / limit) + 1
-    sortBy.value = querySortBy
-    sortDirection.value = querySortDirection
+    sortBy.value = querySortBy as Nullable<string>
+    sortDirection.value = querySortDirection as Nullable<string>
   }
 
   const reset = () => {

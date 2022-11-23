@@ -14,20 +14,12 @@ import {
   PageHeader,
   message
 } from 'ant-design-vue'
-import { ColumnType, TablePaginationConfig } from 'ant-design-vue/lib/table'
-import { FilterValue, SorterResult } from 'ant-design-vue/lib/table/interface'
+import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
-import { LocationQueryRaw, RouteRecordName } from 'vue-router'
-import { ITEMS_PER_PAGE_DEFAULT } from '~/constants'
-import {
-  IUser,
-  IFormConfirmState,
-  Nullable,
-  IDataListFilter
-} from '~/interfaces'
+import useDataListSearch from '~/hooks/useDataListSearch'
+import { IUser, IFormConfirmState } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { useAuthStore } from '~/store/stores/authStore'
-import { useDataListStore } from '~/store/stores/dataListStore'
 import { useUserStore } from '~/store/stores/userStore'
 import { getAvatarLink, isAdmin } from '~/utils/common'
 import {
@@ -39,13 +31,18 @@ import {
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
-const dataListStore = useDataListStore()
-const router = useRouter()
 const route = useRoute()
 const { currentUser } = storeToRefs(authStore)
 const { users } = storeToRefs(userStore)
-const { total, itemsPerPage, currentPage, sortBy, sortDirection } =
-  storeToRefs(dataListStore)
+
+const {
+  sortBy,
+  sortDirection,
+  pagination,
+  dataListSearchOptions,
+  initFromQuery,
+  onChange
+} = useDataListSearch()
 
 const isLoading = ref(false)
 
@@ -159,26 +156,8 @@ const itemVerify = ref<IFormConfirmState<IUser>>({
   isOpen: false
 })
 
-const pagination = computed<TablePaginationConfig>(() => {
-  return {
-    total: total.value,
-    current: currentPage.value,
-    pageSize: itemsPerPage.value
-  }
-})
-
 const searchOptions = computed(() => {
-  const result: IDataListFilter = {
-    limit: itemsPerPage.value,
-    offset: itemsPerPage.value * (currentPage.value - 1)
-  }
-
-  if (sortBy.value && sortDirection.value) {
-    result.sortBy = sortBy.value
-    result.sortDirection = sortDirection.value
-  }
-
-  return result
+  return dataListSearchOptions.value
 })
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -226,50 +205,6 @@ const onVerify = async () => {
   }
 }
 
-const onChange = (
-  pagination: TablePaginationConfig,
-  filter: Record<string, FilterValue | null>,
-  sorter: SorterResult<IUser> | SorterResult<IUser>[]
-) => {
-  console.log(pagination, sorter)
-  dataListStore.setCurrentPage(pagination?.current as number)
-  dataListStore.setItemsPerPage(pagination?.pageSize as number)
-
-  if (Object.keys(sorter).length) {
-    const localSorter = sorter as SorterResult<IUser>
-    dataListStore.setSortBy(localSorter.column?.key as Nullable<string>)
-    dataListStore.setSortDirection(localSorter.order)
-  } else {
-    dataListStore.setSortBy(null)
-    dataListStore.setSortDirection(null)
-  }
-
-  const query: LocationQueryRaw = {}
-
-  if (itemsPerPage.value !== ITEMS_PER_PAGE_DEFAULT) {
-    query.limit = itemsPerPage.value
-  }
-
-  if (currentPage.value !== 1) {
-    query.offset = itemsPerPage.value * (currentPage.value - 1)
-  }
-
-  if (sortBy.value) {
-    query.sortBy = sortBy.value
-  }
-
-  if (sortDirection.value) {
-    query.sortDirection = sortDirection.value
-  }
-
-  pushRoute(query)
-}
-
-const pushRoute = (query?: LocationQueryRaw) => {
-  router.push({ name: route.name as RouteRecordName, query })
-  getUsers()
-}
-
 const getUsers = async () => {
   try {
     isLoading.value = true
@@ -280,9 +215,15 @@ const getUsers = async () => {
 }
 
 onMounted(() => {
-  dataListStore.initFromQuery(route.query)
+  initFromQuery()
   getUsers()
 })
+
+onBeforeUnmount(() => {
+  userStore.reset()
+})
+
+watch(route, () => getUsers())
 </script>
 
 <template>

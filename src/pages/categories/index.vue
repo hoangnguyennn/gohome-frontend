@@ -15,14 +15,26 @@ import {
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import useDataListSearch from '~/hooks/useDataListSearch'
 import { ICategory, IFormConfirmState } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
 
 const categoryStore = useCategoryStore()
+const route = useRoute()
 const { categories } = storeToRefs(categoryStore)
+
+const {
+  sortBy,
+  sortDirection,
+  dataListSearchOptions,
+  pagination,
+  initFromQuery,
+  onChange
+} = useDataListSearch()
+
 const isLoading = ref(false)
 
-const columns = ref<ColumnType<ICategory>[]>([
+const columns: ColumnType<ICategory>[] = [
   {
     title: '#',
     dataIndex: 'id',
@@ -66,11 +78,28 @@ const columns = ref<ColumnType<ICategory>[]>([
     title: 'Hành động',
     key: 'actions'
   }
-])
+]
+
+const columnsComputed = computed<ColumnType<ICategory>[]>(() => {
+  return columns.map((column) => {
+    if (column.key === sortBy.value) {
+      return {
+        ...column,
+        sortOrder: sortDirection.value
+      } as ColumnType<ICategory>
+    }
+
+    return column
+  })
+})
 
 const itemDelete = ref<IFormConfirmState<ICategory>>({
   value: null,
   isOpen: false
+})
+
+const searchOptions = computed(() => {
+  return dataListSearchOptions.value
 })
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -94,13 +123,22 @@ const onDelete = async () => {
 const getCategories = async () => {
   try {
     isLoading.value = true
-    await categoryStore.getCategories()
+    await categoryStore.getCategories(searchOptions.value)
   } finally {
     isLoading.value = false
   }
 }
 
-onMounted(() => getCategories())
+onMounted(() => {
+  initFromQuery()
+  getCategories()
+})
+
+onBeforeUnmount(() => {
+  categoryStore.reset()
+})
+
+watch(route, () => getCategories())
 </script>
 
 <template>
@@ -116,7 +154,13 @@ onMounted(() => getCategories())
     </template>
   </PageHeader>
 
-  <ATable :columns="columns" :data-source="categories" :loading="isLoading">
+  <ATable
+    :columns="columnsComputed"
+    :data-source="categories"
+    :loading="isLoading"
+    :pagination="pagination"
+    @change="onChange"
+  >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>

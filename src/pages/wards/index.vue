@@ -15,15 +15,26 @@ import {
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import useDataListSearch from '~/hooks/useDataListSearch'
 import { IFormConfirmState, IWard } from '~/interfaces'
 import { useWardStore } from '~/store/stores/wardStore'
 
 const wardStore = useWardStore()
+const route = useRoute()
 const { wards } = storeToRefs(wardStore)
+
+const {
+  sortBy,
+  sortDirection,
+  pagination,
+  dataListSearchOptions,
+  initFromQuery,
+  onChange
+} = useDataListSearch()
 
 const isLoading = ref(false)
 
-const columns = ref<ColumnType<IWard>[]>([
+const columns: ColumnType<IWard>[] = [
   {
     title: '#',
     dataIndex: 'id',
@@ -84,11 +95,28 @@ const columns = ref<ColumnType<IWard>[]>([
     title: 'Hành động',
     key: 'actions'
   }
-])
+]
+
+const columnsComputed = computed<ColumnType<IWard>[]>(() => {
+  return columns.map((column) => {
+    if (column.key === sortBy.value) {
+      return {
+        ...column,
+        sortOrder: sortDirection.value
+      } as ColumnType<IWard>
+    }
+
+    return column
+  })
+})
 
 const itemDelete = ref<IFormConfirmState<IWard>>({
   value: null,
   isOpen: false
+})
+
+const searchOptions = computed(() => {
+  return dataListSearchOptions.value
 })
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -112,13 +140,22 @@ const onDelete = async () => {
 const getWards = async () => {
   try {
     isLoading.value = true
-    await wardStore.getWards()
+    await wardStore.getWards(searchOptions.value)
   } finally {
     isLoading.value = false
   }
 }
 
-onMounted(() => getWards())
+onMounted(() => {
+  initFromQuery()
+  getWards()
+})
+
+onBeforeUnmount(() => {
+  wardStore.reset()
+})
+
+watch(route, () => getWards())
 </script>
 
 <template>
@@ -134,7 +171,13 @@ onMounted(() => getWards())
     </template>
   </PageHeader>
 
-  <ATable :columns="columns" :data-source="wards" :loading="isLoading">
+  <ATable
+    :columns="columnsComputed"
+    :data-source="wards"
+    :loading="isLoading"
+    :pagination="pagination"
+    @change="onChange"
+  >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>

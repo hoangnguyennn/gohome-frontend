@@ -15,15 +15,26 @@ import {
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import useDataListSearch from '~/hooks/useDataListSearch'
 import { IDistrict, IFormConfirmState } from '~/interfaces'
 import { useDistrictStore } from '~/store/stores/districtStore'
 
 const districtStore = useDistrictStore()
+const route = useRoute()
 const { districts } = storeToRefs(districtStore)
+
+const {
+  sortBy,
+  sortDirection,
+  pagination,
+  dataListSearchOptions,
+  initFromQuery,
+  onChange
+} = useDataListSearch()
 
 const isLoading = ref(false)
 
-const columns = ref<ColumnType<IDistrict>[]>([
+const columns: ColumnType<IDistrict>[] = [
   {
     title: '#',
     dataIndex: 'id',
@@ -67,11 +78,28 @@ const columns = ref<ColumnType<IDistrict>[]>([
     title: 'Hành động',
     key: 'actions'
   }
-])
+]
+
+const columnsComputed = computed<ColumnType<IDistrict>[]>(() => {
+  return columns.map((column) => {
+    if (column.key === sortBy.value) {
+      return {
+        ...column,
+        sortOrder: sortDirection.value
+      } as ColumnType<IDistrict>
+    }
+
+    return column
+  })
+})
 
 const itemDelete = ref<IFormConfirmState<IDistrict>>({
   value: null,
   isOpen: false
+})
+
+const searchOptions = computed(() => {
+  return dataListSearchOptions.value
 })
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -95,13 +123,22 @@ const onDelete = async () => {
 const getDistricts = async () => {
   try {
     isLoading.value = true
-    await districtStore.getDistricts()
+    await districtStore.getDistricts(searchOptions.value)
   } finally {
     isLoading.value = false
   }
 }
 
-onMounted(() => getDistricts())
+onMounted(() => {
+  initFromQuery()
+  getDistricts()
+})
+
+onBeforeUnmount(() => {
+  districtStore.reset()
+})
+
+watch(route, () => getDistricts())
 </script>
 
 <template>
@@ -117,7 +154,13 @@ onMounted(() => getDistricts())
     </template>
   </PageHeader>
 
-  <ATable :columns="columns" :data-source="districts" :loading="isLoading">
+  <ATable
+    :columns="columnsComputed"
+    :data-source="districts"
+    :loading="isLoading"
+    :pagination="pagination"
+    @change="onChange"
+  >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
         <router-link :to="getLink(record.id, 'view')">Xem</router-link>

@@ -7,8 +7,8 @@ export const useDistrictStore = defineStore('districtStore', () => {
   const districts = ref<IDistrict[]>([])
   const wards = ref<IWard[]>([])
 
-  const getDistricts = async () => {
-    const response = await CommonService.getDistricts()
+  const getDistricts = async (params?: any) => {
+    const response = await CommonService.getDistricts(params)
     districts.value = response.data.data
     dataListStore.setTotal(response.data.total)
   }

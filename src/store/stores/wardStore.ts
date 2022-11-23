@@ -6,8 +6,8 @@ export const useWardStore = defineStore('wardStore', () => {
   const dataListStore = useDataListStore()
   const wards = ref<IWard[]>([])
 
-  const getWards = async () => {
-    const response = await CommonService.getWards()
+  const getWards = async (params?: any) => {
+    const response = await CommonService.getWards(params)
     wards.value = response.data.data
     dataListStore.setTotal(response.data.total)
   }

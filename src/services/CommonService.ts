@@ -36,8 +36,10 @@ const getCurrentUser = () => {
   return axiosClient.get<IUserResponse>('/auth/me')
 }
 
-const getCategories = () => {
-  return axiosClient.get<IDataListResponse<ICategory>>('/categories')
+const getCategories = (params?: any) => {
+  return axiosClient.get<IDataListResponse<ICategory>>('/categories', {
+    params
+  })
 }
 
 const getCategoryById = (id: string) => {
@@ -52,8 +54,8 @@ const updateCategoryById = (id: string, category: ICategoryCreate) => {
   return axiosClient.put(`/categories/${id}`, category)
 }
 
-const getDistricts = () => {
-  return axiosClient.get<IDataListResponse<IDistrict>>('/districts')
+const getDistricts = (params?: any) => {
+  return axiosClient.get<IDataListResponse<IDistrict>>('/districts', { params })
 }
 
 const getDistrictById = (id: string) => {
@@ -72,12 +74,12 @@ const updateDistrictById = (id: string, districtUpdate: IDistrictRequest) => {
   return axiosClient.put<IDistrictRequest>(`/districts/${id}`, districtUpdate)
 }
 
-const getPosts = () => {
-  return axiosClient.get<IDataListResponse<IPost>>('/posts')
+const getPosts = (params?: any) => {
+  return axiosClient.get<IDataListResponse<IPost>>('/posts', { params })
 }
 
-const getRentedPosts = () => {
-  return axiosClient.get<IDataListResponse<IPost>>('/posts/rented')
+const getRentedPosts = (params?: any) => {
+  return axiosClient.get<IDataListResponse<IPost>>('/posts/rented', { params })
 }
 
 const getPostById = (id: string) => {
@@ -116,8 +118,8 @@ const verifyUser = (id: string) => {
   return axiosClient.post<IUserResponse>(`/users/${id}/verify`)
 }
 
-const getWards = () => {
-  return axiosClient.get<IDataListResponse<IWard>>('/wards')
+const getWards = (params?: any) => {
+  return axiosClient.get<IDataListResponse<IWard>>('/wards', { params })
 }
 
 const getWardById = (id: string) => {

@@ -6,8 +6,8 @@ export const useCategoryStore = defineStore('categoryStore', () => {
   const dataListStore = useDataListStore()
   const categories = ref<ICategory[]>([])
 
-  const getCategories = async () => {
-    const response = await CommonService.getCategories()
+  const getCategories = async (params?: any) => {
+    const response = await CommonService.getCategories(params)
     categories.value = response.data.data
     dataListStore.setTotal(response.data.total)
   }

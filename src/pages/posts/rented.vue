@@ -16,6 +16,7 @@ import {
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import useDataListSearch from '~/hooks/useDataListSearch'
 import { IPost, IFormConfirmState } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
 import { getPostImageLink } from '~/utils/common'
@@ -27,9 +28,21 @@ import {
 } from '~/utils/formatter'
 
 const postStore = usePostStore()
+const route = useRoute()
 const { rentedPosts } = storeToRefs(postStore)
 
-const columns = ref<ColumnType<IPost>[]>([
+const {
+  sortBy,
+  sortDirection,
+  pagination,
+  dataListSearchOptions,
+  initFromQuery,
+  onChange
+} = useDataListSearch()
+
+const isLoading = ref(false)
+
+const columns: ColumnType<IPost>[] = [
   {
     title: '#',
     dataIndex: 'code',
@@ -202,7 +215,20 @@ const columns = ref<ColumnType<IPost>[]>([
     title: 'Hành động',
     key: 'actions'
   }
-])
+]
+
+const columnsComputed = computed<ColumnType<IPost>[]>(() => {
+  return columns.map((column) => {
+    if (column.key === sortBy.value) {
+      return {
+        ...column,
+        sortOrder: sortDirection.value
+      } as ColumnType<IPost>
+    }
+
+    return column
+  })
+})
 
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
 
@@ -211,7 +237,9 @@ const itemDelete = ref<IFormConfirmState<IPost>>({
   isOpen: false
 })
 
-const isLoading = ref(false)
+const searchOptions = computed(() => {
+  return dataListSearchOptions.value
+})
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/posts/${id}/${action}`
@@ -235,13 +263,22 @@ const onDelete = () => {
 const getRentedPosts = async () => {
   try {
     isLoading.value = true
-    await postStore.getRentedPosts()
+    await postStore.getRentedPosts(searchOptions.value)
   } finally {
     isLoading.value = false
   }
 }
 
-onMounted(() => getRentedPosts())
+onMounted(() => {
+  initFromQuery()
+  getRentedPosts()
+})
+
+onBeforeUnmount(() => {
+  postStore.reset()
+})
+
+watch(route, () => getRentedPosts())
 </script>
 
 <template>
@@ -258,7 +295,13 @@ onMounted(() => getRentedPosts())
   </PageHeader>
 
   <div class="responsive-wrapper">
-    <ATable :columns="columns" :data-source="rentedPosts" :loading="isLoading">
+    <ATable
+      :columns="columnsComputed"
+      :data-source="rentedPosts"
+      :loading="isLoading"
+      :pagination="pagination"
+      @change="onChange"
+    >
       <template #headerCell="{ column }">
         <template v-if="column.key === 'verifyStatus'">
           <span class="line">Tình trạng</span>{{ ' ' }}
