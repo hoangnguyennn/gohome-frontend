@@ -1,4 +1,4 @@
-import { IPost, IPostCreate } from '~/interfaces'
+import { IPost, IPostCreate, IUser } from '~/interfaces'
 import CommonService from '~/services/CommonService'
 import { useDataListStore } from './dataListStore'
 
@@ -6,6 +6,7 @@ export const usePostStore = defineStore('postStore', () => {
   const dataListStore = useDataListStore()
   const posts = ref<IPost[]>([])
   const rentedPosts = ref<IPost[]>([])
+  const users = ref<IUser[]>([])
 
   const getPosts = async (params?: any) => {
     const response = await CommonService.getPosts(params)
@@ -21,6 +22,11 @@ export const usePostStore = defineStore('postStore', () => {
 
   const getPost = async (id: string) => {
     return CommonService.getPostById(id)
+  }
+
+  const getUsers = async () => {
+    const response = await CommonService.getUsers()
+    users.value = response.data.data
   }
 
   const createPost = (post: IPostCreate) => {
@@ -52,9 +58,11 @@ export const usePostStore = defineStore('postStore', () => {
   return {
     posts,
     rentedPosts,
+    users,
     getPosts,
     getRentedPosts,
     getPost,
+    getUsers,
     createPost,
     approvePost,
     denyPost,

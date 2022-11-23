@@ -7,6 +7,8 @@ import {
 import { IMenuItem } from '~/interfaces'
 import {
   DistrictTypes,
+  PostVerifyStatuses,
+  PostVerifyStatusTexts,
   UserTypes,
   UserTypeTexts,
   UserVerifyStatusTexts,
@@ -29,6 +31,21 @@ export const DISTRICT_TYPES = [
   {
     value: DistrictTypes.THI_XA,
     title: DistrictTypes.THI_XA
+  }
+]
+
+export const POST_VERIFY_STATUSES = [
+  {
+    value: PostVerifyStatuses.PENDING,
+    text: PostVerifyStatusTexts.PENDING
+  },
+  {
+    value: PostVerifyStatuses.APPROVED,
+    text: PostVerifyStatusTexts.APPROVED
+  },
+  {
+    value: PostVerifyStatuses.DENIED,
+    text: PostVerifyStatusTexts.DENIED
   }
 ]
 

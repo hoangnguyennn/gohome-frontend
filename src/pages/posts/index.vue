@@ -11,33 +11,58 @@ import {
   Modal,
   Button as AButton,
   Row,
+  Col,
   PageHeader,
-  Tag
+  Tag,
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  Select as ASelect,
+  SelectOption,
+  Slider
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import { LocationQueryRaw } from 'vue-router'
+import { POST_VERIFY_STATUSES } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
-import { IPost, IFormConfirmState } from '~/interfaces'
+import {
+  IPost,
+  IFormConfirmState,
+  Nullable,
+  IDataListFilter
+} from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
 import { getPostImageLink } from '~/utils/common'
 import {
   getPostVerifyStatusColor,
   getPostVerifyStatusText,
+  removeUndefined,
   toDateTime,
   toVND
 } from '~/utils/formatter'
 
+interface IFormSearch {
+  title?: Nullable<string>
+  createdById?: Nullable<string>
+  commission?: Nullable<string>
+  verifyStatus?: Nullable<string>
+}
+
+interface ISearchOptions extends IFormSearch, IDataListFilter {}
+
 const postStore = usePostStore()
 const route = useRoute()
-const { posts } = storeToRefs(postStore)
+const { posts, users } = storeToRefs(postStore)
 
 const {
   sortBy,
   sortDirection,
   pagination,
   dataListSearchOptions,
-  initFromQuery,
-  onChange
+  initFromQuery: initDataListSearchFromQuery,
+  onChange,
+  pushRoute
 } = useDataListSearch()
 
 const columns: ColumnType<IPost>[] = [
@@ -242,8 +267,35 @@ const itemMarkAsRead = ref<IFormConfirmState<IPost>>({
 })
 
 const searchOptions = computed(() => {
-  return dataListSearchOptions.value
+  const params: ISearchOptions = { ...dataListSearchOptions.value }
+  const query = route.query
+
+  if (query.title) {
+    params.title = query.title as string
+  }
+
+  if (query.createdById) {
+    params.createdById = query.createdById as string
+  }
+
+  return params
 })
+
+const formSearch = ref<IFormSearch>({
+  title: '',
+  createdById: '',
+  verifyStatus: ''
+})
+
+const initFromQuery = () => {
+  initDataListSearchFromQuery()
+
+  const { title, createdById } = route.query
+  formSearch.value = {
+    title: title as string,
+    createdById: createdById as string
+  }
+}
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/posts/${id}/${action}`
@@ -284,6 +336,16 @@ const onMarkAsRead = async () => {
   }
 }
 
+const onFinish = async (values: IFormSearch) => {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    title: values.title || undefined,
+    createdById: values.createdById || undefined
+  }
+
+  pushRoute(removeUndefined(query))
+}
+
 const getPosts = async () => {
   try {
     isLoading.value = true
@@ -296,6 +358,7 @@ const getPosts = async () => {
 onMounted(() => {
   initFromQuery()
   getPosts()
+  postStore.getUsers()
 })
 
 onBeforeUnmount(() => {
@@ -317,6 +380,59 @@ watch(route, () => getPosts())
       </router-link>
     </template>
   </PageHeader>
+
+  <Divider />
+
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    style="margin-bottom: 48px"
+    :model="formSearch"
+    @finish="onFinish"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Tiêu đề" name="title">
+          <AInput v-model:value="formSearch.title" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Tạo bởi" name="createdById">
+          <ASelect v-model:value="formSearch.createdById" allowClear>
+            <SelectOption v-for="user of users" :key="user.id" :value="user.id">
+              {{ user.fullName || user.username }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Hoa hồng" name="commission">
+          <Slider range />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Tình trạng duyệt" name="verifyStatus">
+          <ASelect v-model:value="formSearch.verifyStatus" allowClear>
+            <SelectOption
+              v-for="verifyStatus of POST_VERIFY_STATUSES"
+              :key="verifyStatus.value"
+              :value="verifyStatus.value"
+            >
+              {{ verifyStatus.text }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24">
+        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+      </Col>
+    </Row>
+  </AForm>
+
+  <Divider />
 
   <div class="responsive-wrapper">
     <ATable
