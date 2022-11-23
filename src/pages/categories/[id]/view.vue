@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  Form as AForm,
   FormItem,
   Row,
   Col,
@@ -27,38 +28,45 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chi tiết loại nhà đất" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Chi tiết loại nhà đất"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
-  <Row v-bind="$attrs">
-    <Col :span="24" :lg="12">
-      <FormItem
-        label="Tên loại"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-      >
-        <div>{{ category?.name }}</div>
-      </FormItem>
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    v-bind="$attrs"
+    :colon="false"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="12">
+        <FormItem label="Tên loại">
+          <div>{{ category?.name }}</div>
+        </FormItem>
 
-      <FormItem
-        label="Mã loại"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-      >
-        <div>{{ category?.code }}</div>
-      </FormItem>
+        <FormItem label="Mã loại">
+          <div>{{ category?.code }}</div>
+        </FormItem>
 
-      <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
-        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
-          <router-link :to="`/categories/${id}/edit`">
-            Đi tới trang chỉnh sửa
-          </router-link>
-        </AButton>
-        <AButton>
-          <router-link to="/categories">Quay lại</router-link>
-        </AButton>
-      </FormItem>
-    </Col>
-  </Row>
+        <FormItem>
+          <AButton
+            type="primary"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            <router-link :to="`/categories/${id}/edit`">
+              Đi tới trang chỉnh sửa
+            </router-link>
+          </AButton>
+          <AButton>
+            <router-link to="/categories">Quay lại</router-link>
+          </AButton>
+        </FormItem>
+      </Col>
+    </Row>
+  </AForm>
 </template>
 
 <route lang="yaml">

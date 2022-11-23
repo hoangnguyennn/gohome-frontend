@@ -70,18 +70,22 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chỉnh sửa quận, huyện" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Chỉnh sửa quận, huyện"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
   <AForm
     name="basic"
     ref="formRef"
+    layout="vertical"
     v-bind="$attrs"
+    :colon="false"
     :model="formState"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem
           label="Tên"
@@ -90,6 +94,7 @@ onMounted(async () => {
         >
           <AInput v-model:value="formState.name" />
         </FormItem>
+
         <FormItem
           label="Loại"
           name="type"
@@ -106,7 +111,7 @@ onMounted(async () => {
           </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <FormItem>
           <AButton
             type="primary"
             html-type="submit"

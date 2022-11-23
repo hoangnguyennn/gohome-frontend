@@ -66,40 +66,32 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chỉnh sửa người dùng" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Chỉnh sửa người dùng"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
   <AForm
     name="basic"
     ref="formRef"
+    layout="vertical"
     v-bind="$attrs"
+    :colon="false"
     :model="formState"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Tên đăng nhập"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Tên đăng nhập">
           <div>{{ user?.username }}</div>
         </FormItem>
 
-        <FormItem
-          label="Họ và tên"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Họ và tên">
           <AInput v-model:value="formState.fullName" />
         </FormItem>
 
-        <FormItem
-          label="Loại tài khoản"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Loại tài khoản">
           <ASelect v-model:value="formState.type">
             <SelectOption
               v-for="userType of USER_TYPES"
@@ -111,13 +103,13 @@ onMounted(async () => {
           </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <FormItem>
           <AButton
             type="primary"
             html-type="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
-            Cập nhật loại nhà đất
+            Cập nhật người dùng
           </AButton>
           <AButton @click="resetForm">Xóa tất cả</AButton>
         </FormItem>

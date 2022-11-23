@@ -42,18 +42,22 @@ const resetForm = () => {
 </script>
 
 <template>
-  <PageHeader title="Thêm quận, huyện mới" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Thêm quận, huyện mới"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
   <AForm
     name="basic"
     ref="formRef"
+    layout="vertical"
     v-bind="$attrs"
+    :colon="false"
     :model="formState"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem
           label="Tên"
@@ -62,6 +66,7 @@ const resetForm = () => {
         >
           <AInput v-model:value="formState.name" />
         </FormItem>
+
         <FormItem
           label="Loại"
           name="type"
@@ -78,7 +83,7 @@ const resetForm = () => {
           </ASelect>
         </FormItem>
 
-        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <FormItem>
           <AButton
             type="primary"
             html-type="submit"

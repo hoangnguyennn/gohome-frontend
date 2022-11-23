@@ -165,19 +165,23 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chỉnh sửa bài đăng" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Chỉnh sửa bài đăng"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
   <AForm
     name="basic"
     ref="formRef"
+    layout="vertical"
     v-bind="$attrs"
+    :colon="false"
     :model="formState"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 16 }"
     @finish="onFinish"
   >
     <h3 class="section-title">Thông tin cơ bản</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem
           label="Tiêu đề"
@@ -325,13 +329,11 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Mô tả</h3>
-    <Row>
-      <Col span="24">
+    <Row :gutter="24">
+      <Col :span="24">
         <FormItem
           label="Mô tả"
           name="description"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
           :rules="[{ required: true, message: 'Mô tả là trường bắt buộc' }]"
         >
           <ATextarea v-model:value="formState.description" :rows="12" />
@@ -342,14 +344,9 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Hình ảnh</h3>
-    <Row>
-      <Col span="24">
-        <FormItem
-          label="Hình ảnh"
-          name="images"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+    <Row :gutter="24">
+      <Col :span="24">
+        <FormItem label="Hình ảnh" name="images">
           <ImageUploader v-model:value="formState.images" />
         </FormItem>
       </Col>
@@ -358,41 +355,27 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title"></h3>
-    <Row>
-      <Col span="24">
-        <FormItem
-          label="Nổi bật"
-          name="isFeatured"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Nổi bật" name="isFeatured">
           <Checkbox v-model:checked="formState.isFeatured" />
         </FormItem>
+      </Col>
 
-        <FormItem
-          label="Giá rẻ"
-          name="isCheap"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+      <Col :span="24" :xl="6">
+        <FormItem label="Giá rẻ" name="isCheap">
           <Checkbox v-model:checked="formState.isCheap" />
         </FormItem>
+      </Col>
 
-        <FormItem
-          label="Đã thuê"
-          name="isRented"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+      <Col :span="24" :xl="6">
+        <FormItem label="Đã thuê" name="isRented">
           <Checkbox v-model:checked="formState.isRented" />
         </FormItem>
+      </Col>
 
-        <FormItem
-          label="Ẩn"
-          name="isHide"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+      <Col :span="24" :xl="6">
+        <FormItem label="Ẩn" name="isHide">
           <Checkbox v-model:checked="formState.isHide" />
         </FormItem>
       </Col>
@@ -401,7 +384,7 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Thông tin chủ hộ</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem
           label="Tên chủ hộ"
@@ -442,9 +425,9 @@ onMounted(async () => {
 
     <Divider type="horizontal"></Divider>
 
-    <Row>
-      <Col span="12">
-        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+    <Row :gutter="24">
+      <Col :span="24">
+        <FormItem>
           <AButton
             type="primary"
             html-type="submit"
@@ -469,7 +452,7 @@ meta:
 
 <style scoped lang="scss">
 .section-title {
-  padding: 16px 24px;
+  padding: 16px 0;
   font-weight: bold;
 }
 </style>

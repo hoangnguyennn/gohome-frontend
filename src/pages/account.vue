@@ -3,9 +3,9 @@ import {
   PageHeader,
   Row,
   Col,
-  Form,
+  Form as AForm,
   FormItem,
-  Input,
+  Input as AInput,
   InputPassword,
   Button as AButton,
   Divider,
@@ -79,28 +79,34 @@ watch(
 </script>
 
 <template>
-  <PageHeader title="Thông tin tài khoản" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Thông tin tài khoản"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
   <div v-bind="$attrs">
     <h3 class="section-title">Thông tin cá nhân</h3>
-    <Form
+    <AForm
       name="basic"
+      layout="vertical"
+      :colon="false"
       :model="updateInfoFormState"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
       @finish="onUpdateInfo"
     >
-      <Row>
+      <Row :gutter="24">
         <Col :span="24" :xl="12">
           <FormItem label="Họ và tên" name="fullName">
-            <Input
+            <AInput
               v-model:value="updateInfoFormState.fullName"
               placeholder="(rỗng)"
             />
           </FormItem>
+
           <FormItem label="Loại tài khoản">
             <div>{{ getUserTypeText(currentUser?.type) }}</div>
           </FormItem>
+
           <FormItem>
             <AButton
               type="primary"
@@ -112,19 +118,18 @@ watch(
             </AButton>
           </FormItem>
         </Col>
-        <Col :span="24" :xl="12"></Col>
       </Row>
-    </Form>
+    </AForm>
 
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Đổi mật khẩu</h3>
-    <Form
+    <AForm
       name="basic"
       ref="changePasswordFormRef"
+      layout="vertical"
+      :colon="false"
       :model="changePasswordFormState"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
       @finish="onChangePassword"
     >
       <Row>
@@ -142,18 +147,18 @@ watch(
           </FormItem>
 
           <FormItem>
-            <Button
+            <AButton
               type="primary"
               html-type="submit"
               :disabled="!changePasswordFormState.newPassword"
               style="margin-right: 10px; margin-bottom: 10px"
             >
               Đổi
-            </Button>
+            </AButton>
           </FormItem>
         </Col>
       </Row>
-    </Form>
+    </AForm>
   </div>
 </template>
 
@@ -166,7 +171,7 @@ meta:
 
 <style scoped lang="scss">
 .section-title {
-  padding: 16px 24px;
+  padding: 16px 0;
   font-weight: bold;
 }
 </style>

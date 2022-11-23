@@ -61,7 +61,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chi tiết bài đăng" @back="router.back">
+  <PageHeader
+    title="Chi tiết bài đăng"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  >
     <template #extra>
       <Tag v-if="post?.isCheap" color="blue">Giá rẻ</Tag>
       <Tag v-if="post?.isFeatured" color="pink">Nổi bật</Tag>
@@ -72,88 +76,55 @@ onMounted(async () => {
     </template>
   </PageHeader>
 
-  <div class="post-detail" v-bind="$attrs">
+  <AForm
+    name="basic"
+    ref="formRef"
+    class="post-detail"
+    layout="vertical"
+    v-bind="$attrs"
+    :colon="false"
+  >
     <h3 class="section-title">Thông tin cơ bản</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Tiêu đề"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Tiêu đề">
           <div>{{ post?.title }}</div>
         </FormItem>
 
-        <FormItem
-          label="Loại"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Loại">
           <div>{{ post?.category?.name }}</div>
         </FormItem>
 
-        <FormItem
-          label="Quận huyện"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Quận huyện">
           <div>{{ post?.ward?.district?.name }}</div>
         </FormItem>
 
-        <FormItem
-          label="Xã phường"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Xã phường">
           <div>{{ post?.ward?.name }}</div>
         </FormItem>
 
-        <FormItem
-          label="Giá (VND)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Giá (VND)">
           <div>{{ toVndPrefix(post?.price || 0) }}</div>
         </FormItem>
       </Col>
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Hoa hồng (VND)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Hoa hồng (VND)">
           <div>{{ toVndPrefix(post?.commission || 0) }}</div>
         </FormItem>
 
-        <FormItem
-          label="Diện tích (m²)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Diện tích (m²)">
           <div>{{ toAcreage(post?.acreage || 0) }}</div>
         </FormItem>
 
-        <FormItem
-          label="Số phòng ngủ"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Số phòng ngủ">
           <div>{{ post?.bedroom }}</div>
         </FormItem>
 
-        <FormItem
-          label="Số phòng tắm"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Số phòng tắm">
           <div>{{ post?.bathroom }}</div>
         </FormItem>
 
-        <FormItem
-          label="Số tầng"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Số tầng">
           <div>{{ post?.floor }}</div>
         </FormItem>
       </Col>
@@ -162,13 +133,9 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Mô tả</h3>
-    <Row>
+    <Row :gutter="24">
       <Col span="24">
-        <FormItem
-          label="Mô tả"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+        <FormItem label="Mô tả">
           <div style="white-space: pre-wrap">{{ post?.description }}</div>
         </FormItem>
       </Col>
@@ -177,13 +144,9 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Hình ảnh</h3>
-    <Row>
+    <Row :gutter="24">
       <Col span="24">
-        <FormItem
-          label="Hình ảnh"
-          :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 20 }"
-        >
+        <FormItem label="Hình ảnh">
           <div class="images-wrap">
             <div
               v-if="post"
@@ -201,13 +164,9 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Thời gian</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Thời gian cho thuê (gần nhất)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Thời gian cho thuê (gần nhất)">
           <div v-if="post">
             {{
               post.rentedAt ? toDateTime(post.rentedAt) : 'Chưa từng được thuê'
@@ -215,27 +174,17 @@ onMounted(async () => {
           </div>
         </FormItem>
 
-        <FormItem
-          label="Thời gian mở cho thuê (gần nhất)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
-          <div v-if="post">{{ toDateTime(post.openedForRentAt) }}</div>
+        <FormItem label="Thời gian mở cho thuê (gần nhất)">
+          <div v-if="post">
+            {{ post.openedForRentAt ? toDateTime(post.openedForRentAt) : '' }}
+          </div>
         </FormItem>
 
-        <FormItem
-          label="Thời gian cập nhật (gần nhất)"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Thời gian cập nhật (gần nhất)">
           <div v-if="post">{{ toDateTime(post.updatedAt) }}</div>
         </FormItem>
 
-        <FormItem
-          label="Thời gian tạo"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Thời gian tạo">
           <div v-if="post">{{ toDateTime(post.createdAt) }}</div>
         </FormItem>
       </Col>
@@ -244,31 +193,19 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Thông tin chủ hộ</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Tên chủ hộ"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Tên chủ hộ">
           <div>{{ post?.ownerName }}</div>
         </FormItem>
 
-        <FormItem
-          label="Địa chỉ chủ hộ"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Địa chỉ chủ hộ">
           <div>{{ post?.ownerAddress }}</div>
         </FormItem>
       </Col>
 
       <Col span="12">
-        <FormItem
-          label="Số điện thoại chủ hộ"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Số điện thoại chủ hộ">
           <div>{{ post?.ownerPhone }}</div>
         </FormItem>
       </Col>
@@ -277,81 +214,77 @@ onMounted(async () => {
     <Divider type="horizontal"></Divider>
 
     <h3 class="section-title">Thông tin người đăng</h3>
-    <Row>
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem
-          label="Tên người đăng"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-        >
+        <FormItem label="Tên người đăng">
           <div>
             {{ post?.createdBy?.fullName || post?.createdBy?.username }}
           </div>
         </FormItem>
       </Col>
     </Row>
+  </AForm>
 
-    <Divider type="horizontal"></Divider>
+  <Divider type="horizontal"></Divider>
 
-    <AForm
-      name="basic"
-      :model="denyFormState"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      @finish="denyPost"
-    >
-      <Row>
-        <Col :span="24" :xl="12">
-          <FormItem
-            label="Lý do không duyệt"
-            name="reason"
-            :rules="[
-              { required: true, message: 'Vui lòng nhập lý do không duyệt' }
-            ]"
-          >
-            <ATextarea
-              v-model:value="denyFormState.reason"
-              placeholder="Nếu không duyệt, vui lòng nhập lý do"
-              :rows="4"
-            />
-          </FormItem>
-
-          <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
-            <AButton
-              type="primary"
-              style="margin-right: 10px; margin-bottom: 10px"
-              @click="approvePost"
-            >
-              Duyệt bài
-            </AButton>
-            <AButton type="primary" danger html-type="submit">
-              Không duyệt
-            </AButton>
-          </FormItem>
-        </Col>
-      </Row>
-    </AForm>
-
-    <Divider type="horizontal"></Divider>
-
-    <Row>
+  <AForm
+    name="basic"
+    layout="vertical"
+    :colon="false"
+    :model="denyFormState"
+    @finish="denyPost"
+  >
+    <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
+        <FormItem
+          label="Lý do không duyệt"
+          name="reason"
+          :rules="[
+            { required: true, message: 'Vui lòng nhập lý do không duyệt' }
+          ]"
+        >
+          <ATextarea
+            v-model:value="denyFormState.reason"
+            placeholder="Nếu không duyệt, vui lòng nhập lý do"
+            :rows="4"
+          />
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24" :xl="12">
+        <FormItem>
           <AButton
             type="primary"
             style="margin-right: 10px; margin-bottom: 10px"
+            @click="approvePost"
           >
-            <router-link :to="`/posts/${id}/edit`">
-              Đi tới trang chỉnh sửa
-            </router-link>
+            Duyệt bài
           </AButton>
-          <AButton>
-            <router-link to="/posts">Quay lại</router-link>
+          <AButton type="primary" danger html-type="submit">
+            Không duyệt
           </AButton>
         </FormItem>
       </Col>
     </Row>
-  </div>
+  </AForm>
+
+  <Divider type="horizontal"></Divider>
+
+  <Row :gutter="24">
+    <Col :span="24" :xl="12">
+      <FormItem>
+        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
+          <router-link :to="`/posts/${id}/edit`">
+            Đi tới trang chỉnh sửa
+          </router-link>
+        </AButton>
+        <AButton>
+          <router-link to="/posts">Quay lại</router-link>
+        </AButton>
+      </FormItem>
+    </Col>
+  </Row>
 </template>
 
 <route lang="yaml">
@@ -364,7 +297,7 @@ meta:
 
 <style scoped lang="scss">
 .section-title {
-  padding: 16px 24px;
+  padding: 16px 0;
   font-weight: bold;
 }
 

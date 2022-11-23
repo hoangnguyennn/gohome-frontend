@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  Form as AForm,
   FormItem,
   Row,
   Col,
@@ -28,37 +29,45 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageHeader title="Chi tiết quận, huyện" @back="router.back"></PageHeader>
+  <PageHeader
+    title="Chi tiết quận, huyện"
+    style="padding-left: 0; padding-right: 0"
+    @back="router.back"
+  />
 
-  <Row v-bind="$attrs">
-    <Col :span="24" :xl="12">
-      <FormItem
-        label="Tên"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-      >
-        <div>{{ district?.name }}</div>
-      </FormItem>
-      <FormItem
-        label="Loại"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-      >
-        <div>{{ district?.type }}</div>
-      </FormItem>
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    v-bind="$attrs"
+    :colon="false"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="12">
+        <FormItem label="Tên">
+          <div>{{ district?.name }}</div>
+        </FormItem>
 
-      <FormItem :wrapper-col="{ span: 24, xl: { offset: 8, span: 16 } }">
-        <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
-          <router-link :to="`/districts/${id}/edit`">
-            Đi tới trang chỉnh sửa
-          </router-link>
-        </AButton>
-        <AButton>
-          <router-link to="/districts">Quay lại</router-link>
-        </AButton>
-      </FormItem>
-    </Col>
-  </Row>
+        <FormItem label="Loại">
+          <div>{{ district?.type }}</div>
+        </FormItem>
+
+        <FormItem>
+          <AButton
+            type="primary"
+            style="margin-right: 10px; margin-bottom: 10px"
+          >
+            <router-link :to="`/districts/${id}/edit`">
+              Đi tới trang chỉnh sửa
+            </router-link>
+          </AButton>
+          <AButton>
+            <router-link to="/districts">Quay lại</router-link>
+          </AButton>
+        </FormItem>
+      </Col>
+    </Row>
+  </AForm>
 </template>
 
 <route lang="yaml">
