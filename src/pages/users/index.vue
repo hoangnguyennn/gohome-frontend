@@ -11,13 +11,27 @@ import {
   Modal,
   Tag,
   Row,
+  Col,
   PageHeader,
-  message
+  message,
+  Form as AForm,
+  FormItem,
+  Input as AInput,
+  Select as ASelect,
+  SelectOption,
+  Button as AButton
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import { LocationQueryRaw } from 'vue-router'
+import { USER_TYPES, USER_VERIFY_STATUSES } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
-import { IUser, IFormConfirmState } from '~/interfaces'
+import {
+  IUser,
+  IFormConfirmState,
+  Nullable,
+  IDataListFilter
+} from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { useAuthStore } from '~/store/stores/authStore'
 import { useUserStore } from '~/store/stores/userStore'
@@ -26,8 +40,18 @@ import {
   getUserTypeText,
   getUserTypeColor,
   getUserVerifyStatusColor,
-  getUserVerifyStatusText
+  getUserVerifyStatusText,
+  removeUndefined
 } from '~/utils/formatter'
+
+interface IFormSearch {
+  username?: Nullable<string>
+  fullName?: Nullable<string>
+  type?: Nullable<UserTypes>
+  isVerified?: Nullable<number>
+}
+
+interface ISearchOptions extends IFormSearch, IDataListFilter {}
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -40,8 +64,9 @@ const {
   sortDirection,
   pagination,
   dataListSearchOptions,
-  initFromQuery,
-  onChange
+  initFromQuery: initDataListSearchFromQuery,
+  onChange,
+  pushRoute
 } = useDataListSearch()
 
 const isLoading = ref(false)
@@ -157,8 +182,46 @@ const itemVerify = ref<IFormConfirmState<IUser>>({
 })
 
 const searchOptions = computed(() => {
-  return dataListSearchOptions.value
+  const params: ISearchOptions = { ...dataListSearchOptions.value }
+  const query = route.query
+
+  if (query.username) {
+    params.username = query.username as string
+  }
+
+  if (query.fullName) {
+    params.fullName = query.fullName as string
+  }
+
+  if (query.type !== undefined) {
+    params.type = query.type as unknown as UserTypes
+  }
+
+  if (query.isVerified !== undefined) {
+    params.isVerified = Number(query.isVerified)
+  }
+
+  return params
 })
+
+const formSearch = ref<IFormSearch>({
+  username: '',
+  fullName: '',
+  type: undefined,
+  isVerified: undefined
+})
+
+const initFromQuery = () => {
+  initDataListSearchFromQuery()
+
+  const { username, fullName, type, isVerified } = route.query
+  formSearch.value = {
+    username: username as string,
+    fullName: fullName as string,
+    type: type !== undefined ? Number(type) : undefined,
+    isVerified: isVerified !== undefined ? Number(isVerified) : undefined
+  }
+}
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
   return `/users/${id}/${action}`
@@ -205,6 +268,19 @@ const onVerify = async () => {
   }
 }
 
+const onFinish = async (values: IFormSearch) => {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    username: values.username || undefined,
+    fullName: values.fullName || undefined,
+    type: values.type !== undefined ? String(values.type) : undefined,
+    isVerified:
+      values.isVerified !== undefined ? String(values.isVerified) : undefined
+  }
+
+  pushRoute(removeUndefined(query))
+}
+
 const getUsers = async () => {
   try {
     isLoading.value = true
@@ -223,7 +299,7 @@ onBeforeUnmount(() => {
   userStore.reset()
 })
 
-watch(route, () => getUsers())
+watch(route, getUsers)
 </script>
 
 <template>
@@ -232,6 +308,63 @@ watch(route, () => getUsers())
     back-icon=""
     style="padding-left: 0; padding-right: 0"
   />
+
+  <Divider />
+
+  <AForm
+    name="basic"
+    ref="formRef"
+    layout="vertical"
+    style="margin-bottom: 48px"
+    :model="formSearch"
+    @finish="onFinish"
+  >
+    <Row :gutter="24">
+      <Col :span="24" :xl="6">
+        <FormItem label="Tên đăng nhập" name="username">
+          <AInput v-model:value="formSearch.username" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Họ tên" name="fullName">
+          <AInput v-model:value="formSearch.fullName" allowClear />
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Loại tài khoản" name="type">
+          <ASelect v-model:value="formSearch.type" allowClear>
+            <SelectOption
+              v-for="userType of USER_TYPES"
+              :key="userType.value"
+              :value="userType.value"
+            >
+              {{ userType.title }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+      <Col :span="24" :xl="6">
+        <FormItem label="Xác thực" name="isVerified">
+          <ASelect v-model:value="formSearch.isVerified" allowClear>
+            <SelectOption
+              v-for="verifyStatus of USER_VERIFY_STATUSES"
+              :key="verifyStatus.value"
+              :value="verifyStatus.value"
+            >
+              {{ verifyStatus.title }}
+            </SelectOption>
+          </ASelect>
+        </FormItem>
+      </Col>
+    </Row>
+    <Row :gutter="24">
+      <Col :span="24">
+        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+      </Col>
+    </Row>
+  </AForm>
+
+  <Divider />
 
   <ATable
     :columns="columnsComputed"

@@ -103,3 +103,15 @@ export const getPostVerifyStatusText = (verifyStatus?: PostVerifyStatuses) => {
       return ''
   }
 }
+
+export const removeUndefined = (value: any): any => {
+  const newResult: any = {}
+
+  Object.keys(value).forEach((key) => {
+    if (value[key] !== undefined) {
+      newResult[key] = value[key]
+    }
+  })
+
+  return newResult
+}

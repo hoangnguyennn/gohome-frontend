@@ -4,6 +4,7 @@ import { LocationQueryRaw, RouteRecordName } from 'vue-router'
 import { ITEMS_PER_PAGE_DEFAULT } from '~/constants'
 import { IDataListFilter, IUser, Nullable } from '~/interfaces'
 import { useDataListStore } from '~/store/stores/dataListStore'
+import { removeUndefined } from '~/utils/formatter'
 
 const useDataListSearch = () => {
   const dataListStore = useDataListStore()
@@ -17,7 +18,8 @@ const useDataListSearch = () => {
     return {
       total: total.value,
       current: currentPage.value,
-      pageSize: itemsPerPage.value
+      pageSize: itemsPerPage.value,
+      showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
     }
   })
 
@@ -56,29 +58,42 @@ const useDataListSearch = () => {
       dataListStore.setSortDirection(null)
     }
 
-    const query: LocationQueryRaw = {}
+    const query: LocationQueryRaw = { ...route.query }
 
     if (itemsPerPage.value !== ITEMS_PER_PAGE_DEFAULT) {
       query.limit = itemsPerPage.value
+    } else {
+      query.limit = undefined
     }
 
     if (currentPage.value !== 1) {
       query.offset = itemsPerPage.value * (currentPage.value - 1)
+    } else {
+      query.offset = undefined
     }
 
     if (sortBy.value) {
       query.sortBy = sortBy.value
+    } else {
+      query.sortBy = undefined
     }
 
     if (sortDirection.value) {
       query.sortDirection = sortDirection.value
+    } else {
+      query.sortDirection = undefined
     }
 
-    pushRoute(query)
+    pushRoute(removeUndefined(query))
   }
 
   const pushRoute = (query?: LocationQueryRaw) => {
-    router.push({ name: route.name as RouteRecordName, query })
+    try {
+      console.log({ query, routeName: route.name })
+      router.push({ name: route.name as RouteRecordName, query })
+    } catch (err) {
+      console.log({ err })
+    }
   }
 
   return {
@@ -89,7 +104,8 @@ const useDataListSearch = () => {
     pagination,
     dataListSearchOptions,
     initFromQuery,
-    onChange
+    onChange,
+    pushRoute
   }
 }
 

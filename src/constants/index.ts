@@ -5,55 +5,71 @@ import {
   UserOutlined
 } from '@ant-design/icons-vue'
 import { IMenuItem } from '~/interfaces'
-import { UserTypes } from '~/interfaces/enums'
-import { getUserTypeText } from '~/utils/formatter'
+import {
+  DistrictTypes,
+  UserTypes,
+  UserTypeTexts,
+  UserVerifyStatusTexts,
+  WardTypes
+} from '~/interfaces/enums'
 
 export const DISTRICT_TYPES = [
   {
-    value: 'Quận',
-    title: 'Quận'
+    value: DistrictTypes.QUAN,
+    title: DistrictTypes.QUAN
   },
   {
-    value: 'Huyện',
-    title: 'Huyện'
+    value: DistrictTypes.HUYEN,
+    title: DistrictTypes.HUYEN
   },
   {
-    value: 'Thành phố',
-    title: 'Thành phố'
+    value: DistrictTypes.THANH_PHO,
+    title: DistrictTypes.THANH_PHO
   },
   {
-    value: 'Thị xã',
-    title: 'Thị xã'
+    value: DistrictTypes.THI_XA,
+    title: DistrictTypes.THI_XA
   }
 ]
 
 export const WARD_TYPES = [
   {
-    value: 'Xã',
-    title: 'Xã'
+    value: WardTypes.XA,
+    title: WardTypes.XA
   },
   {
-    value: 'Phường',
-    title: 'Phường'
+    value: WardTypes.PHUONG,
+    title: WardTypes.PHUONG
   },
   {
-    value: 'Thị trấn',
-    title: 'Thị trấn'
+    value: WardTypes.THI_TRAN,
+    title: WardTypes.THI_TRAN
   }
 ]
 
 export const USER_TYPES = [
   {
     value: UserTypes.ROOT,
-    title: getUserTypeText(UserTypes.ROOT)
+    title: UserTypeTexts.ROOT
   },
   {
     value: UserTypes.ADMIN,
-    title: getUserTypeText(UserTypes.ADMIN)
+    title: UserTypeTexts.ADMIN
   },
   {
     value: UserTypes.EMPLOYEE,
-    title: getUserTypeText(UserTypes.EMPLOYEE)
+    title: UserTypeTexts.EMPLOYEE
+  }
+]
+
+export const USER_VERIFY_STATUSES = [
+  {
+    value: 1,
+    title: UserVerifyStatusTexts.VEFIRIED
+  },
+  {
+    value: 0,
+    title: UserVerifyStatusTexts.UNVERIFY
   }
 ]
 
