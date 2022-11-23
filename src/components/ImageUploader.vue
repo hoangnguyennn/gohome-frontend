@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'ImageUploader'
+}
+</script>
+
 <script setup lang="ts">
 import { Upload, Modal, UploadChangeParam, UploadFile } from 'ant-design-vue'
 import { PlusOutlined } from '@ant-design/icons-vue'

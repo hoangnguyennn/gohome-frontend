@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'UserEditPage'
+}
+</script>
+
 <script setup lang="ts">
 import {
   PageHeader,

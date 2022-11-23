@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'CategoryListPage'
+}
+</script>
+
 <script setup lang="ts">
 import {
   Table as ATable,

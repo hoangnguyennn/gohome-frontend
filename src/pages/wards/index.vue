@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'WardListPage'
+}
+</script>
+
 <script setup lang="ts">
 import {
   Table as ATable,

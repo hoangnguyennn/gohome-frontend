@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'PostDetailPage'
+}
+</script>
+
 <script setup lang="ts">
 import {
   Form as AForm,

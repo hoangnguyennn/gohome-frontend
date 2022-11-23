@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'DefaultLayout'
+}
+</script>
+
 <script setup lang="ts">
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
 import {

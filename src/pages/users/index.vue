@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'UserListPage'
+}
+</script>
+
 <script setup lang="ts">
 import {
   Table as ATable,

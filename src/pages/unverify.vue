@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'UnverifyPage'
+}
+</script>
+
 <script setup lang="ts">
 import { Button as AButton } from 'ant-design-vue'
 import { IUser, Nullable } from '~/interfaces'

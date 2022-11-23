@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'TheMenu'
+}
+</script>
+
 <script setup lang="ts">
 import { Menu, SubMenu, MenuItem } from 'ant-design-vue'
 import { ExportOutlined } from '@ant-design/icons-vue'
