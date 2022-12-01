@@ -389,24 +389,24 @@ onMounted(async () => {
 
     <Divider type="horizontal"></Divider>
 
-    <h3 class="section-title">Thông tin chủ hộ</h3>
+    <h3 class="section-title">Thông tin chủ nhà</h3>
     <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem
-          label="Tên chủ hộ"
+          label="Tên chủ nhà"
           name="ownerName"
           :rules="[
-            { required: true, message: 'Tên chủ hộ là trường bắt buộc' }
+            { required: true, message: 'Tên chủ nhà là trường bắt buộc' }
           ]"
         >
           <AInput v-model:value="formState.ownerName" />
         </FormItem>
 
         <FormItem
-          label="Địa chỉ chủ hộ"
+          label="Địa chỉ chủ nhà"
           name="ownerAddress"
           :rules="[
-            { required: true, message: 'Địa chỉ chủ hộ là trường bắt buộc' }
+            { required: true, message: 'Địa chỉ chủ nhà là trường bắt buộc' }
           ]"
         >
           <AInput v-model:value="formState.ownerAddress" />
@@ -415,12 +415,12 @@ onMounted(async () => {
 
       <Col :span="24" :xl="12">
         <FormItem
-          label="Số điện thoại chủ hộ"
+          label="Số điện thoại chủ nhà"
           name="ownerPhone"
           :rules="[
             {
               required: true,
-              message: 'Số điện thoại chủ hộ là trường bắt buộc'
+              message: 'Số điện thoại chủ nhà là trường bắt buộc'
             }
           ]"
         >

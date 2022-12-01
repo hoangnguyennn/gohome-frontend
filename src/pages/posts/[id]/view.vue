@@ -21,7 +21,7 @@ import { IPost, Nullable } from '~/interfaces'
 import {
   toVndPrefix,
   toAcreage,
-  toDateTime,
+  toDateTimeString,
   getPostVerifyStatusColor,
   getPostVerifyStatusText
 } from '~/utils/formatter'
@@ -193,43 +193,47 @@ onMounted(async () => {
         <FormItem label="Thời gian cho thuê (gần nhất)">
           <div v-if="post">
             {{
-              post.rentedAt ? toDateTime(post.rentedAt) : 'Chưa từng được thuê'
+              post.rentedAt
+                ? toDateTimeString(post.rentedAt)
+                : 'Chưa từng được thuê'
             }}
           </div>
         </FormItem>
 
         <FormItem label="Thời gian mở cho thuê (gần nhất)">
           <div v-if="post">
-            {{ post.openedForRentAt ? toDateTime(post.openedForRentAt) : '' }}
+            {{
+              post.openedForRentAt ? toDateTimeString(post.openedForRentAt) : ''
+            }}
           </div>
         </FormItem>
 
         <FormItem label="Thời gian cập nhật (gần nhất)">
-          <div v-if="post">{{ toDateTime(post.updatedAt) }}</div>
+          <div v-if="post">{{ toDateTimeString(post.updatedAt) }}</div>
         </FormItem>
 
         <FormItem label="Thời gian tạo">
-          <div v-if="post">{{ toDateTime(post.createdAt) }}</div>
+          <div v-if="post">{{ toDateTimeString(post.createdAt) }}</div>
         </FormItem>
       </Col>
     </Row>
 
     <Divider type="horizontal"></Divider>
 
-    <h3 class="section-title">Thông tin chủ hộ</h3>
+    <h3 class="section-title">Thông tin chủ nhà</h3>
     <Row :gutter="24">
       <Col :span="24" :xl="12">
-        <FormItem label="Tên chủ hộ">
+        <FormItem label="Tên chủ nhà">
           <div>{{ post?.ownerName }}</div>
         </FormItem>
 
-        <FormItem label="Địa chỉ chủ hộ">
+        <FormItem label="Địa chỉ chủ nhà">
           <div>{{ post?.ownerAddress }}</div>
         </FormItem>
       </Col>
 
       <Col span="12">
-        <FormItem label="Số điện thoại chủ hộ">
+        <FormItem label="Số điện thoại chủ nhà">
           <div>{{ post?.ownerPhone }}</div>
         </FormItem>
       </Col>

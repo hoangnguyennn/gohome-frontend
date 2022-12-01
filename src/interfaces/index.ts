@@ -5,6 +5,10 @@ import {
   WardTypes
 } from './enums'
 
+export interface IAuthResponse {
+  token: string
+}
+
 export interface ICategory {
   id: string
   name: string
@@ -18,6 +22,10 @@ export interface ICategoryCreate {
 
 export interface ICategoryResponse {
   data: ICategory
+}
+
+export interface IChangePassword {
+  newPassword: string
 }
 
 export interface IDataListFilter<T = any> {
@@ -47,9 +55,28 @@ export interface IDistrictResponse {
   data: IDistrict
 }
 
+export interface IErrorResponse {
+  code: number
+  message: string
+}
+
+export interface IFormConfirmState<T> {
+  value: Nullable<T>
+  isOpen: boolean
+}
+
 export interface IImage {
   id: string
   url: string
+}
+
+export interface IMenuItem {
+  id: string | number
+  title: string
+  icon?: any
+  link?: string
+  children?: IMenuItem[]
+  permissions?: UserTypes[]
 }
 
 export interface IPost {
@@ -110,6 +137,16 @@ export interface IPostResponse {
   data: IPost
 }
 
+export interface ISelectOption<T = any> {
+  value: T
+  label: string
+}
+
+export interface IUpdateInfo {
+  fullName?: string
+  avatar?: string
+}
+
 export interface IUser {
   id: string
   username: string
@@ -143,38 +180,6 @@ export interface IWardResponse {
 
 export interface IWardsResponse {
   data: IWard[]
-}
-
-export interface IErrorResponse {
-  code: number
-  message: string
-}
-
-export interface IMenuItem {
-  id: string | number
-  title: string
-  icon?: any
-  link?: string
-  children?: IMenuItem[]
-  permissions?: UserTypes[]
-}
-
-export interface IAuthResponse {
-  token: string
-}
-
-export interface IUpdateInfo {
-  fullName?: string
-  avatar?: string
-}
-
-export interface IChangePassword {
-  newPassword: string
-}
-
-export interface IFormConfirmState<T> {
-  value: Nullable<T>
-  isOpen: boolean
 }
 
 export type Nullable<T> = T | null | undefined

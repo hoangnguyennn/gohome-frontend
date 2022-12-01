@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs, { Dayjs } from 'dayjs'
 import {
   Colors,
   PostVerifyStatuses,
@@ -8,8 +8,12 @@ import {
   UserVerifyStatusTexts
 } from '~/interfaces/enums'
 
-export const toDateTime = (date: Date | string | number) => {
-  return moment(date).format('DD/MM/YYYY HH:mm:ss')
+export const toDateTimeString = (date: Date | string | number) => {
+  return dayjs(date).format('DD/MM/YYYY HH:mm:ss')
+}
+
+export const toDateString = (date: Date | string | number | Dayjs) => {
+  return dayjs(date).format('DD/MM/YYYY')
 }
 
 export const toVND = (number: number | string) => {
@@ -108,7 +112,7 @@ export const removeUndefined = (value: any): any => {
   const newResult: any = {}
 
   Object.keys(value).forEach((key) => {
-    if (value[key] !== undefined) {
+    if (![undefined, ''].includes(value[key])) {
       newResult[key] = value[key]
     }
   })

@@ -18,11 +18,12 @@ import {
   FormItem,
   Input as AInput,
   Select as ASelect,
-  SelectOption,
-  Slider
+  RangePicker,
+  FormInstance
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
+import dayjs, { Dayjs } from 'dayjs'
 import { LocationQueryRaw } from 'vue-router'
 import { POST_VERIFY_STATUSES } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
@@ -30,7 +31,8 @@ import {
   IPost,
   IFormConfirmState,
   Nullable,
-  IDataListFilter
+  IDataListFilter,
+  ISelectOption
 } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
 import { getPostImageLink } from '~/utils/common'
@@ -38,22 +40,45 @@ import {
   getPostVerifyStatusColor,
   getPostVerifyStatusText,
   removeUndefined,
-  toDateTime,
+  toDateString,
+  toDateTimeString,
   toVND
 } from '~/utils/formatter'
+import { PostVerifyStatuses } from '~/interfaces/enums'
+
+type RangeValue = [Dayjs, Dayjs]
 
 interface IFormSearch {
+  code?: Nullable<string>
   title?: Nullable<string>
   createdById?: Nullable<string>
-  commission?: Nullable<string>
   verifyStatus?: Nullable<string>
+  createdAt?: RangeValue
+  updatedAt?: RangeValue
+  categoryIds?: string[]
+  locationIds?: string[]
+  ownerPhone?: string
 }
 
-interface ISearchOptions extends IFormSearch, IDataListFilter {}
+interface IFormSearchQuery {
+  code?: Nullable<string>
+  title?: Nullable<string>
+  createdById?: Nullable<string>
+  verifyStatus?: Nullable<string>
+  createdAtStart?: string
+  createdAtEnd?: string
+  updatedAtStart?: string
+  updatedAtEnd?: string
+  categoryIds?: string | string[]
+  locationIds?: string | string[]
+  ownerPhone?: string
+}
+
+interface ISearchOptions extends IFormSearchQuery, IDataListFilter {}
 
 const postStore = usePostStore()
 const route = useRoute()
-const { posts, users } = storeToRefs(postStore)
+const { posts, users, categories, wards } = storeToRefs(postStore)
 
 const {
   sortBy,
@@ -64,6 +89,8 @@ const {
   onChange,
   pushRoute
 } = useDataListSearch()
+
+const isLoading = ref(false)
 
 const columns: ColumnType<IPost>[] = [
   {
@@ -253,8 +280,34 @@ const columnsComputed = computed<ColumnType<IPost>[]>(() => {
   })
 })
 
+const userOptions = computed<ISelectOption<string>[]>(() => {
+  return users.value.map((user) => ({
+    value: user.id,
+    label: user.fullName ? `${user.fullName} (${user.username})` : user.username
+  }))
+})
+
+const postVerifyStatuses: ISelectOption<PostVerifyStatuses>[] =
+  POST_VERIFY_STATUSES.map(({ value, text }) => ({
+    value,
+    label: text
+  }))
+
+const categoryOptions = computed<ISelectOption<string>[]>(() => {
+  return categories.value.map((category) => ({
+    value: category.id,
+    label: `${category.name} (${category.code})`
+  }))
+})
+
+const wardOptions = computed<ISelectOption<string>[]>(() => {
+  return wards.value.map((ward) => ({
+    value: ward.id,
+    label: `${ward.name} (${ward.district?.name})`
+  }))
+})
+
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
-const isLoading = ref(false)
 
 const itemDelete = ref<IFormConfirmState<IPost>>({
   value: null,
@@ -270,6 +323,10 @@ const searchOptions = computed(() => {
   const params: ISearchOptions = { ...dataListSearchOptions.value }
   const query = route.query
 
+  if (query.code) {
+    params.code = query.code as string
+  }
+
   if (query.title) {
     params.title = query.title as string
   }
@@ -278,23 +335,118 @@ const searchOptions = computed(() => {
     params.createdById = query.createdById as string
   }
 
+  if (query.verifyStatus !== undefined) {
+    params.verifyStatus = query.verifyStatus as string
+  }
+
+  if (query.createdAtStart) {
+    params.createdAtStart = query.createdAtStart as string
+  }
+
+  if (query.createdAtEnd) {
+    params.createdAtEnd = query.createdAtEnd as string
+  }
+
+  if (query.updatedAtStart) {
+    params.updatedAtStart = query.updatedAtStart as string
+  }
+
+  if (query.updatedAtEnd) {
+    params.updatedAtEnd = query.updatedAtEnd as string
+  }
+
+  if (query.categoryIds) {
+    params.categoryIds = query.categoryIds as string[]
+  }
+
+  if (query.locationIds) {
+    params.locationIds = query.locationIds as string[]
+  }
+
+  if (query.ownerPhone) {
+    params.ownerPhone = query.ownerPhone as string
+  }
+
   return params
 })
 
 const formSearch = ref<IFormSearch>({
+  code: '',
   title: '',
   createdById: '',
-  verifyStatus: ''
+  verifyStatus: '',
+  createdAt: undefined,
+  updatedAt: undefined,
+  categoryIds: [],
+  locationIds: [],
+  ownerPhone: ''
 })
+
+const formRef = ref<FormInstance>()
 
 const initFromQuery = () => {
   initDataListSearchFromQuery()
 
-  const { title, createdById } = route.query
-  formSearch.value = {
-    title: title as string,
-    createdById: createdById as string
+  const {
+    code,
+    title,
+    createdById,
+    verifyStatus,
+    createdAtStart,
+    createdAtEnd,
+    updatedAtStart,
+    updatedAtEnd,
+    categoryIds,
+    locationIds,
+    ownerPhone
+  } = route.query
+
+  let createdAt: any[] = []
+  if (createdAtStart && createdAtEnd) {
+    createdAt = [
+      dayjs(createdAtStart as string, 'DD/MM/YYYY'),
+      dayjs(createdAtEnd as string, 'DD/MM/YYYY')
+    ]
   }
+
+  let updatedAt: any[] = []
+  if (updatedAtStart && updatedAtEnd) {
+    updatedAt = [
+      dayjs(updatedAtStart as string, 'DD/MM/YYYY'),
+      dayjs(updatedAtEnd as string, 'DD/MM/YYYY')
+    ]
+  }
+
+  let categoryIdsValue = []
+  if (typeof categoryIds === 'string') {
+    categoryIdsValue = [categoryIds]
+  } else {
+    categoryIdsValue = categoryIds as string[]
+  }
+
+  let locationIdsValue = []
+  if (typeof locationIds === 'string') {
+    locationIdsValue = [locationIds]
+  } else {
+    locationIdsValue = locationIds as string[]
+  }
+
+  formSearch.value = {
+    code: code as string,
+    title: title as string,
+    createdById: createdById as string,
+    verifyStatus: verifyStatus as string,
+    createdAt: createdAt as [Dayjs, Dayjs],
+    updatedAt: updatedAt as [Dayjs, Dayjs],
+    categoryIds: categoryIdsValue,
+    locationIds: locationIdsValue,
+    ownerPhone: ownerPhone as string
+  }
+}
+
+const resetFormSearch = () => {
+  formRef.value?.resetFields()
+  onFinish(formRef.value?.getFieldsValue() as IFormSearch)
 }
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -337,10 +489,33 @@ const onMarkAsRead = async () => {
 }
 
 const onFinish = async (values: IFormSearch) => {
+  let createdAtStart: any
+  let createdAtEnd: any
+  if (values.createdAt?.length === 2) {
+    createdAtStart = toDateString(values.createdAt[0])
+    createdAtEnd = toDateString(values.createdAt[1])
+  }
+
+  let updatedAtStart: any
+  let updatedAtEnd: any
+  if (values.updatedAt?.length === 2) {
+    updatedAtStart = toDateString(values.updatedAt[0])
+    updatedAtEnd = toDateString(values.updatedAt[1])
+  }
+
   const query: LocationQueryRaw = {
     ...route.query,
-    title: values.title || undefined,
-    createdById: values.createdById || undefined
+    code: values.code ?? undefined,
+    title: values.title ?? undefined,
+    createdById: values.createdById ?? undefined,
+    verifyStatus: values.verifyStatus ?? undefined,
+    createdAtStart: createdAtStart,
+    createdAtEnd: createdAtEnd,
+    updatedAtStart: updatedAtStart,
+    updatedAtEnd: updatedAtEnd,
+    categoryIds: values.categoryIds ?? undefined,
+    locationIds: values.locationIds ?? undefined,
+    ownerPhone: values.ownerPhone ?? undefined
   }
 
   pushRoute(removeUndefined(query))
@@ -355,17 +530,27 @@ const getPosts = async () => {
   }
 }
 
+const disabledDate = (current: Dayjs) => {
+  return current && current > dayjs().endOf('day')
+}
+
+const filterOption = (input: string, option: ISelectOption<string>) => {
+  return option.label.toLowerCase().includes(input.toLowerCase())
+}
+
 onMounted(() => {
   initFromQuery()
   getPosts()
   postStore.getUsers()
+  postStore.getCategories()
+  postStore.getWards()
 })
 
 onBeforeUnmount(() => {
   postStore.reset()
 })
 
-watch(route, () => getPosts())
+watch(route, getPosts)
 </script>
 
 <template>
@@ -392,42 +577,113 @@ watch(route, () => getPosts())
     @finish="onFinish"
   >
     <Row :gutter="24">
-      <Col :span="24" :xl="6">
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Mã bài đăng" name="code">
+          <AInput v-model:value="formSearch.code" allowClear />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
         <FormItem label="Tiêu đề" name="title">
           <AInput v-model:value="formSearch.title" allowClear />
         </FormItem>
       </Col>
-      <Col :span="24" :xl="6">
+
+      <Col :span="24" :md="12" :xl="6">
         <FormItem label="Tạo bởi" name="createdById">
-          <ASelect v-model:value="formSearch.createdById" allowClear>
-            <SelectOption v-for="user of users" :key="user.id" :value="user.id">
-              {{ user.fullName || user.username }}
-            </SelectOption>
+          <ASelect
+            v-model:value="formSearch.createdById"
+            allowClear
+            show-search
+            :options="userOptions"
+            :filterOption="filterOption"
+          >
           </ASelect>
         </FormItem>
       </Col>
-      <Col :span="24" :xl="6">
-        <FormItem label="Hoa hồng" name="commission">
-          <Slider range />
-        </FormItem>
-      </Col>
-      <Col :span="24" :xl="6">
+
+      <Col :span="24" :md="12" :xl="6">
         <FormItem label="Tình trạng duyệt" name="verifyStatus">
-          <ASelect v-model:value="formSearch.verifyStatus" allowClear>
-            <SelectOption
-              v-for="verifyStatus of POST_VERIFY_STATUSES"
-              :key="verifyStatus.value"
-              :value="verifyStatus.value"
-            >
-              {{ verifyStatus.text }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.verifyStatus"
+            allowClear
+            show-search
+            :options="postVerifyStatuses"
+            :filterOption="filterOption"
+          />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Ngày tạo" name="createdAt">
+          <RangePicker
+            allow-clear
+            style="width: 100%"
+            format="DD/MM/YYYY"
+            v-model:value="formSearch.createdAt"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            :disabled-date="disabledDate"
+          />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Ngày cập nhật" name="updatedAt">
+          <RangePicker
+            allowClear
+            style="width: 100%"
+            format="DD/MM/YYYY"
+            v-model:value="formSearch.updatedAt"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            :disabledDate="disabledDate"
+          />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Loại nhà đất" name="categoryIds">
+          <ASelect
+            v-model:value="formSearch.categoryIds"
+            allowClear
+            mode="multiple"
+            max-tag-count="responsive"
+            showSearch
+            :options="categoryOptions"
+            :filter-option="filterOption"
+          />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Khu vực" name="locationIds">
+          <ASelect
+            v-model:value="formSearch.locationIds"
+            allowClear
+            mode="multiple"
+            max-tag-count="responsive"
+            showSearch
+            :options="wardOptions"
+            :filter-option="filterOption"
+          />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Số điện thoại chủ nhà" name="ownerPhone">
+          <AInput v-model:value="formSearch.ownerPhone" allowClear />
         </FormItem>
       </Col>
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+        <AButton
+          type="primary"
+          html-type="submit"
+          style="margin-right: 10px; margin-bottom: 10px"
+        >
+          Tìm kiếm
+        </AButton>
+        <AButton @click="resetFormSearch">Xóa bộ lọc</AButton>
       </Col>
     </Row>
   </AForm>
@@ -499,7 +755,7 @@ watch(route, () => getPosts())
 
         <template v-else-if="dateTimeFields.includes(column.key)">
           <template v-if="record[column.key]">
-            {{ toDateTime(new Date(record[column.key])) }}
+            {{ toDateTimeString(new Date(record[column.key])) }}
           </template>
         </template>
       </template>
