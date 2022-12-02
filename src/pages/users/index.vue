@@ -35,7 +35,7 @@ import {
 import { UserTypes } from '~/interfaces/enums'
 import { useAuthStore } from '~/store/stores/authStore'
 import { useUserStore } from '~/store/stores/userStore'
-import { getAvatarLink, isAdmin } from '~/utils/common'
+import { getAvatarLink, isAdmin, isSearchChanged } from '~/utils/common'
 import {
   getUserTypeText,
   getUserTypeColor,
@@ -271,11 +271,15 @@ const onVerify = async () => {
 const onFinish = async (values: IFormSearch) => {
   const query: LocationQueryRaw = {
     ...route.query,
-    username: values.username || undefined,
-    fullName: values.fullName || undefined,
+    username: values.username ?? undefined,
+    fullName: values.fullName ?? undefined,
     type: values.type !== undefined ? String(values.type) : undefined,
     isVerified:
       values.isVerified !== undefined ? String(values.isVerified) : undefined
+  }
+
+  if (isSearchChanged(removeUndefined(query), route.query)) {
+    query.offset = undefined
   }
 
   pushRoute(removeUndefined(query))

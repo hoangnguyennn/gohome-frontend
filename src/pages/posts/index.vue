@@ -6,20 +6,20 @@ export default {
 
 <script setup lang="ts">
 import {
-  Table as ATable,
-  Divider,
-  Modal,
   Button as AButton,
-  Row,
   Col,
-  PageHeader,
-  Tag,
+  Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
-  Select as ASelect,
+  Modal,
+  PageHeader,
   RangePicker,
-  FormInstance
+  Row,
+  Select as ASelect,
+  Table as ATable,
+  Tag
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
@@ -35,7 +35,7 @@ import {
   ISelectOption
 } from '~/interfaces'
 import { usePostStore } from '~/store/stores/postStore'
-import { getPostImageLink } from '~/utils/common'
+import { getPostImageLink, isSearchChanged } from '~/utils/common'
 import {
   getPostVerifyStatusColor,
   getPostVerifyStatusText,
@@ -513,9 +513,13 @@ const onFinish = async (values: IFormSearch) => {
     createdAtEnd: createdAtEnd,
     updatedAtStart: updatedAtStart,
     updatedAtEnd: updatedAtEnd,
-    categoryIds: values.categoryIds ?? undefined,
-    locationIds: values.locationIds ?? undefined,
+    categoryIds: values.categoryIds?.length ? values.categoryIds : undefined,
+    locationIds: values.locationIds?.length ? values.locationIds : undefined,
     ownerPhone: values.ownerPhone ?? undefined
+  }
+
+  if (isSearchChanged(removeUndefined(query), route.query)) {
+    query.offset = undefined
   }
 
   pushRoute(removeUndefined(query))
@@ -550,7 +554,10 @@ onBeforeUnmount(() => {
   postStore.reset()
 })
 
-watch(route, getPosts)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getPosts()
+})
 </script>
 
 <template>

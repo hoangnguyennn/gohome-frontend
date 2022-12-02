@@ -6,23 +6,23 @@ export default {
 
 <script setup lang="ts">
 import {
-  Table as ATable,
-  Divider,
-  Modal,
   Button as AButton,
-  Row,
   Col,
-  PageHeader,
-  Tag,
+  Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
-  Select as ASelect,
-  SelectOption,
+  Modal,
+  PageHeader,
   RangePicker,
-  FormInstance
+  Row,
+  Select as ASelect,
+  Table as ATable,
+  Tag
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
+import { filterOption } from 'ant-design-vue/lib/vc-mentions/src/util'
 import dayjs, { Dayjs } from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { LocationQueryRaw, RouterLink } from 'vue-router'
@@ -32,10 +32,12 @@ import {
   IPost,
   IFormConfirmState,
   IDataListFilter,
-  Nullable
+  Nullable,
+  ISelectOption
 } from '~/interfaces'
+import { PostVerifyStatuses } from '~/interfaces/enums'
 import { usePostStore } from '~/store/stores/postStore'
-import { getPostImageLink } from '~/utils/common'
+import { getPostImageLink, isSearchChanged } from '~/utils/common'
 import {
   getPostVerifyStatusColor,
   getPostVerifyStatusText,
@@ -51,7 +53,7 @@ interface IFormSearch {
   code?: Nullable<string>
   title?: Nullable<string>
   createdById?: Nullable<string>
-  verifyStatus?: Nullable<string>
+  verifyStatus?: Nullable<number>
   createdAt?: RangeValue
   updatedAt?: RangeValue
   categoryIds?: string[]
@@ -279,6 +281,33 @@ const columnsComputed = computed<ColumnType<IPost>[]>(() => {
   })
 })
 
+const userOptions = computed<ISelectOption<string>[]>(() => {
+  return users.value.map((user) => ({
+    value: user.id,
+    label: user.fullName ? `${user.fullName} (${user.username})` : user.username
+  }))
+})
+
+const postVerifyStatuses: ISelectOption<PostVerifyStatuses>[] =
+  POST_VERIFY_STATUSES.map(({ value, text }) => ({
+    value,
+    label: text
+  }))
+
+const categoryOptions = computed<ISelectOption<string>[]>(() => {
+  return categories.value.map((category) => ({
+    value: category.id,
+    label: `${category.name} (${category.code})`
+  }))
+})
+
+const wardOptions = computed<ISelectOption<string>[]>(() => {
+  return wards.value.map((ward) => ({
+    value: ward.id,
+    label: `${ward.name} (${ward.district?.name})`
+  }))
+})
+
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
 
 const itemDelete = ref<IFormConfirmState<IPost>>({
@@ -341,7 +370,7 @@ const formSearch = ref<IFormSearch>({
   code: '',
   title: '',
   createdById: '',
-  verifyStatus: '',
+  verifyStatus: null,
   createdAt: undefined,
   updatedAt: undefined,
   categoryIds: [],
@@ -398,11 +427,18 @@ const initFromQuery = () => {
     locationIdsValue = locationIds as string[]
   }
 
+  let verifyStatusValue = null
+  if (!isNaN(Number(verifyStatus))) {
+    if (Object.values(PostVerifyStatuses).includes(Number(verifyStatus))) {
+      verifyStatusValue = Number(verifyStatus)
+    }
+  }
+
   formSearch.value = {
     code: code as string,
     title: title as string,
     createdById: createdById as string,
-    verifyStatus: verifyStatus as string,
+    verifyStatus: verifyStatusValue,
     createdAt: createdAt as [Dayjs, Dayjs],
     updatedAt: updatedAt as [Dayjs, Dayjs],
     categoryIds: categoryIdsValue,
@@ -460,9 +496,13 @@ const onFinish = async (values: IFormSearch) => {
     createdAtEnd: createdAtEnd,
     updatedAtStart: updatedAtStart,
     updatedAtEnd: updatedAtEnd,
-    categoryIds: values.categoryIds ?? undefined,
-    locationIds: values.locationIds ?? undefined,
+    categoryIds: values.categoryIds?.length ? values.categoryIds : undefined,
+    locationIds: values.locationIds?.length ? values.locationIds : undefined,
     ownerPhone: values.ownerPhone ?? undefined
+  }
+
+  if (isSearchChanged(removeUndefined(query), route.query)) {
+    query.offset = undefined
   }
 
   pushRoute(removeUndefined(query))
@@ -493,7 +533,10 @@ onBeforeUnmount(() => {
   postStore.reset()
 })
 
-watch(route, getRentedPosts)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getRentedPosts()
+})
 </script>
 
 <template>
@@ -534,25 +577,26 @@ watch(route, getRentedPosts)
 
       <Col :span="24" :md="12" :xl="6">
         <FormItem label="Tạo bởi" name="createdById">
-          <ASelect v-model:value="formSearch.createdById" allowClear>
-            <SelectOption v-for="user of users" :key="user.id" :value="user.id">
-              {{ user.fullName || user.username }}
-            </SelectOption>
+          <ASelect
+            v-model:value="formSearch.createdById"
+            allowClear
+            show-search
+            :options="userOptions"
+            :filterOption="filterOption"
+          >
           </ASelect>
         </FormItem>
       </Col>
 
       <Col :span="24" :md="12" :xl="6">
         <FormItem label="Tình trạng duyệt" name="verifyStatus">
-          <ASelect v-model:value="formSearch.verifyStatus" allowClear>
-            <SelectOption
-              v-for="verifyStatus of POST_VERIFY_STATUSES"
-              :key="verifyStatus.value"
-              :value="verifyStatus.value"
-            >
-              {{ verifyStatus.text }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.verifyStatus"
+            allowClear
+            show-search
+            :options="postVerifyStatuses"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
 
@@ -589,15 +633,10 @@ watch(route, getRentedPosts)
             allowClear
             mode="multiple"
             max-tag-count="responsive"
-          >
-            <SelectOption
-              v-for="category of categories"
-              :key="category.id"
-              :value="category.id"
-            >
-              {{ category.name }}
-            </SelectOption>
-          </ASelect>
+            showSearch
+            :options="categoryOptions"
+            :filter-option="filterOption"
+          />
         </FormItem>
       </Col>
 
@@ -608,15 +647,10 @@ watch(route, getRentedPosts)
             allowClear
             mode="multiple"
             max-tag-count="responsive"
-          >
-            <SelectOption
-              v-for="location of wards"
-              :key="location.id"
-              :value="location.id"
-            >
-              {{ location.district?.name }} - {{ location.name }}
-            </SelectOption>
-          </ASelect>
+            showSearch
+            :options="wardOptions"
+            :filter-option="filterOption"
+          />
         </FormItem>
       </Col>
 

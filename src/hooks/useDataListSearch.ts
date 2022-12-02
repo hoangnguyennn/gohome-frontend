@@ -47,8 +47,12 @@ const useDataListSearch = () => {
     filter: Record<string, FilterValue | null>,
     sorter: SorterResult<IUser> | SorterResult<IUser>[]
   ) => {
-    dataListStore.setCurrentPage(pagination?.current as number)
-    dataListStore.setItemsPerPage(pagination?.pageSize as number)
+    if (pagination?.pageSize !== itemsPerPage.value) {
+      dataListStore.setItemsPerPage(pagination?.pageSize as number)
+      dataListStore.setCurrentPage(1)
+    } else {
+      dataListStore.setCurrentPage(pagination?.current as number)
+    }
 
     if (Object.keys(sorter).length) {
       const localSorter = sorter as SorterResult<IUser>

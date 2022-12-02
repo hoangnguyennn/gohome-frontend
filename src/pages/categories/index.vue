@@ -28,6 +28,7 @@ import {
   Nullable
 } from '~/interfaces'
 import { useCategoryStore } from '~/store/stores/categoryStore'
+import { isSearchChanged } from '~/utils/common'
 import { removeUndefined } from '~/utils/formatter'
 
 interface IFormSearch {
@@ -168,8 +169,12 @@ const onDelete = async () => {
 const onFinish = async (values: IFormSearch) => {
   const query: LocationQueryRaw = {
     ...route.query,
-    name: values.name || undefined,
-    code: values.code || undefined
+    name: values.name ?? undefined,
+    code: values.code ?? undefined
+  }
+
+  if (isSearchChanged(removeUndefined(query), route.query)) {
+    query.offset = undefined
   }
 
   pushRoute(removeUndefined(query))

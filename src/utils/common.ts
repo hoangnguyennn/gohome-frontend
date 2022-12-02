@@ -1,3 +1,4 @@
+import { LocationQueryRaw } from 'vue-router'
 import { VALID_PASSWORD } from '~/constants/RegExp'
 import { IImage } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
@@ -24,4 +25,12 @@ export const isValidPassword = (password: string) => {
 
 export const isAdmin = (type: UserTypes) => {
   return type === UserTypes.ROOT || type === UserTypes.ADMIN
+}
+
+export const isSearchChanged = (
+  newSearch: LocationQueryRaw,
+  oldSearch: LocationQueryRaw
+) => {
+  console.log({ newSearch, oldSearch })
+  return Object.keys(newSearch).some((key) => newSearch[key] !== oldSearch[key])
 }

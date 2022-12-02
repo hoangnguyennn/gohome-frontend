@@ -87,7 +87,7 @@ export const getPostVerifyStatusColor = (verifyStatus?: PostVerifyStatuses) => {
     case PostVerifyStatuses.PENDING:
       return Colors.WARNING
     case PostVerifyStatuses.APPROVED:
-      return Colors.WARNING
+      return Colors.SUCCESS
     case PostVerifyStatuses.DENIED:
       return Colors.ERROR
     default:
