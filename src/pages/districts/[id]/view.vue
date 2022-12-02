@@ -6,12 +6,12 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Col,
   Form as AForm,
   FormItem,
-  Row,
-  Col,
-  Button as AButton,
-  PageHeader
+  PageHeader,
+  Row
 } from 'ant-design-vue'
 
 import { useDistrictStore } from '~/store/stores/districtStore'
@@ -63,12 +63,12 @@ onMounted(async () => {
             type="primary"
             style="margin-right: 10px; margin-bottom: 10px"
           >
-            <router-link :to="`/districts/${id}/edit`">
+            <RouterLink :to="`/districts/${id}/edit`">
               Đi tới trang chỉnh sửa
-            </router-link>
+            </RouterLink>
           </AButton>
           <AButton>
-            <router-link to="/districts">Quay lại</router-link>
+            <RouterLink to="/districts">Quay lại</RouterLink>
           </AButton>
         </FormItem>
       </Col>

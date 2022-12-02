@@ -6,12 +6,12 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Col,
   Form as AForm,
   FormItem,
-  Row,
-  Col,
-  Button as AButton,
-  PageHeader
+  PageHeader,
+  Row
 } from 'ant-design-vue'
 
 import { useWardStore } from '~/store/stores/wardStore'
@@ -59,9 +59,9 @@ onMounted(async () => {
         </FormItem>
 
         <FormItem label="Quận huyện">
-          <router-link :to="`/districts/${ward?.district?.id}/view`">
+          <RouterLink :to="`/districts/${ward?.district?.id}/view`">
             {{ ward?.district?.name }}
-          </router-link>
+          </RouterLink>
         </FormItem>
 
         <FormItem>
@@ -69,12 +69,12 @@ onMounted(async () => {
             type="primary"
             style="margin-right: 10px; margin-bottom: 10px"
           >
-            <router-link :to="`/wards/${id}/edit`">
+            <RouterLink :to="`/wards/${id}/edit`">
               Đi tới trang chỉnh sửa
-            </router-link>
+            </RouterLink>
           </AButton>
           <AButton>
-            <router-link to="/wards">Quay lại</router-link>
+            <RouterLink to="/wards">Quay lại</RouterLink>
           </AButton>
         </FormItem>
       </Col>

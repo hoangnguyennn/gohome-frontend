@@ -6,11 +6,11 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
   Form as AForm,
   FormItem,
   Input as AInput,
-  InputPassword,
-  Button as AButton
+  InputPassword
 } from 'ant-design-vue'
 import { Rule } from 'ant-design-vue/lib/form'
 import { useAuthStore } from '~/store/stores/authStore'
@@ -107,11 +107,11 @@ const onRegister = async (values: IRegisterFormState) => {
         />
       </FormItem>
       <FormItem>
-        <AButton block type="primary" html-type="submit">Đăng ký</AButton>
+        <AButton block type="primary" htmlType="submit">Đăng ký</AButton>
       </FormItem>
       <p class="actions">
         Đã có tài khoản?
-        <router-link to="/login">Đăng nhập</router-link>
+        <RouterLink to="/login">Đăng nhập</RouterLink>
       </p>
     </AForm>
   </div>

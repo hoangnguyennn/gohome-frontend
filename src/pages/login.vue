@@ -6,11 +6,11 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
   Form as AForm,
   FormItem,
   Input as AInput,
-  InputPassword,
-  Button as AButton
+  InputPassword
 } from 'ant-design-vue'
 import { useAuthStore } from '~/store/stores/authStore'
 
@@ -62,11 +62,11 @@ const onLogin = async (values: ILoginFormState) => {
         />
       </FormItem>
       <FormItem>
-        <AButton block type="primary" html-type="submit">Đăng nhập</AButton>
+        <AButton block type="primary" htmlType="submit">Đăng nhập</AButton>
       </FormItem>
       <p class="actions">
         Không có tài khoản?
-        <router-link to="/register">Đăng ký ngay</router-link>
+        <RouterLink to="/register">Đăng ký ngay</RouterLink>
       </p>
     </AForm>
   </div>

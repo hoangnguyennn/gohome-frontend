@@ -6,20 +6,20 @@ export default {
 
 <script setup lang="ts">
 import {
-  Table as ATable,
-  Divider,
-  Modal,
-  Tag,
-  Row,
+  Button as AButton,
   Col,
-  PageHeader,
-  message,
+  Divider,
   Form as AForm,
   FormItem,
   Input as AInput,
+  message,
+  Modal,
+  PageHeader,
+  Row,
   Select as ASelect,
   SelectOption,
-  Button as AButton
+  Table as ATable,
+  Tag
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
@@ -309,7 +309,7 @@ watch(route, getUsers)
 <template>
   <PageHeader
     title="Người dùng"
-    back-icon=""
+    backIcon=""
     style="padding-left: 0; padding-right: 0"
   />
 
@@ -363,7 +363,7 @@ watch(route, getUsers)
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
       </Col>
     </Row>
   </AForm>
@@ -379,9 +379,9 @@ watch(route, getUsers)
   >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
+        <RouterLink :to="getLink(record.id, 'view')">Xem</RouterLink>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
+        <RouterLink :to="getLink(record.id, 'edit')">Sửa</RouterLink>
         <Divider type="vertical" />
         <a @click.prevent="onClickDelete(record)">Xóa</a>
         <template v-if="isVerifiable(record)">

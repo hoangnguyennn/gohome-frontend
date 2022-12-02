@@ -6,13 +6,13 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Col,
   Form as AForm,
   FormItem,
   Input as AInput,
-  Row,
-  Col,
-  Button as AButton,
-  PageHeader
+  PageHeader,
+  Row
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
 
@@ -106,7 +106,7 @@ onMounted(async () => {
         <FormItem>
           <AButton
             type="primary"
-            html-type="submit"
+            htmlType="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
             Cập nhật loại nhà đất

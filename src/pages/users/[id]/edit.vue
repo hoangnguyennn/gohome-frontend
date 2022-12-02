@@ -6,15 +6,15 @@ export default {
 
 <script setup lang="ts">
 import {
-  PageHeader,
-  Row,
+  Button as AButton,
   Col,
   Form as AForm,
   FormItem,
   Input as AInput,
+  PageHeader,
+  Row,
   Select as ASelect,
-  SelectOption,
-  Button as AButton
+  SelectOption
 } from 'ant-design-vue'
 import { USER_TYPES } from '~/constants'
 import { IUser, Nullable } from '~/interfaces'
@@ -112,7 +112,7 @@ onMounted(async () => {
         <FormItem>
           <AButton
             type="primary"
-            html-type="submit"
+            htmlType="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
             Cập nhật người dùng

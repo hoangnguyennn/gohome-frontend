@@ -6,17 +6,17 @@ export default {
 
 <script setup lang="ts">
 import {
-  PageHeader,
-  Row,
+  Button as AButton,
   Col,
+  Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
   InputPassword,
-  Button as AButton,
-  Divider,
-  FormInstance,
-  message
+  message,
+  PageHeader,
+  Row
 } from 'ant-design-vue'
 import { IChangePassword, IUpdateInfo, IUser, Nullable } from '~/interfaces'
 import { useAuthStore } from '~/store/stores/authStore'
@@ -116,7 +116,7 @@ watch(
           <FormItem>
             <AButton
               type="primary"
-              html-type="submit"
+              htmlType="submit"
               :disabled="!isUserInfoChanged"
               style="margin-right: 10px; margin-bottom: 10px"
             >
@@ -155,7 +155,7 @@ watch(
           <FormItem>
             <AButton
               type="primary"
-              html-type="submit"
+              htmlType="submit"
               :disabled="!changePasswordFormState.newPassword"
               style="margin-right: 10px; margin-bottom: 10px"
             >

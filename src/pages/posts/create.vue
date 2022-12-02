@@ -6,19 +6,19 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Checkbox,
+  Col,
+  Divider,
   Form as AForm,
   FormItem,
   Input as AInput,
-  Textarea as ATextarea,
   InputNumber,
+  PageHeader,
+  Row,
   Select as ASelect,
   SelectOption,
-  Checkbox,
-  Row,
-  Col,
-  Button as AButton,
-  PageHeader,
-  Divider,
+  Textarea as ATextarea,
   UploadFile
 } from 'ant-design-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -364,7 +364,7 @@ onMounted(() => {
         <FormItem>
           <AButton
             type="primary"
-            html-type="submit"
+            htmlType="submit"
             style="margin-right: 10px; margin-bottom: 10px"
           >
             Tạo bài đăng

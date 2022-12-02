@@ -542,13 +542,13 @@ watch(route, () => {
 <template>
   <PageHeader
     title="Danh sách bài đăng (đã thuê)"
-    back-icon=""
+    backIcon=""
     style="padding-left: 0; padding-right: 0"
   >
     <template #extra>
-      <router-link to="/posts/create">
+      <RouterLink to="/posts/create">
         <AButton type="primary">Thêm bài đăng mới</AButton>
-      </router-link>
+      </RouterLink>
     </template>
   </PageHeader>
 
@@ -664,7 +664,7 @@ watch(route, () => {
       <Col :span="24">
         <AButton
           type="primary"
-          html-type="submit"
+          htmlType="submit"
           style="margin-right: 10px; margin-bottom: 10px"
         >
           Tìm kiếm
@@ -697,9 +697,9 @@ watch(route, () => {
 
       <template #bodyCell="{ column, record }">
         <Row v-if="column.key === 'actions'">
-          <router-link :to="getLink(record.id, 'view')">Xem</router-link>
+          <RouterLink :to="getLink(record.id, 'view')">Xem</RouterLink>
           <Divider type="vertical" />
-          <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
+          <RouterLink :to="getLink(record.id, 'edit')">Sửa</RouterLink>
           <Divider type="vertical" />
           <a @click.prevent="onClickDelete(record)">Xóa</a>
         </Row>
@@ -713,9 +713,9 @@ watch(route, () => {
         </template>
 
         <template v-else-if="column.key === 'createdBy'">
-          <router-link :to="`/users/${record.createdBy.id}/view`">
+          <RouterLink :to="`/users/${record.createdBy.id}/view`">
             {{ record.createdBy.fullName || record.createdBy.username }}
-          </router-link>
+          </RouterLink>
         </template>
 
         <template v-else-if="column.key === 'commission'">

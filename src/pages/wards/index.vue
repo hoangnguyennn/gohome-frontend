@@ -6,18 +6,18 @@ export default {
 
 <script setup lang="ts">
 import {
-  Table as ATable,
-  Divider,
-  Modal,
   Button as AButton,
-  Row,
   Col,
-  PageHeader,
+  Divider,
   Form as AForm,
   FormItem,
   Input as AInput,
+  Modal,
+  PageHeader,
+  Row,
   Select as ASelect,
-  SelectOption
+  SelectOption,
+  Table as ATable
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
@@ -233,13 +233,13 @@ watch(route, getWards)
 <template>
   <PageHeader
     title="Xã phường"
-    back-icon=""
+    backIcon=""
     style="padding-left: 0; padding-right: 0"
   >
     <template #extra>
-      <router-link to="/wards/create">
+      <RouterLink to="/wards/create">
         <AButton type="primary">Thêm xã phường mới</AButton>
-      </router-link>
+      </RouterLink>
     </template>
   </PageHeader>
 
@@ -288,7 +288,7 @@ watch(route, getWards)
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
       </Col>
     </Row>
   </AForm>
@@ -304,16 +304,16 @@ watch(route, getWards)
   >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
+        <RouterLink :to="getLink(record.id, 'view')">Xem</RouterLink>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
+        <RouterLink :to="getLink(record.id, 'edit')">Sửa</RouterLink>
         <Divider type="vertical" />
         <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
       <template v-else-if="column.key === 'district'">
-        <router-link :to="`/districts/${record.district.id}/view`">
+        <RouterLink :to="`/districts/${record.district.id}/view`">
           {{ record.district.name }}
-        </router-link>
+        </RouterLink>
       </template>
     </template>
   </ATable>

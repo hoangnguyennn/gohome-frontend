@@ -6,13 +6,13 @@ export default {
 
 <script setup lang="ts">
 import {
-  Form as AForm,
-  PageHeader,
-  Tag,
-  Row,
+  Button as AButton,
   Col,
+  Form as AForm,
   FormItem,
-  Button as AButton
+  PageHeader,
+  Row,
+  Tag
 } from 'ant-design-vue'
 import { IUser, Nullable } from '~/interfaces'
 import { useUserStore } from '~/store/stores/userStore'
@@ -84,12 +84,12 @@ onMounted(async () => {
             type="primary"
             style="margin-right: 10px; margin-bottom: 10px"
           >
-            <router-link :to="`/users/${id}/edit`">
+            <RouterLink :to="`/users/${id}/edit`">
               Đi tới trang chỉnh sửa
-            </router-link>
+            </RouterLink>
           </AButton>
           <AButton>
-            <router-link to="/users">Quay lại</router-link>
+            <RouterLink to="/users">Quay lại</RouterLink>
           </AButton>
         </FormItem>
       </Col>

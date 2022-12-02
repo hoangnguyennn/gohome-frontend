@@ -6,12 +6,12 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Col,
   Form as AForm,
   FormItem,
-  Row,
-  Col,
-  Button as AButton,
-  PageHeader
+  PageHeader,
+  Row
 } from 'ant-design-vue'
 
 import { ICategory, Nullable } from '~/interfaces'
@@ -62,12 +62,12 @@ onMounted(async () => {
             type="primary"
             style="margin-right: 10px; margin-bottom: 10px"
           >
-            <router-link :to="`/categories/${id}/edit`">
+            <RouterLink :to="`/categories/${id}/edit`">
               Đi tới trang chỉnh sửa
-            </router-link>
+            </RouterLink>
           </AButton>
           <AButton>
-            <router-link to="/categories">Quay lại</router-link>
+            <RouterLink to="/categories">Quay lại</RouterLink>
           </AButton>
         </FormItem>
       </Col>

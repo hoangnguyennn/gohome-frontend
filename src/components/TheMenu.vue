@@ -72,9 +72,9 @@ watch(
           </template>
           <MenuItem v-for="child in menuItem.children" :key="child.id">
             <template v-if="child.permissions?.includes(currentUser.type)">
-              <router-link v-if="child.link" :to="child.link">
+              <RouterLink v-if="child.link" :to="child.link">
                 {{ child.title }}
-              </router-link>
+              </RouterLink>
               <template v-else>
                 {{ child.title }}
               </template>
@@ -87,9 +87,9 @@ watch(
             <template #icon>
               <component :is="menuItem.icon" />
             </template>
-            <router-link v-if="menuItem.link" :to="menuItem.link">
+            <RouterLink v-if="menuItem.link" :to="menuItem.link">
               {{ menuItem.title }}
-            </router-link>
+            </RouterLink>
             <template v-else>
               {{ menuItem.title }}
             </template>

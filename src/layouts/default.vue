@@ -64,7 +64,7 @@ const collapsed = ref(false)
             <template #overlay>
               <Menu>
                 <MenuItem>
-                  <router-link to="/account">Thông tin tài khoản</router-link>
+                  <RouterLink to="/account">Thông tin tài khoản</RouterLink>
                 </MenuItem>
               </Menu>
             </template>

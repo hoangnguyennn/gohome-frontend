@@ -6,13 +6,13 @@ export default {
 
 <script setup lang="ts">
 import {
+  Button as AButton,
+  Col,
+  Divider,
   Form as AForm,
   FormItem,
-  Row,
-  Col,
-  Button as AButton,
   PageHeader,
-  Divider,
+  Row,
   Tag,
   Textarea as ATextarea
 } from 'ant-design-vue'
@@ -98,32 +98,32 @@ onMounted(async () => {
         </FormItem>
 
         <FormItem label="Loại">
-          <router-link
+          <RouterLink
             v-if="post?.category?.id"
             :to="`/categories/${post?.category?.id}/view`"
           >
             {{ post?.category?.name }}
-          </router-link>
+          </RouterLink>
           <div v-else>{{ post?.category?.name }}</div>
         </FormItem>
 
         <FormItem label="Quận huyện">
-          <router-link
+          <RouterLink
             v-if="post?.ward?.district?.id"
             :to="`/districts/${post?.ward?.district?.id}/view`"
           >
             {{ post?.ward?.district?.name }}
-          </router-link>
+          </RouterLink>
           <div v-else>{{ post?.ward?.district?.name }}</div>
         </FormItem>
 
         <FormItem label="Xã phường">
-          <router-link
+          <RouterLink
             v-if="post?.ward?.id"
             :to="`/wards/${post?.ward?.id}/view`"
           >
             {{ post?.ward?.name }}
-          </router-link>
+          </RouterLink>
           <div v-else>{{ post?.ward?.name }}</div>
         </FormItem>
 
@@ -245,12 +245,12 @@ onMounted(async () => {
     <Row :gutter="24">
       <Col :span="24" :xl="12">
         <FormItem label="Tên người đăng">
-          <router-link
+          <RouterLink
             v-if="post?.createdBy?.id"
             :to="`/users/${post?.createdBy?.id}/view`"
           >
             {{ post?.createdBy?.fullName || post?.createdBy?.username }}
-          </router-link>
+          </RouterLink>
           <div v-else>
             {{ post?.createdBy?.fullName || post?.createdBy?.username }}
           </div>
@@ -295,7 +295,7 @@ onMounted(async () => {
           >
             Duyệt bài
           </AButton>
-          <AButton type="primary" danger html-type="submit">
+          <AButton type="primary" danger htmlType="submit">
             Không duyệt
           </AButton>
         </FormItem>
@@ -309,12 +309,12 @@ onMounted(async () => {
     <Col :span="24" :xl="12">
       <FormItem>
         <AButton type="primary" style="margin-right: 10px; margin-bottom: 10px">
-          <router-link :to="`/posts/${id}/edit`">
+          <RouterLink :to="`/posts/${id}/edit`">
             Đi tới trang chỉnh sửa
-          </router-link>
+          </RouterLink>
         </AButton>
         <AButton>
-          <router-link to="/posts">Quay lại</router-link>
+          <RouterLink to="/posts">Quay lại</RouterLink>
         </AButton>
       </FormItem>
     </Col>

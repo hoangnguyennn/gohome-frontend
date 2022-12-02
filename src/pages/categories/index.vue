@@ -6,16 +6,16 @@ export default {
 
 <script setup lang="ts">
 import {
-  Table as ATable,
-  Divider,
-  Modal,
   Button as AButton,
-  Row,
   Col,
-  PageHeader,
+  Divider,
   Form as AForm,
   FormItem,
-  Input as AInput
+  Input as AInput,
+  Modal,
+  PageHeader,
+  Row,
+  Table as ATable
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
 import { storeToRefs } from 'pinia'
@@ -204,13 +204,13 @@ watch(route, getCategories)
 <template>
   <PageHeader
     title="Loại nhà đất"
-    back-icon=""
+    backIcon=""
     style="padding-left: 0; padding-right: 0"
   >
     <template #extra>
-      <router-link to="/categories/create">
+      <RouterLink to="/categories/create">
         <AButton type="primary">Thêm loại nhà đất mới</AButton>
-      </router-link>
+      </RouterLink>
     </template>
   </PageHeader>
 
@@ -238,7 +238,7 @@ watch(route, getCategories)
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" html-type="submit">Tìm kiếm</AButton>
+        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
       </Col>
     </Row>
   </AForm>
@@ -247,16 +247,16 @@ watch(route, getCategories)
 
   <ATable
     :columns="columnsComputed"
-    :data-source="categories"
+    :dataSource="categories"
     :loading="isLoading"
     :pagination="pagination"
     @change="onChange"
   >
     <template #bodyCell="{ column, record }">
       <Row v-if="column.key === 'actions'">
-        <router-link :to="getLink(record.id, 'view')">Xem</router-link>
+        <RouterLink :to="getLink(record.id, 'view')">Xem</RouterLink>
         <Divider type="vertical" />
-        <router-link :to="getLink(record.id, 'edit')">Sửa</router-link>
+        <RouterLink :to="getLink(record.id, 'edit')">Sửa</RouterLink>
         <Divider type="vertical" />
         <a @click.prevent="onClickDelete(record)">Xóa</a>
       </Row>
