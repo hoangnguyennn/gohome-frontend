@@ -10,6 +10,7 @@ import {
   Col,
   Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
   Modal,
@@ -64,34 +65,14 @@ const columns: ColumnType<ICategory>[] = [
     title: 'Tên loại',
     dataIndex: 'name',
     key: 'name',
-    sorter: {
-      compare: (a, b) => {
-        if (a.name > b.name) {
-          return 1
-        } else if (a.name < b.name) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Mã loại',
     dataIndex: 'code',
     key: 'code',
-    sorter: {
-      compare: (a, b) => {
-        if (a.code > b.code) {
-          return 1
-        } else if (a.code < b.code) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -138,6 +119,8 @@ const formSearch = ref<IFormSearch>({
   code: ''
 })
 
+const formRef = ref<FormInstance>()
+
 const initFromQuery = () => {
   initDataListSearchFromQuery()
 
@@ -146,6 +129,11 @@ const initFromQuery = () => {
     name: name as string,
     code: code as string
   }
+}
+
+const resetFormSearch = () => {
+  formRef.value?.resetFields()
+  onFinish(formRef.value?.getFieldsValue() as IFormSearch)
 }
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -198,7 +186,10 @@ onBeforeUnmount(() => {
   categoryStore.reset()
 })
 
-watch(route, getCategories)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getCategories()
+})
 </script>
 
 <template>
@@ -238,7 +229,14 @@ watch(route, getCategories)
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
+        <AButton
+          type="primary"
+          htmlType="submit"
+          style="margin-right: 10px; margin-bottom: 10px"
+        >
+          Tìm kiếm
+        </AButton>
+        <AButton @click="resetFormSearch">Xóa bộ lọc</AButton>
       </Col>
     </Row>
   </AForm>

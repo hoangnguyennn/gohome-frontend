@@ -99,17 +99,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'code',
     width: 148,
     maxWidth: 148,
-    sorter: {
-      compare: (a, b) => {
-        if (a.code > b.code) {
-          return 1
-        } else if (a.code < b.code) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -125,17 +115,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'title',
     width: 224,
     maxWidth: 224,
-    sorter: {
-      compare: (a, b) => {
-        if (a.title > b.title) {
-          return 1
-        } else if (a.title < b.title) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -144,19 +124,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'createdBy',
     width: 120,
     maxWidth: 120,
-    sorter: {
-      compare: (a, b) => {
-        const aCreatedBy = a.createdBy?.fullName || a.createdBy?.username || ''
-        const bCreatedBy = b.createdBy?.fullName || b.createdBy?.username || ''
-        if (aCreatedBy > bCreatedBy) {
-          return 1
-        } else if (aCreatedBy < bCreatedBy) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -165,17 +133,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'commission',
     width: 148,
     maxWidth: 148,
-    sorter: {
-      compare: (a, b) => {
-        if (a.commission > b.commission) {
-          return 1
-        } else if (a.commission < b.commission) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -184,17 +142,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'verifyStatus',
     width: 150,
     maxWidth: 150,
-    sorter: {
-      compare: (a, b) => {
-        if (a.verifyStatus > b.verifyStatus) {
-          return 1
-        } else if (a.verifyStatus < b.verifyStatus) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -210,17 +158,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'isHide',
     width: 148,
     maxWidth: 148,
-    sorter: {
-      compare: (a, b) => {
-        if (a.isHide > b.isHide) {
-          return 1
-        } else if (a.isHide < b.isHide) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -229,17 +167,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'createdAt',
     width: 148,
     maxWidth: 148,
-    sorter: {
-      compare: (a, b) => {
-        if (new Date(a.createdAt) > new Date(b.createdAt)) {
-          return 1
-        } else if (new Date(a.createdAt) < new Date(b.createdAt)) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -248,17 +176,7 @@ const columns: ColumnType<IPost>[] = [
     key: 'updatedAt',
     width: 148,
     maxWidth: 148,
-    sorter: {
-      compare: (a, b) => {
-        if (new Date(a.updatedAt) > new Date(b.updatedAt)) {
-          return 1
-        } else if (new Date(a.updatedAt) < new Date(b.updatedAt)) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -601,7 +519,7 @@ watch(route, () => {
           <ASelect
             v-model:value="formSearch.createdById"
             allowClear
-            show-search
+            showSearch
             :options="userOptions"
             :filterOption="filterOption"
           >
@@ -614,7 +532,7 @@ watch(route, () => {
           <ASelect
             v-model:value="formSearch.verifyStatus"
             allowClear
-            show-search
+            showSearch
             :options="postVerifyStatuses"
             :filterOption="filterOption"
           />
@@ -624,7 +542,7 @@ watch(route, () => {
       <Col :span="24" :md="12" :xl="6">
         <FormItem label="Ngày tạo" name="createdAt">
           <RangePicker
-            allow-clear
+            allowClear
             style="width: 100%"
             format="DD/MM/YYYY"
             v-model:value="formSearch.createdAt"
@@ -653,10 +571,10 @@ watch(route, () => {
             v-model:value="formSearch.categoryIds"
             allowClear
             mode="multiple"
-            max-tag-count="responsive"
+            maxTagCount="responsive"
             showSearch
             :options="categoryOptions"
-            :filter-option="filterOption"
+            :filterOption="filterOption"
           />
         </FormItem>
       </Col>
@@ -667,10 +585,10 @@ watch(route, () => {
             v-model:value="formSearch.locationIds"
             allowClear
             mode="multiple"
-            max-tag-count="responsive"
+            maxTagCount="responsive"
             showSearch
             :options="wardOptions"
-            :filter-option="filterOption"
+            :filterOption="filterOption"
           />
         </FormItem>
       </Col>
@@ -700,7 +618,7 @@ watch(route, () => {
   <div class="responsive-wrapper">
     <ATable
       :columns="columnsComputed"
-      :data-source="posts"
+      :dataSource="posts"
       :loading="isLoading"
       :pagination="pagination"
       @change="onChange"

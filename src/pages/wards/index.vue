@@ -10,13 +10,13 @@ import {
   Col,
   Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
   Modal,
   PageHeader,
   Row,
   Select as ASelect,
-  SelectOption,
   Table as ATable
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
@@ -27,9 +27,11 @@ import useDataListSearch from '~/hooks/useDataListSearch'
 import {
   IDataListFilter,
   IFormConfirmState,
+  ISelectOption,
   IWard,
   Nullable
 } from '~/interfaces'
+import { WardTypes } from '~/interfaces/enums'
 import { useWardStore } from '~/store/stores/wardStore'
 import { isSearchChanged } from '~/utils/common'
 import { removeUndefined } from '~/utils/formatter'
@@ -68,52 +70,22 @@ const columns: ColumnType<IWard>[] = [
     title: 'Tên',
     dataIndex: 'name',
     key: 'name',
-    sorter: {
-      compare: (a, b) => {
-        if (a.type > b.type) {
-          return 1
-        } else if (a.type < b.type) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại',
     dataIndex: 'type',
     key: 'type',
-    sorter: {
-      compare: (a, b) => {
-        if (a.type > b.type) {
-          return 1
-        } else if (a.type < b.type) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    }
+    sorter: true,
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Quận huyện',
     dataIndex: 'district',
     key: 'district',
-    sorter: {
-      compare: (a, b) => {
-        const aDistrictName = a.district?.name || ''
-        const bDistrictName = b.district?.name || ''
-        if (aDistrictName > bDistrictName) {
-          return 1
-        } else if (aDistrictName < bDistrictName) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    }
+    sorter: true,
+    showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Hành động',
@@ -132,6 +104,17 @@ const columnsComputed = computed<ColumnType<IWard>[]>(() => {
 
     return column
   })
+})
+
+const wardTypes: ISelectOption<WardTypes>[] = WARD_TYPES.map(
+  ({ value, title }) => ({ value, label: title })
+)
+
+const districtOptions = computed<ISelectOption<string>[]>(() => {
+  return districts.value.map((district) => ({
+    value: district.id,
+    label: `${district.type} ${district.name}`
+  }))
 })
 
 const itemDelete = ref<IFormConfirmState<IWard>>({
@@ -164,6 +147,8 @@ const formSearch = ref<IFormSearch>({
   districtId: null
 })
 
+const formRef = ref<FormInstance>()
+
 const initFromQuery = () => {
   initDataListSearchFromQuery()
 
@@ -173,6 +158,11 @@ const initFromQuery = () => {
     type: type as string,
     districtId: districtId as string
   }
+}
+
+const resetFormSearch = () => {
+  formRef.value?.resetFields()
+  onFinish(formRef.value?.getFieldsValue() as IFormSearch)
 }
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -217,6 +207,10 @@ const getWards = async () => {
   }
 }
 
+const filterOption = (input: string, option: ISelectOption<string>) => {
+  return option.label.toLowerCase().includes(input.toLowerCase())
+}
+
 onMounted(() => {
   initFromQuery()
   getWards()
@@ -227,7 +221,10 @@ onBeforeUnmount(() => {
   wardStore.reset()
 })
 
-watch(route, getWards)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getWards()
+})
 </script>
 
 <template>
@@ -261,34 +258,37 @@ watch(route, getWards)
       </Col>
       <Col :span="24" :xl="6">
         <FormItem label="Loại" name="type">
-          <ASelect v-model:value="formSearch.type" allowClear>
-            <SelectOption
-              v-for="wardType of WARD_TYPES"
-              :key="wardType.value"
-              :value="wardType.value"
-            >
-              {{ wardType.title }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.type"
+            allowClear
+            showSearch
+            :options="wardTypes"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
       <Col :span="24" :xl="6">
         <FormItem label="Quận huyện" name="districtId">
-          <ASelect v-model:value="formSearch.districtId" allowClear>
-            <SelectOption
-              v-for="district of districts"
-              :key="district.id"
-              :value="district.id"
-            >
-              {{ district.type }} {{ district.name }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.districtId"
+            allowClear
+            showSearch
+            :options="districtOptions"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
+        <AButton
+          type="primary"
+          htmlType="submit"
+          style="margin-right: 10px; margin-bottom: 10px"
+        >
+          Tìm kiếm
+        </AButton>
+        <AButton @click="resetFormSearch">Xóa bộ lọc</AButton>
       </Col>
     </Row>
   </AForm>
@@ -297,7 +297,7 @@ watch(route, getWards)
 
   <ATable
     :columns="columnsComputed"
-    :data-source="wards"
+    :dataSource="wards"
     :loading="isLoading"
     :pagination="pagination"
     @change="onChange"

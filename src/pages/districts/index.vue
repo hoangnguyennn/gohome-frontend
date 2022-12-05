@@ -10,13 +10,13 @@ import {
   Col,
   Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
   Modal,
   PageHeader,
   Row,
   Select as ASelect,
-  SelectOption,
   Table as ATable
 } from 'ant-design-vue'
 import { ColumnType } from 'ant-design-vue/lib/table'
@@ -28,8 +28,10 @@ import {
   IDataListFilter,
   IDistrict,
   IFormConfirmState,
+  ISelectOption,
   Nullable
 } from '~/interfaces'
+import { DistrictTypes } from '~/interfaces/enums'
 import { useDistrictStore } from '~/store/stores/districtStore'
 import { isSearchChanged } from '~/utils/common'
 import { removeUndefined } from '~/utils/formatter'
@@ -67,34 +69,14 @@ const columns: ColumnType<IDistrict>[] = [
     title: 'Tên',
     dataIndex: 'name',
     key: 'name',
-    sorter: {
-      compare: (a, b) => {
-        if (a.name > b.name) {
-          return 1
-        } else if (a.name < b.name) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại',
     dataIndex: 'type',
     key: 'type',
-    sorter: {
-      compare: (a, b) => {
-        if (a.type > b.type) {
-          return 1
-        } else if (a.type < b.type) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -115,6 +97,13 @@ const columnsComputed = computed<ColumnType<IDistrict>[]>(() => {
     return column
   })
 })
+
+const districtTypes: ISelectOption<DistrictTypes>[] = DISTRICT_TYPES.map(
+  ({ value, title }) => ({
+    value,
+    label: title
+  })
+)
 
 const itemDelete = ref<IFormConfirmState<IDistrict>>({
   value: null,
@@ -141,6 +130,8 @@ const formSearch = ref<IFormSearch>({
   type: ''
 })
 
+const formRef = ref<FormInstance>()
+
 const initFromQuery = () => {
   initDataListSearchFromQuery()
 
@@ -149,6 +140,11 @@ const initFromQuery = () => {
     name: name as string,
     type: type as string
   }
+}
+
+const resetFormSearch = () => {
+  formRef.value?.resetFields()
+  onFinish(formRef.value?.getFieldsValue() as IFormSearch)
 }
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -192,6 +188,10 @@ const getDistricts = async () => {
   }
 }
 
+const filterOption = (input: string, option: ISelectOption<string>) => {
+  return option.label.toLowerCase().includes(input.toLowerCase())
+}
+
 onMounted(() => {
   initFromQuery()
   getDistricts()
@@ -201,7 +201,10 @@ onBeforeUnmount(() => {
   districtStore.reset()
 })
 
-watch(route, getDistricts)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getDistricts()
+})
 </script>
 
 <template>
@@ -235,21 +238,26 @@ watch(route, getDistricts)
       </Col>
       <Col :span="24" :xl="6">
         <FormItem label="Loại" name="type">
-          <ASelect v-model:value="formSearch.type" allowClear>
-            <SelectOption
-              v-for="districtType of DISTRICT_TYPES"
-              :key="districtType.value"
-              :value="districtType.value"
-            >
-              {{ districtType.title }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.type"
+            allowClear
+            showSearch
+            :options="districtTypes"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
+        <AButton
+          type="primary"
+          htmlType="submit"
+          style="margin-right: 10px; margin-bottom: 10px"
+        >
+          Tìm kiếm
+        </AButton>
+        <AButton @click="resetFormSearch">Xóa bộ lọc</AButton>
       </Col>
     </Row>
   </AForm>

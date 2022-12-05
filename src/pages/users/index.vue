@@ -10,6 +10,7 @@ import {
   Col,
   Divider,
   Form as AForm,
+  FormInstance,
   FormItem,
   Input as AInput,
   message,
@@ -17,7 +18,6 @@ import {
   PageHeader,
   Row,
   Select as ASelect,
-  SelectOption,
   Table as ATable,
   Tag
 } from 'ant-design-vue'
@@ -30,7 +30,8 @@ import {
   IUser,
   IFormConfirmState,
   Nullable,
-  IDataListFilter
+  IDataListFilter,
+  ISelectOption
 } from '~/interfaces'
 import { UserTypes } from '~/interfaces/enums'
 import { useAuthStore } from '~/store/stores/authStore'
@@ -86,70 +87,28 @@ const columns: ColumnType<IUser>[] = [
     title: 'Tên đăng nhập',
     dataIndex: 'username',
     key: 'username',
-    sorter: {
-      compare: (a, b) => {
-        if (a.username > b.username) {
-          return 1
-        } else if (a.username < b.username) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Họ tên',
     dataIndex: 'fullName',
     key: 'fullName',
-    sorter: {
-      compare: (a, b) => {
-        const aFullname = a.fullName || ''
-        const bFullname = b.fullName || ''
-        if (aFullname > bFullname) {
-          return 1
-        } else if (aFullname < bFullname) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Loại tài khoản',
     dataIndex: 'type',
     key: 'type',
-    sorter: {
-      compare: (a, b) => {
-        if (a.type > b.type) {
-          return 1
-        } else if (a.type < b.type) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
     title: 'Xác thực',
     dataIndex: 'isVerified',
     key: 'isVerified',
-    sorter: {
-      compare: (a, b) => {
-        if (a.isVerified > b.isVerified) {
-          return 1
-        } else if (a.isVerified < b.isVerified) {
-          return -1
-        } else {
-          return 0
-        }
-      }
-    },
+    sorter: true,
     showSorterTooltip: { title: 'Nhấn để sắp xếp' }
   },
   {
@@ -170,6 +129,14 @@ const columnsComputed = computed<ColumnType<IUser>[]>(() => {
     return column
   })
 })
+
+const userTypes: ISelectOption<UserTypes>[] = USER_TYPES.map(
+  ({ value, title }) => ({ value, label: title })
+)
+
+const userVerifyStatuses: ISelectOption<number>[] = USER_VERIFY_STATUSES.map(
+  ({ value, title }) => ({ value, label: title })
+)
 
 const itemDelete = ref<IFormConfirmState<IUser>>({
   value: null,
@@ -211,6 +178,8 @@ const formSearch = ref<IFormSearch>({
   isVerified: undefined
 })
 
+const formRef = ref<FormInstance>()
+
 const initFromQuery = () => {
   initDataListSearchFromQuery()
 
@@ -221,6 +190,11 @@ const initFromQuery = () => {
     type: type !== undefined ? Number(type) : undefined,
     isVerified: isVerified !== undefined ? Number(isVerified) : undefined
   }
+}
+
+const resetFormSearch = () => {
+  formRef.value?.resetFields()
+  onFinish(formRef.value?.getFieldsValue() as IFormSearch)
 }
 
 const getLink = (id: string, action: 'view' | 'edit' | 'delete') => {
@@ -294,6 +268,10 @@ const getUsers = async () => {
   }
 }
 
+const filterOption = (input: string, option: ISelectOption<string>) => {
+  return option.label.toLowerCase().includes(input.toLowerCase())
+}
+
 onMounted(() => {
   initFromQuery()
   getUsers()
@@ -303,7 +281,10 @@ onBeforeUnmount(() => {
   userStore.reset()
 })
 
-watch(route, getUsers)
+watch(route, () => {
+  initDataListSearchFromQuery()
+  getUsers()
+})
 </script>
 
 <template>
@@ -336,34 +317,37 @@ watch(route, getUsers)
       </Col>
       <Col :span="24" :xl="6">
         <FormItem label="Loại tài khoản" name="type">
-          <ASelect v-model:value="formSearch.type" allowClear>
-            <SelectOption
-              v-for="userType of USER_TYPES"
-              :key="userType.value"
-              :value="userType.value"
-            >
-              {{ userType.title }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.type"
+            allowClear
+            showSearch
+            :options="userTypes"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
       <Col :span="24" :xl="6">
         <FormItem label="Xác thực" name="isVerified">
-          <ASelect v-model:value="formSearch.isVerified" allowClear>
-            <SelectOption
-              v-for="verifyStatus of USER_VERIFY_STATUSES"
-              :key="verifyStatus.value"
-              :value="verifyStatus.value"
-            >
-              {{ verifyStatus.title }}
-            </SelectOption>
-          </ASelect>
+          <ASelect
+            v-model:value="formSearch.isVerified"
+            allowClear
+            showSearch
+            :options="userVerifyStatuses"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
     </Row>
     <Row :gutter="24">
       <Col :span="24">
-        <AButton type="primary" htmlType="submit">Tìm kiếm</AButton>
+        <AButton
+          type="primary"
+          htmlType="submit"
+          style="margin-right: 10px; margin-bottom: 10px"
+        >
+          Tìm kiếm
+        </AButton>
+        <AButton @click="resetFormSearch">Xóa bộ lọc</AButton>
       </Col>
     </Row>
   </AForm>
@@ -372,7 +356,7 @@ watch(route, getUsers)
 
   <ATable
     :columns="columnsComputed"
-    :data-source="users"
+    :dataSource="users"
     :loading="isLoading"
     :pagination="pagination"
     @change="onChange"
