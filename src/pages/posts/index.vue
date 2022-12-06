@@ -319,6 +319,11 @@ const initFromQuery = () => {
     ownerPhone
   } = route.query
 
+  let verifyStatusValue: any
+  if ((verifyStatus as string) in PostVerifyStatuses) {
+    verifyStatusValue = Number(verifyStatus)
+  }
+
   let createdAt: any[] = []
   if (createdAtStart && createdAtEnd) {
     createdAt = [
@@ -353,7 +358,7 @@ const initFromQuery = () => {
     code: code as string,
     title: title as string,
     createdById: createdById as string,
-    verifyStatus: verifyStatus as string,
+    verifyStatus: verifyStatusValue,
     createdAt: createdAt as [Dayjs, Dayjs],
     updatedAt: updatedAt as [Dayjs, Dayjs],
     categoryIds: categoryIdsValue,

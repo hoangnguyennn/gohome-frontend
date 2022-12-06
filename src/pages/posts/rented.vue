@@ -314,6 +314,11 @@ const initFromQuery = () => {
     ownerPhone
   } = route.query
 
+  let verifyStatusValue: any
+  if ((verifyStatus as string) in PostVerifyStatuses) {
+    verifyStatusValue = Number(verifyStatus)
+  }
+
   let createdAt: any[] = []
   if (createdAtStart && createdAtEnd) {
     createdAt = [
@@ -342,13 +347,6 @@ const initFromQuery = () => {
     locationIdsValue = [locationIds]
   } else {
     locationIdsValue = locationIds as string[]
-  }
-
-  let verifyStatusValue = null
-  if (!isNaN(Number(verifyStatus))) {
-    if (Object.values(PostVerifyStatuses).includes(Number(verifyStatus))) {
-      verifyStatusValue = Number(verifyStatus)
-    }
   }
 
   formSearch.value = {
