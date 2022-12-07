@@ -31,6 +31,5 @@ export const isSearchChanged = (
   newSearch: LocationQueryRaw,
   oldSearch: LocationQueryRaw
 ) => {
-  console.log({ newSearch, oldSearch })
   return Object.keys(newSearch).some((key) => newSearch[key] !== oldSearch[key])
 }

@@ -194,3 +194,18 @@ export const menuItems: IMenuItem[] = [
 ]
 
 export const ITEMS_PER_PAGE_DEFAULT = 10
+
+export const SHOW_HIDE_OPTIONS = [
+  {
+    text: 'Tất cả',
+    value: -1
+  },
+  {
+    text: 'Ẩn',
+    value: 1
+  },
+  {
+    text: 'Hiện',
+    value: 0
+  }
+]

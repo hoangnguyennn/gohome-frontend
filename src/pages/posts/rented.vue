@@ -25,7 +25,7 @@ import { ColumnType } from 'ant-design-vue/lib/table'
 import dayjs, { Dayjs } from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { LocationQueryRaw, RouterLink } from 'vue-router'
-import { POST_VERIFY_STATUSES } from '~/constants'
+import { POST_VERIFY_STATUSES, SHOW_HIDE_OPTIONS } from '~/constants'
 import useDataListSearch from '~/hooks/useDataListSearch'
 import {
   IPost,
@@ -58,6 +58,7 @@ interface IFormSearch {
   categoryIds?: string[]
   locationIds?: string[]
   ownerPhone?: string
+  isHide?: number
 }
 
 interface IFormSearchQuery {
@@ -72,6 +73,7 @@ interface IFormSearchQuery {
   categoryIds?: string | string[]
   locationIds?: string | string[]
   ownerPhone?: string
+  isHide?: string
 }
 
 interface ISearchOptions extends IFormSearchQuery, IDataListFilter {}
@@ -225,6 +227,13 @@ const wardOptions = computed<ISelectOption<string>[]>(() => {
   }))
 })
 
+const showHideOptions: ISelectOption<number>[] = SHOW_HIDE_OPTIONS.map(
+  (option) => ({
+    value: option.value,
+    label: option.text
+  })
+)
+
 const dateTimeFields = ref(['createdAt', 'updatedAt'])
 
 const itemDelete = ref<IFormConfirmState<IPost>>({
@@ -280,6 +289,10 @@ const searchOptions = computed(() => {
     params.ownerPhone = query.ownerPhone as string
   }
 
+  if (query.isHide) {
+    params.isHide = query.isHide as string
+  }
+
   return params
 })
 
@@ -292,7 +305,8 @@ const formSearch = ref<IFormSearch>({
   updatedAt: undefined,
   categoryIds: [],
   locationIds: [],
-  ownerPhone: ''
+  ownerPhone: '',
+  isHide: undefined
 })
 
 const formRef = ref<FormInstance>()
@@ -311,7 +325,8 @@ const initFromQuery = () => {
     updatedAtEnd,
     categoryIds,
     locationIds,
-    ownerPhone
+    ownerPhone,
+    isHide
   } = route.query
 
   let verifyStatusValue: any
@@ -349,6 +364,15 @@ const initFromQuery = () => {
     locationIdsValue = locationIds as string[]
   }
 
+  let isHideValue = -1
+  if (isHide === 'true') {
+    isHideValue = 1
+  }
+
+  if (isHide === 'false') {
+    isHideValue = 0
+  }
+
   formSearch.value = {
     code: code as string,
     title: title as string,
@@ -358,7 +382,8 @@ const initFromQuery = () => {
     updatedAt: updatedAt as [Dayjs, Dayjs],
     categoryIds: categoryIdsValue,
     locationIds: locationIdsValue,
-    ownerPhone: ownerPhone as string
+    ownerPhone: ownerPhone as string,
+    isHide: isHideValue
   }
 }
 
@@ -401,6 +426,15 @@ const onFinish = async (values: IFormSearch) => {
     updatedAtEnd = toDateString(values.updatedAt[1])
   }
 
+  let isHide
+  if (values.isHide === 1) {
+    isHide = 'true'
+  }
+
+  if (values.isHide === 0) {
+    isHide = 'false'
+  }
+
   const query: LocationQueryRaw = {
     ...route.query,
     code: values.code ?? undefined,
@@ -413,7 +447,8 @@ const onFinish = async (values: IFormSearch) => {
     updatedAtEnd: updatedAtEnd,
     categoryIds: values.categoryIds?.length ? values.categoryIds : undefined,
     locationIds: values.locationIds?.length ? values.locationIds : undefined,
-    ownerPhone: values.ownerPhone ?? undefined
+    ownerPhone: values.ownerPhone ?? undefined,
+    isHide: isHide
   }
 
   if (isSearchChanged(removeUndefined(query), route.query)) {
@@ -576,6 +611,18 @@ watch(route, () => {
       <Col :span="24" :md="12" :xl="6">
         <FormItem label="Số điện thoại chủ nhà" name="ownerPhone">
           <AInput v-model:value="formSearch.ownerPhone" allowClear />
+        </FormItem>
+      </Col>
+
+      <Col :span="24" :md="12" :xl="6">
+        <FormItem label="Ẩn/hiện" name="isHide">
+          <ASelect
+            v-model:value="formSearch.isHide"
+            allowClear
+            showSearch
+            :options="showHideOptions"
+            :filterOption="filterOption"
+          />
         </FormItem>
       </Col>
     </Row>
